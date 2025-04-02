@@ -2,7 +2,7 @@
 
 namespace B3.GameStateSystem
 {
-    public sealed class Player : MonoBehaviour
+    public abstract class Player : MonoBehaviour
     {
         
     }

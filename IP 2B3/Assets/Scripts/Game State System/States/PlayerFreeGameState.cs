@@ -7,7 +7,7 @@ namespace B3.GameStateSystem
     {
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
-            // TODO(back): trade + build
+            // TODO(front/back): trade + build
             
             stateMachine.ChangeState<PlayerEndGameState>();
             yield break;

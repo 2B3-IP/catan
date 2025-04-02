@@ -13,13 +13,16 @@ namespace B3.GameStateSystem
 
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
-            // TODO(back): inlocuieste Vector3.zero cu pozitia camerei playerului curent
+            // TODO(front): inlocuieste Vector3.zero cu pozitia camerei playerului curent
             // + trb sa astepti ca playerul ca tina apasat pe un buton iar apoi sa i pasezi forta la coroutina
             // adica, cu cat mai mult tine apasat pe buton cu atat mai tare arunca zaru
-            float throwForce = 1f;
             
-            yield return diceThrower.ThrowCoroutine(Vector3.zero, throwForce); 
+            float throwForce = 1f; // = stateMachine.CurrentPlayer.GetForce();
+            // player - de la input
+            // ai - random
             
+            yield return diceThrower.ThrowCoroutine(Vector3.zero, throwForce);
+
             int diceRolls = diceThrower.DiceRolls;
             
             if(diceRolls == THIEF_ROLL) stateMachine.ChangeState<ThiefGameState>();

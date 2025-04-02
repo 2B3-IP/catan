@@ -7,7 +7,7 @@ namespace B3.GameStateSystem
     {
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
-            // TODO(back): steal from players, move thief, etc
+            // TODO(front): steal from players, move thief, etc
             
             stateMachine.ChangeState<PlayerFreeGameState>();
             yield break;

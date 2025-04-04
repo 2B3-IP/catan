@@ -1018,7 +1018,7 @@ Transform:
   m_GameObject: {fileID: 441811875}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31.2, y: 4.65, z: -9.15}
+  m_LocalPosition: {x: 2.03, y: 4.65, z: -9.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2679,12 +2679,9 @@ MonoBehaviour:
   - rid: 6434893590810853527
   - rid: 6434893590810853525
   - rid: 6434893590810853524
-  - rid: -2
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 6434893590810853523
       type: {class: PlayerDiceGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:

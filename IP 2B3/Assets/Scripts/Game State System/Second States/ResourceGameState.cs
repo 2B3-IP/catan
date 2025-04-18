@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using B3.DiceSystem;
+using B3.ResourcesSystem;
 using UnityEngine;
 
 namespace B3.GameStateSystem
@@ -13,7 +14,7 @@ namespace B3.GameStateSystem
         {
             float diceRolls = diceThrower.DiceRolls;
             
-            // TODO(back):Resources.AddResource(diceRolls);
+            //resourceController.AddResources(diceRolls);
             stateMachine.ChangeState<PlayerFreeGameState>();
             yield break;
         }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace B3.DiceSystem
 {
-    internal sealed class DiceThrower : MonoBehaviour
+    public sealed class DiceThrower : MonoBehaviour
     {
         private DiceController[] _diceControllers;
         

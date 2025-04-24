@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using B3.PieceSystem;
 using B3.PlayerBuffSystem;
 using B3.ResourcesSystem;
 using B3.SettlementSystem;
@@ -25,7 +26,7 @@ namespace B3.PlayerSystem
         public PlayerBuffs PlayerBuffs { get; private set; }
         
         public List<SettlementController> Settlements { get; private set; } = new();
-
+        public PieceController SelectedThiefPiece { get; protected set; }
         private void Awake() =>
             PlayerBuffs = GetComponent<PlayerBuffs>();
 

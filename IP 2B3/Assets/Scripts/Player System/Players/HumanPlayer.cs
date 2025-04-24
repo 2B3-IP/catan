@@ -54,7 +54,7 @@ namespace B3.PlayerSystem
             }
             
             var pieceController = closestHit.transform.GetComponent<PieceController>();
-            // Getter = pieceController;
+            SelectedThiefPiece = pieceController;
             
             var thiefPivot = pieceController.ThiefPivot;
             

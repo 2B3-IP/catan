@@ -4,10 +4,12 @@ using UnityEngine;
 
 namespace B3.GameStateSystem
 {
-    public class AddRoadState : RepeatedGameStateBase
+    [System.Serializable]
+    public class AddRoadState : GameStateBase
     {
         [SerializeField] private BuildingControllerBase buildingController;
-
+        [SerializeField] private int repeatTimes;
+        
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
             var currentPlayer = stateMachine.CurrentPlayer;
@@ -18,9 +20,9 @@ namespace B3.GameStateSystem
             if (!isFirstPlayer)
                 yield break;
 
-            RepeatTimes--;
+            repeatTimes--;
 
-            if (RepeatTimes == 0) stateMachine.ChangeState<PlayerDiceGameState>();
+            if (repeatTimes == 0) stateMachine.ChangeState<PlayerDiceGameState>();
             else stateMachine.ChangeState<AddHouseState>();
         }
     }

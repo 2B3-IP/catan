@@ -117,7 +117,63 @@ namespace B3.BuildingSystem
         }
         public override IEnumerator BuildRoad(PlayerBase player)
         {
-            yield break;
+            //daca drumul nu este ocupat si unul din capete este owned de un player
+            //sau daca este conectat de un alt drum al playerului atunci putem construi drumul
+            var availablePaths = _allPaths
+                .Where(p => p.Owner == null && (
+                    (p.SettlementA != null && p.SettlementA.HasOwner && p.SettelementA.Owner == player) ||
+                    (p.SettlementB != null && p.SettlementB.HasOwner && p.SettlementB.Owner == player) ||
+                    IsConnectedToOwnedRoad(p, player)
+                )).ToList();
+
+            if (availablePaths.Count == 0)
+            {
+                Debug.Log("No available paths to build a road.");
+                yield break;
+            }
+
+            HighlightPaths(availablePaths, true);
+            Path selectedPath = null;
+            bool roadPlaces = false;
+
+            clickButton.action.Enable();
+            //daca obiectul (adica aici drumul) pe care a dat click playerul este printre pathurile available setam drept Owner playerul 
+            while (!roadPlaced)
+            {
+                if (clickButton.action.WasPressedThisFrame())
+                {
+                    var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
+                    if (Pyhisics.Raycast(ray, out RaycastHit hit, 100f))
+                    {
+                        var path = hit.transform.GetComponent<Path>();
+                        if (path != null && availablePaths.Contains(path))
+                        {
+                            path.Owner = player;
+                            Debug.Log($"Road built between {path.SettlementA?.name} and {path.SettlementB?.name} by {player.name}");
+                            roadPlaced = true;
+                            selectedPath = path;
+                        }
+                    }
+                }
+                yield return null;
+            }
+
+            HighlightPaths(availablePaths, false);
+        }
+
+        private void HighlightPaths(IEnumerator<Path> paths, bool highlight)
+        {
+            foreach (var path in paths)
+            {
+                //to do front: de schimbat culoare, scale, etc
+                path.gameObject.GetComponent<Renderer>().material.color = highlight ? Color.green : Color.white;
+            }
+        }
+
+        private bool IsConnectedToOwnedRoad(Path path, PlayerBase player)
+        {
+            return _allPaths.Any(p => p.Owner == player &&
+                                      (p.ConnectsTo(path.SettlementA) || p.ConnectsTo(path.SettlementB)));
         }
 
         public override IEnumerator BuildCity(PlayerBase player)

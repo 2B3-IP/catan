@@ -53,6 +53,7 @@ namespace B3.BuildingSystem
             {
                 _selectedSettlement.SetOwner(player);
                 _selectedSettlement.BuildHouse();
+                player.Settlements.Add(_selectedSettlement);
                 Debug.Log($"House built at {_selectedSettlement.name} by {player.name}");
             }
             SettlementController.OnSettlementSelected -= OnSettlementSelected;

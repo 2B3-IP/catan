@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.ThiefSystem;
 using UnityEngine;
@@ -15,6 +16,12 @@ namespace B3.PlayerSystem
         
         private readonly Camera _playerCamera = Camera.main;
         private readonly RaycastHit[] _hits = new RaycastHit[5];
+
+        private void OnEnable() =>
+            UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
+        
+        private void OnDisable() =>
+            UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
         
         public override IEnumerator DiceThrowForceCoroutine()
         {
@@ -64,5 +71,8 @@ namespace B3.PlayerSystem
         public override void OnTradeAndBuildUpdate()
         {
         }
+        
+        private void OnPlayerEndButtonPress() =>
+            IsTurnEnded = true;
     }
 }

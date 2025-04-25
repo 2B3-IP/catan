@@ -121,7 +121,7 @@ namespace B3.BuildingSystem
             //sau daca este conectat de un alt drum al playerului atunci putem construi drumul
             var availablePaths = _allPaths
                 .Where(p => p.Owner == null && (
-                    (p.SettlementA != null && p.SettlementA.HasOwner && p.SettelementA.Owner == player) ||
+                    (p.SettlementA != null && p.SettlementA.HasOwner && p.SettlementA.Owner == player) ||
                     (p.SettlementB != null && p.SettlementB.HasOwner && p.SettlementB.Owner == player) ||
                     IsConnectedToOwnedRoad(p, player)
                 )).ToList();
@@ -134,7 +134,7 @@ namespace B3.BuildingSystem
 
             HighlightPaths(availablePaths, true);
             Path selectedPath = null;
-            bool roadPlaces = false;
+            bool roadPlaced = false;
 
             clickButton.action.Enable();
             //daca obiectul (adica aici drumul) pe care a dat click playerul este printre pathurile available setam drept Owner playerul 
@@ -143,7 +143,7 @@ namespace B3.BuildingSystem
                 if (clickButton.action.WasPressedThisFrame())
                 {
                     var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
-                    if (Pyhisics.Raycast(ray, out RaycastHit hit, 100f))
+                    if (Physics.Raycast(ray, out RaycastHit hit, 100f))
                     {
                         var path = hit.transform.GetComponent<Path>();
                         if (path != null && availablePaths.Contains(path))
@@ -161,7 +161,7 @@ namespace B3.BuildingSystem
             HighlightPaths(availablePaths, false);
         }
 
-        private void HighlightPaths(IEnumerator<Path> paths, bool highlight)
+        private void HighlightPaths(List<Path> paths, bool highlight)
         {
             foreach (var path in paths)
             {

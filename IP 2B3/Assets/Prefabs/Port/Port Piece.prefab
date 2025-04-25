@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5971512644756494858}
   - component: {fileID: 649774825387512724}
   - component: {fileID: 8744720668834221750}
-  - component: {fileID: 5762785280787895990}
+  - component: {fileID: 5866182488662244895}
   m_Layer: 0
   m_Name: Port Piece
   m_TagString: Untagged
@@ -87,8 +87,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &5762785280787895990
-SphereCollider:
+--- !u!65 &5866182488662244895
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -106,5 +106,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Size: {x: 1, y: 1.0000001, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

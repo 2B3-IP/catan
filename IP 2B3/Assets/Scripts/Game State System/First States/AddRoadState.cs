@@ -8,7 +8,7 @@ namespace B3.GameStateSystem
     public class AddRoadState : GameStateBase
     {
         [SerializeField] private BuildingControllerBase buildingController;
-        [SerializeField] private int repeatTimes;
+        [SerializeField] private int repeatTimes = 2;
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {

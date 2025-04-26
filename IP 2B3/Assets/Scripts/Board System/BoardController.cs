@@ -65,6 +65,7 @@ namespace B3.BoardSystem
                 }
             }
 
+            _currentIndex = 0;
             foreach (var portLine in portLines)
             {
                 var spawnPosition = portLine.SpawnPosition.position;
@@ -100,7 +101,7 @@ namespace B3.BoardSystem
             PortPiece piece;
             do
             {
-                int index = Random.Range(0, _portControllers.Length);
+                int index = Random.Range(0, ports.Length);
                 piece=ports[index];
             } while (!piece.CanSpawn);
             

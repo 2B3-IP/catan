@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8744720668834221750, guid: efcdc7c3a296aa346993933fa344b81c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9875a245ac49007498213638a307faa1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -77,5 +81,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370a23d3120948eda38609bc5a61302a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnDuration: 1
   portTransform: []
   resourceType: 0

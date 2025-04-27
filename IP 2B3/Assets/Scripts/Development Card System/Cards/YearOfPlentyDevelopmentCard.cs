@@ -10,14 +10,27 @@ namespace B3.DevelopmentCardSystem
     internal sealed class YearOfPlentyDevelopmentCard : DevelopmentCardBase
     {
         [SerializeField] private BankController bankController;
+        private bool resourceWasSelected = false;
+        private ResourceType selectedResourceType;
         
         public override IEnumerator UseCard(PlayerBase player)
         {
-            var resource = ResourceType.Brick;
-            yield return null; //TODO: TEMP, alege o resursa pe care vrei sa o furi
+            resourceWasSelected = false;
+            UISelectResource.OnSelectResource += OnChosenResource;
+            while (!resourceWasSelected)
+                yield return null;
             
-            bankController.GetResources(resource, 2);
-            player.AddResource(resource, 2);
+            
+            bankController.GetResources(selectedResourceType, 2);
+            player.AddResource(selectedResourceType, 2);
+            
+            UISelectResource.OnSelectResource -= OnChosenResource;
+        }
+
+        private void OnChosenResource(ResourceType chosenResource)
+        {
+            resourceWasSelected = true;
+            selectedResourceType = chosenResource;
         }
     }
 }

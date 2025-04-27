@@ -6,25 +6,38 @@ using UnityEngine;
 
 namespace B3.DevelopmentCardSystem
 {
+    
     internal sealed class MonopolyDevelopmentCard : DevelopmentCardBase
     {
         [SerializeField] private PlayersManager playerManager;
+        private bool resourceWasSelected = false;
+        private ResourceType chosenResourceType;
         
         public override IEnumerator UseCard(PlayerBase player)
-        {
-            var resource = ResourceType.Brick;
-            yield return null; //TODO: TEMP, alege o resursa pe care vrei sa o furi
+        {   
+            resourceWasSelected = false;
+            UISelectResource.OnSelectResource += OnChosenResource;
+            while (!resourceWasSelected)
+                yield return null;
 
             foreach (var otherPlayer in playerManager.ActivePlayers)
             {
                 if (otherPlayer == player)
                     continue;
                 
-                int amount = otherPlayer.Resources[(int)resource];
-                otherPlayer.RemoveResource(resource, amount);
+                int amount = otherPlayer.Resources[(int)chosenResourceType];
+                otherPlayer.RemoveResource(chosenResourceType, amount);
                 
-                player.AddResource(resource, amount);
+                player.AddResource(chosenResourceType, amount);
             }
+            UISelectResource.OnSelectResource -= OnChosenResource;
+        }
+
+        private void OnChosenResource(ResourceType chosenResource)
+        {
+            resourceWasSelected = true;
+            this.chosenResourceType = chosenResource;
+            
         }
     }
 }

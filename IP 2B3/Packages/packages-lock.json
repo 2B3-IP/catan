@@ -155,7 +155,7 @@
     },
     "com.unity.test-framework": {
       "version": "1.4.6",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "2.0.3",

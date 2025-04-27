@@ -30,6 +30,9 @@ namespace B3.BuildingSystem
 
         public override IEnumerator BuildHouse(PlayerBase player)
         {
+            if (!CanBuildHouse(player))
+                yield break;
+            
             var availableSettlements =
                 _settlements.Where(s => !s.HasOwner && CanBuildHouse(s, player, _allPaths)).ToArray();
             
@@ -118,6 +121,9 @@ namespace B3.BuildingSystem
         }
         public override IEnumerator BuildRoad(PlayerBase player)
         {
+            if (!CanBuildRoad(player))
+                yield break;
+            
             //daca drumul nu este ocupat si unul din capete este owned de un player
             //sau daca este conectat de un alt drum al playerului atunci putem construi drumul
             var availablePaths = _allPaths
@@ -150,6 +156,7 @@ namespace B3.BuildingSystem
                         if (path != null && availablePaths.Contains(path))
                         {
                             path.Owner = player;
+                            player.Paths.Add(path);
                             Debug.Log($"Road built between {path.SettlementA?.name} and {path.SettlementB?.name} by {player.name}");
                             roadPlaced = true;
                             selectedPath = path;
@@ -179,7 +186,9 @@ namespace B3.BuildingSystem
 
         public override IEnumerator BuildCity(PlayerBase player)
         {
-          
+            if (!CanBuildCity(player))
+                yield break;
+            
             var action = clickButton.action;
             while(!action.WasPressedThisFrame())
                 yield return null;

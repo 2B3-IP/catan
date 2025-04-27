@@ -1,27 +1,24 @@
-﻿using UnityEngine;
+﻿using B3.GameStateSystem;
 using UnityEditor;
-using B3.GameStateSystem;
+using UnityEngine;
 
 namespace B3.EditorExtensions
 {
-    [CustomPropertyDrawer(typeof(GameStateBase))]
+    [CustomPropertyDrawer(typeof(GameStateBase), true)]
     internal sealed class GameStateBasePropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (property.managedReferenceValue is null)
-            {
-                EditorGUI.LabelField(position, "Null State");
-                return;
-            }
+            var value = property.managedReferenceValue;
+            
+            label = value != null ? 
+                new GUIContent(value.GetType().Name) : 
+                new GUIContent("Null State");
 
-            var stateType = property.managedReferenceValue.GetType();
-            string stateName = stateType.Name;
-
-            EditorGUI.PropertyField(position, property, new GUIContent(stateName), true);
+            EditorGUI.PropertyField(position, property, label, true);
         }
-        
+
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
-            EditorGUI.GetPropertyHeight(property, label, true);
+            EditorGUI.GetPropertyHeight(property, true);
     }
 }

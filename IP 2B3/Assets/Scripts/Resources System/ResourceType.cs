@@ -1,6 +1,6 @@
 ﻿namespace B3.ResourcesSystem
 {
-    internal enum ResourceType
+    public enum ResourceType
     {
         Wood,
         Brick,

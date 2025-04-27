@@ -1,67 +1,62 @@
 ﻿using System;
-using System.Reflection;
-using UnityEditor;
-using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 using B3.GameStateSystem;
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace B3.EditorExtensions
 {
     [CustomEditor(typeof(GameStateMachine))]
     internal sealed class GameStateMachineEditor : Editor
     {
-        private SerializedProperty _gameStatesProperty;
-        private PropertyField _gameStatesField;
+        private SerializedProperty gameStatesProperty;
         
         public override VisualElement CreateInspectorGUI()
         {
-            _gameStatesProperty = serializedObject.FindProperty("gameStates");
-            _gameStatesField = new PropertyField(_gameStatesProperty);
+            gameStatesProperty = serializedObject.FindProperty("gameStates");
             
             var root = new VisualElement();
-            
-            var buttonsRoot = GetButtonRoot();
+
+            var buttonsRoot = initializeButtonsRoot();
             root.Add(buttonsRoot);
+
+            root.Add(new PropertyField(gameStatesProperty));
+            root.Add(new PropertyField(serializedObject.FindProperty("startStateIndex")));
+            root.Add(new PropertyField(serializedObject.FindProperty("playersManager")));
             
-            root.Add(_gameStatesField);
             return root;
         }
 
-        private VisualElement AddStateButton(Type stateType)
-        {
-            var button = new Button(() =>
-            {
-                if(AlreadyExists(stateType))
-                    return;
-                
-                serializedObject.Update();
-                
-                int arraySize = _gameStatesProperty.arraySize++;
-                var stateProperty = _gameStatesProperty.GetArrayElementAtIndex(arraySize);
-                
-                stateProperty.managedReferenceValue = Activator.CreateInstance(stateType);
-                serializedObject.ApplyModifiedProperties();
-            });
-            
-            button.text = stateType.Name;
-            return button;
-        }
-        
-        private VisualElement GetButtonRoot()
+        private VisualElement initializeButtonsRoot()
         {
             var root = new VisualElement();
-            
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            var stateType = typeof(GameStateBase);
-            
-            foreach (Assembly assembly in assemblies)
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                foreach (var type in assembly.GetTypes())
+                var types = assembly.GetTypes();
+                
+                foreach (var type in types)
                 {
-                    if (type.BaseType != stateType)
+                    if (!type.IsSubclassOf(typeof(GameStateBase))) 
                         continue;
+
+                    var button = new Button(() =>
+                    {
+                        if (AlreadyExists(type))
+                            return;
+                        
+                        int index = gameStatesProperty.arraySize;
+                        gameStatesProperty.InsertArrayElementAtIndex(index);
+                        
+                        var element = gameStatesProperty.GetArrayElementAtIndex(index);
+                        var gameState = (GameStateBase)Activator.CreateInstance(type);
+                        
+                        element.managedReferenceValue = gameState;
+                        serializedObject.ApplyModifiedProperties();
+                    });
                     
-                    var button = AddStateButton(type);
+                    button.text = type.Name;
                     root.Add(button);
                 }
             }
@@ -69,14 +64,14 @@ namespace B3.EditorExtensions
             return root;
         }
 
-        private bool AlreadyExists(Type stateType)
+        private bool AlreadyExists(Type type)
         {
-            for (int i = 0; i < _gameStatesProperty.arraySize; i++)
+            for (int i = 0; i < gameStatesProperty.arraySize; i++)
             {
-                var stateProperty = _gameStatesProperty.GetArrayElementAtIndex(i);
+                var element = gameStatesProperty.GetArrayElementAtIndex(i);
+                var value = element.managedReferenceValue;
 
-                var referenceValue = stateProperty.managedReferenceValue;
-                if (referenceValue is not null && referenceValue.GetType() == stateType)
+                if (value != null && value.GetType() == type)
                     return true;
             }
 

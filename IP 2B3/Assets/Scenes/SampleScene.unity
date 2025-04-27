@@ -6869,23 +6869,34 @@ MonoBehaviour:
   - rid: 6434893590810853523
   - rid: 6434893590810853526
   - rid: 6434893590810853527
-  - rid: 6434893590810853525
-  - rid: 6434893590810853524
+  - rid: 3160003638182543451
+  - rid: 3160003638182543457
+  - rid: 3160003638182543458
+  - rid: 3160003638182543459
   playersManager: {fileID: 0}
   references:
     version: 2
     RefIds:
+    - rid: 3160003638182543451
+      type: {class: AddHouseState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
+      data:
+        buildingController: {fileID: 0}
+    - rid: 3160003638182543457
+      type: {class: AddRoadState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
+      data:
+        buildingController: {fileID: 0}
+        repeatTimes: 2
+    - rid: 3160003638182543458
+      type: {class: PlayerEndGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
+      data: 
+    - rid: 3160003638182543459
+      type: {class: PlayerFreeGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
+      data:
+        _waitTimeRound: 10
     - rid: 6434893590810853523
       type: {class: PlayerDiceGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
         diceThrower: {fileID: 441811876}
-    - rid: 6434893590810853524
-      type: {class: PlayerEndGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
-      data: 
-    - rid: 6434893590810853525
-      type: {class: PlayerFreeGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
-      data:
-        _waitTimeRound: 10
     - rid: 6434893590810853526
       type: {class: ResourceGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:

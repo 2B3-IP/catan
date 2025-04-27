@@ -8,11 +8,8 @@ namespace B3.GameStateSystem
     {
         [SerializeField] private float _waitTimeRound = 10f;
         
-        private bool _isButtonPressed = false;
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
-            _isButtonPressed = false;
-            
             // TODO(front/back): trade + build, yield return astepti doar dupa end turn button/trece timpu
             
             var currentPlayer = stateMachine.CurrentPlayer;

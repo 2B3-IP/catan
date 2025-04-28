@@ -23,8 +23,8 @@ namespace B3.GameStateSystem
 
             var currentPlayer = stateMachine.CurrentPlayer;
             
-             yield return currentPlayer.DiceThrowForceCoroutine();
-             float throwForce = currentPlayer.DiceThrowForce;
+            yield return currentPlayer.DiceThrowForceCoroutine();
+            float throwForce = currentPlayer.DiceThrowForce;
             // player - de la input
             // ai - random
 

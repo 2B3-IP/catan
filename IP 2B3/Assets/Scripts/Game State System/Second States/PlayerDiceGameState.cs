@@ -11,18 +11,20 @@ namespace B3.GameStateSystem
         
         [SerializeField] private DiceThrower diceThrower;
 
-        private Camera _camera = Camera.main;
+        private Camera _camera;
 
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
+            _camera ??= Camera.main;
+            
             // TODO(front): inlocuieste Vector3.zero cu pozitia camerei playerului curent
             // + trb sa astepti ca playerul ca tina apasat pe un buton iar apoi sa i pasezi forta la coroutina
             // adica, cu cat mai mult tine apasat pe buton cu atat mai tare arunca zaru
 
             var currentPlayer = stateMachine.CurrentPlayer;
             
-             yield return currentPlayer.DiceThrowForceCoroutine();
-             float throwForce = currentPlayer.DiceThrowForce;
+            yield return currentPlayer.DiceThrowForceCoroutine();
+            float throwForce = currentPlayer.DiceThrowForce;
             // player - de la input
             // ai - random
 

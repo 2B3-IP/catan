@@ -5,6 +5,7 @@ namespace B3.GameStateSystem
 {
     public sealed class GameStateMachine : MonoBehaviour
     {
+        [SerializeField] private int startStateIndex;
         [SerializeReference] private GameStateBase[] gameStates;
         [SerializeField] private PlayersManager playersManager;
         
@@ -15,8 +16,11 @@ namespace B3.GameStateSystem
         internal PlayerBase CurrentPlayer => playersManager.ActivePlayers[_currentPlayerIndex];
         internal int PlayerCount => playersManager.ActivePlayers.Count;
 
-        public void StartMachine() =>
-            ChangeState<PlayerDiceGameState>();
+        public void StartMachine()
+        {
+            var gameState = gameStates[startStateIndex];
+            ChangeState(gameState);
+        }
         
         internal void ChangeState<T>()
         {
@@ -32,11 +36,17 @@ namespace B3.GameStateSystem
         
         internal void StartMachineWithOtherPlayer()
         {
+            ChangePlayer();
+            StartMachine();
+        }
+
+        internal bool ChangePlayer()
+        {
             CurrentPlayer.IsTurnEnded = true;
             _currentPlayerIndex = (_currentPlayerIndex + 1) % PlayerCount;
-            
+
             CurrentPlayer.IsTurnEnded = false;
-            StartMachine();
+            return _currentPlayerIndex == 0;
         }
         
         private void ChangeState(GameStateBase state)

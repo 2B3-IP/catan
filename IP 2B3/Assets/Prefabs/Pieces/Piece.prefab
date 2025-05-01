@@ -42,13 +42,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3912969351623841332}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da4ed4d2d3b94ae99bc05440d46ab12a, type: 3}
+  m_Script: {fileID: 11500000, guid: f6add574331b4532a36ab70406eb97fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ResourceType>k__BackingField: 0
-  <IsBlocked>k__BackingField: 0
-  <ThiefPivot>k__BackingField: {fileID: 0}
-  spawnDuration: 1
+  spawnDuration: 2
 --- !u!1 &8578178960563531983
 GameObject:
   m_ObjectHideFlags: 0

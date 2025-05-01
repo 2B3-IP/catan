@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using B3.BuildingSystem;
 using B3.PieceSystem;
 using B3.PlayerBuffSystem;
 using B3.ResourcesSystem;
@@ -18,7 +17,7 @@ namespace B3.PlayerSystem
         /// <summary>
         /// Mapat cu ResourceType (Resources[0] = Ore, Resources[1] = Wheat, Resources[2] = Wood, Resources[3] = Brick, Resources[4] = Sheep)
         /// </summary>
-        public int[] Resources { get; private set; }  = new int[5];
+        public int[] Resources { get; private set; }  = {1, 2, 3, 4, 5};
         public int VictoryPoints { get; private set; }
         public float DiceThrowForce { get; protected set; }
         
@@ -27,10 +26,7 @@ namespace B3.PlayerSystem
         public PlayerBuffs PlayerBuffs { get; private set; }
         
         public List<SettlementController> Settlements { get; private set; } = new();
-        public List<Path> Paths { get; private set; } = new();
-        
         public PieceController SelectedThiefPiece { get; protected set; }
-        
         private void Awake() =>
             PlayerBuffs = GetComponent<PlayerBuffs>();
 
@@ -73,24 +69,6 @@ namespace B3.PlayerSystem
                 return;
             
             VictoryPoints -= amount;
-        }
-        
-        public int GetHousesCount()
-        {
-            int count = 0;
-            foreach (var settlement in Settlements)
-            {
-                if (!settlement.IsCity)
-                    count++;
-            }
-
-            return count;
-        }
-        
-        public int GetCitiesCount()
-        {
-            int housesCount = GetHousesCount();
-            return Settlements.Count - housesCount;
         }
     }
 }

@@ -30,9 +30,6 @@ namespace B3.BuildingSystem
 
         public override IEnumerator BuildHouse(PlayerBase player)
         {
-            if (!CanBuildHouse(player))
-                yield break;
-            
             var availableSettlements =
                 _settlements.Where(s => !s.HasOwner && CanBuildHouse(s, player, _allPaths)).ToArray();
             
@@ -56,7 +53,6 @@ namespace B3.BuildingSystem
             {
                 _selectedSettlement.SetOwner(player);
                 _selectedSettlement.BuildHouse();
-                player.Settlements.Add(_selectedSettlement);
                 Debug.Log($"House built at {_selectedSettlement.name} by {player.name}");
             }
             SettlementController.OnSettlementSelected -= OnSettlementSelected;
@@ -121,74 +117,12 @@ namespace B3.BuildingSystem
         }
         public override IEnumerator BuildRoad(PlayerBase player)
         {
-            if (!CanBuildRoad(player))
-                yield break;
-            
-            //daca drumul nu este ocupat si unul din capete este owned de un player
-            //sau daca este conectat de un alt drum al playerului atunci putem construi drumul
-            var availablePaths = _allPaths
-                .Where(p => p.Owner == null && (
-                    (p.SettlementA != null && p.SettlementA.HasOwner && p.SettlementA.Owner == player) ||
-                    (p.SettlementB != null && p.SettlementB.HasOwner && p.SettlementB.Owner == player) ||
-                    IsConnectedToOwnedRoad(p, player)
-                )).ToList();
-
-            if (availablePaths.Count == 0)
-            {
-                Debug.Log("No available paths to build a road.");
-                yield break;
-            }
-
-            HighlightPaths(availablePaths, true);
-            Path selectedPath = null;
-            bool roadPlaced = false;
-
-            clickButton.action.Enable();
-            //daca obiectul (adica aici drumul) pe care a dat click playerul este printre pathurile available setam drept Owner playerul 
-            while (!roadPlaced)
-            {
-                if (clickButton.action.WasPressedThisFrame())
-                {
-                    var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
-                    if (Physics.Raycast(ray, out RaycastHit hit, 100f))
-                    {
-                        var path = hit.transform.GetComponent<Path>();
-                        if (path != null && availablePaths.Contains(path))
-                        {
-                            path.Owner = player;
-                            player.Paths.Add(path);
-                            Debug.Log($"Road built between {path.SettlementA?.name} and {path.SettlementB?.name} by {player.name}");
-                            roadPlaced = true;
-                            selectedPath = path;
-                        }
-                    }
-                }
-                yield return null;
-            }
-
-            HighlightPaths(availablePaths, false);
-        }
-
-        private void HighlightPaths(List<Path> paths, bool highlight)
-        {
-            foreach (var path in paths)
-            {
-                //to do front: de schimbat culoare, scale, etc
-                path.gameObject.GetComponent<Renderer>().material.color = highlight ? Color.green : Color.white;
-            }
-        }
-
-        private bool IsConnectedToOwnedRoad(Path path, PlayerBase player)
-        {
-            return _allPaths.Any(p => p.Owner == player &&
-                                      (p.ConnectsTo(path.SettlementA) || p.ConnectsTo(path.SettlementB)));
+            yield break;
         }
 
         public override IEnumerator BuildCity(PlayerBase player)
         {
-            if (!CanBuildCity(player))
-                yield break;
-            
+          
             var action = clickButton.action;
             while(!action.WasPressedThisFrame())
                 yield return null;

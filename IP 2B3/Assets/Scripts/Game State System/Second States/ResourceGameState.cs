@@ -18,9 +18,9 @@ namespace B3.GameStateSystem
         {
             float diceRolls = diceThrower.DiceRolls;
 
-            var matchedPieces = allPieces.Where(piece => piece.Number == (int)diceRolls && !piece.IsBlocked);
+            var macthedPieces = allPieces.Where(piece => piece.Number == (int)diceRolls && !piece.IsBlocked);
 
-            foreach (var piece in matchedPieces)
+            foreach (var piece in macthedPieces)
             {
                 foreach (var settlement in piece.Settlements)
                 {
@@ -33,7 +33,7 @@ namespace B3.GameStateSystem
                     owner.AddResource(resourceType, amount);
                 }
             }
-            
+            //resourceController.AddResources(diceRolls);
             stateMachine.ChangeState<PlayerFreeGameState>();
             yield break;
         }

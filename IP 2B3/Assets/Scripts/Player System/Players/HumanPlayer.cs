@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace B3.PlayerSystem
 {
-    internal sealed class HumanPlayer : PlayerBase
+    public sealed class HumanPlayer : PlayerBase
     {
         [SerializeField] private InputActionReference throwForceButton;
         

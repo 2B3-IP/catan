@@ -24,7 +24,7 @@ namespace B3.PlayerSystem
         
         public bool IsTurnEnded { get; set; }
         
-        public PlayerBuffs PlayerBuffs { get; private set; }
+        public PlayerBuffs PlayerBuffs { get; set; }
         
         public List<SettlementController> Settlements { get; private set; } = new();
         public List<Path> Paths { get; private set; } = new();

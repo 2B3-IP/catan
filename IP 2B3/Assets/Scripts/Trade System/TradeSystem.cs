@@ -14,8 +14,7 @@ namespace B3.TradeSystem
         {
             for (int i = 0; i < resourcesToTrade.Length; i++)
             {
-                var resource = (ResourceType)resourcesToTrade[i];
-                
+                var resource = (ResourceType)i;//aici ar trebui ResourceType(i);
                 player.RemoveResource(resource, resourcesToTrade[i]);
                 otherPlayer.AddResource(resource, resourcesToTrade[i]);
             }

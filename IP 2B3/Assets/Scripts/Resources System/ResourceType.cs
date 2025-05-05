@@ -6,6 +6,6 @@
         Brick,
         Wheat,
         Sheep,
-        Ore
+        Ore,
     }
 }

@@ -1,7 +1,6 @@
 ﻿using B3.GameStateSystem;
 using B3.PlayerSystem;
 using UnityEngine;
-
 namespace B3.DevelopmentCardSystem
 {
     public sealed class DevelopmentCardController : MonoBehaviour

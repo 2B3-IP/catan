@@ -9,7 +9,7 @@ namespace B3.BoardSystem
     {
         [field:SerializeField] private int maxSpawnCount;
         [field:SerializeField] private PieceController piecePrefab;
-
+        
         private int _currentSpawnCount;
         public bool CanSpawn => _currentSpawnCount < maxSpawnCount;
         
@@ -19,6 +19,7 @@ namespace B3.BoardSystem
             piece.OnSpawn(endPosition);
             
             _currentSpawnCount++;
+            // AI.giveResources()
             return piece;
         }
     }

@@ -13,6 +13,8 @@ namespace B3.PlayerInventorySystem
         private DevelopmentCardController _developmentCardController;
         private PlayerBase _player;
         
+        public int PlayerCount => _playerItems.Count;
+        
         private void Awake() =>
             _player = GetComponent<PlayerBase>();
         

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace B3.PlayerSystem
 {
-    internal sealed class AIPlayer : PlayerBase
+    public sealed class AIPlayer : PlayerBase
     {
         public override IEnumerator DiceThrowForceCoroutine()
         {

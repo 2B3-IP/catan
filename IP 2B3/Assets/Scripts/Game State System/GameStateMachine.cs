@@ -13,8 +13,8 @@ namespace B3.GameStateSystem
 
         private int _currentPlayerIndex;
         
-        internal PlayerBase CurrentPlayer => playersManager.ActivePlayers[_currentPlayerIndex];
-        internal int PlayerCount => playersManager.ActivePlayers.Count;
+        internal PlayerBase CurrentPlayer => playersManager.players[_currentPlayerIndex];
+        internal int PlayerCount => playersManager.players.Count;
 
         public void StartMachine()
         {

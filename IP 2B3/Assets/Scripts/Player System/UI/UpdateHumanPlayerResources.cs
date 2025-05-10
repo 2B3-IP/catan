@@ -14,11 +14,6 @@ public class UpdateHumanPlayerResources : MonoBehaviour
     public TMP_Text sheepResourcesText;
     public TMP_Text oreResourcesText;
 
-    void Start()
-    {
-
-    }
-
     void FixedUpdate()
     {
         victoryPointsText.text = humanPlayer.VictoryPoints.ToString();
@@ -26,11 +21,7 @@ public class UpdateHumanPlayerResources : MonoBehaviour
         brickResourcesText.text = humanPlayer.Resources[3].ToString();
         wheatResourcesText.text = humanPlayer.Resources[1].ToString();
         sheepResourcesText.text = humanPlayer.Resources[0].ToString();
-        oreResourcesText.text = humanPlayer.Resources[5].ToString();
+        oreResourcesText.text = humanPlayer.Resources[4].ToString();
     }
-
-    void Update()
-    {
-        
-    }
+    
 }

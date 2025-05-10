@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace B3.DevelopmentCardSystem
 {
-    
-    internal sealed class MonopolyDevelopmentCard : DevelopmentCardBase
+    [System.Serializable]
+    public sealed class MonopolyDevelopmentCard : DevelopmentCardBase
     {
         [SerializeField] private PlayersManager playerManager;
         private bool resourceWasSelected = false;
@@ -20,7 +20,7 @@ namespace B3.DevelopmentCardSystem
             while (!resourceWasSelected)
                 yield return null;
 
-            foreach (var otherPlayer in playerManager.ActivePlayers)
+            foreach (var otherPlayer in playerManager.players)
             {
                 if (otherPlayer == player)
                     continue;

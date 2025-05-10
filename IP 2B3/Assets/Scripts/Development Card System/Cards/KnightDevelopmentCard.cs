@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace B3.DevelopmentCardSystem
 {
+    [System.Serializable]
     internal sealed class KnightDevelopmentCard : DevelopmentCardBase
     {
         [SerializeField] private ThiefController thiefController;

@@ -1,23 +1,28 @@
-﻿using B3.GameStateSystem;
+﻿using System.Collections.Generic;
+using B3.GameStateSystem;
 using B3.PlayerSystem;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace B3.DevelopmentCardSystem
 {
     public sealed class DevelopmentCardController : MonoBehaviour
     {
-        private readonly DevelopmentCardBase[] _cards =
-        {
-            new KnightDevelopmentCard(),
-            new RoadBuildingDevelopmentCard(),
-            new MonopolyDevelopmentCard(),
-            new YearOfPlentyDevelopmentCard(),
-            new VictoryPointDevelopmentCard()
-        };
+        [SerializeReference] public List<DevelopmentCardBase> cards;
         
         public void UseCard(PlayerBase player, DevelopmentCardType cardType)
         {
-            _cards[(int)cardType].UseCard(player);
+            cards[(int)cardType].UseCard(player);
+        }
+
+        [Button]
+        void AddClasses()
+        {
+            cards.Add(new KnightDevelopmentCard());
+            cards.Add(new RoadBuildingDevelopmentCard());
+            cards.Add(new MonopolyDevelopmentCard());
+            cards.Add(new YearOfPlentyDevelopmentCard());
+            cards.Add(new VictoryPointDevelopmentCard());
         }
     }
 }

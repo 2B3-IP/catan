@@ -4,7 +4,8 @@ using B3.PlayerSystem;
 
 namespace B3.DevelopmentCardSystem
 {
-    internal sealed class VictoryPointDevelopmentCard : DevelopmentCardBase
+    [System.Serializable]
+    public sealed class VictoryPointDevelopmentCard : DevelopmentCardBase
     {
         public override IEnumerator UseCard(PlayerBase player)
         {

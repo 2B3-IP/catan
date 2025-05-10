@@ -1,6 +1,7 @@
 using B3.PlayerInventorySystem;
 using B3.PlayerSystem;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UpdateAIPlayersResources : MonoBehaviour
@@ -12,14 +13,12 @@ public class UpdateAIPlayersResources : MonoBehaviour
     public TMP_Text largestArmyText;
     public TMP_Text resourcesCountText;
     public TMP_Text developmentCardsCountText;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
     void FixedUpdate()
     {
+        if (chatGPT.gameObject.IsDestroyed())
+            Destroy(gameObject);
+        
         victoryPointsText.text = chatGPT.VictoryPoints.ToString();
         
         int sum = 0;
@@ -29,11 +28,5 @@ public class UpdateAIPlayersResources : MonoBehaviour
         }
         resourcesCountText.text = sum.ToString();
         developmentCardsCountText.text = playerInventoryController.PlayerCount.ToString();    
-    }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

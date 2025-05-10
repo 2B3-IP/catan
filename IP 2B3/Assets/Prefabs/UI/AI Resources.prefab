@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6326354666050566186}
   - component: {fileID: 4086275847064963366}
   m_Layer: 5
-  m_Name: Enemy resources
+  m_Name: AI Resources
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

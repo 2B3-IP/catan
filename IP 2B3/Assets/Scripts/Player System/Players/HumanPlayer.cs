@@ -7,14 +7,13 @@ using UnityEngine.InputSystem;
 
 namespace B3.PlayerSystem
 {
-    internal sealed class HumanPlayer : PlayerBase
+    public sealed class HumanPlayer : PlayerBase
     {
         [SerializeField] private InputActionReference throwForceButton;
         
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private LayerMask pieceLayerMask;
         
-        private readonly Camera _playerCamera = Camera.main;
         private readonly RaycastHit[] _hits = new RaycastHit[5];
 
         private void OnEnable() =>
@@ -47,7 +46,7 @@ namespace B3.PlayerSystem
             int hitCount = 0;
             while(hitCount == 0)
             {
-                var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
+                var ray = Camera.main.ScreenPointToRay(Mouse.current.position.value);
                 hitCount = Physics.RaycastNonAlloc(ray, _hits, float.MaxValue, pieceLayerMask);
             }
 

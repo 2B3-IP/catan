@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace B3.DevelopmentCardSystem
 {
-    internal sealed class RoadBuildingDevelopmentCard : DevelopmentCardBase
+    [System.Serializable]
+    public sealed class RoadBuildingDevelopmentCard : DevelopmentCardBase
     {
         [SerializeField] private BuildingControllerBase buildingController;
         

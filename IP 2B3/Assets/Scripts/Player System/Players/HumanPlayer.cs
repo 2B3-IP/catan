@@ -14,8 +14,14 @@ namespace B3.PlayerSystem
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private LayerMask pieceLayerMask;
         
-        private readonly Camera _playerCamera = Camera.main;
+        //private readonly Camera _playerCamera = Camera.main;
+        private  Camera _playerCamera;
+
         private readonly RaycastHit[] _hits = new RaycastHit[5];
+        private void Awake()
+        {
+            _playerCamera = Camera.main; // ✅ permis aici
+        }
 
         private void OnEnable() =>
             UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;

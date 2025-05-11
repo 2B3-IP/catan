@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace B3.DiceSystem
 {
-    public sealed class DiceThrower : MonoBehaviour
+    public class DiceThrower : MonoBehaviour
     {
         private DiceController[] _diceControllers;
 
@@ -56,6 +56,11 @@ namespace B3.DiceSystem
             DiceRolls = firstDice.DiceRoll + secondDice.DiceRoll;
 
             Debug.Log($"Dice rolled. Total: {DiceRolls} (first: {firstDice.DiceRoll}, second: {secondDice.DiceRoll})");
+        }
+
+        public void SetResult(int i)
+        {
+            DiceRolls = i;
         }
     }
 }

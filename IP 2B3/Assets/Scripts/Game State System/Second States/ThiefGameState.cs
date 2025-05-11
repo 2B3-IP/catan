@@ -5,7 +5,7 @@ using UnityEngine;
 namespace B3.GameStateSystem
 {
     [System.Serializable]
-    internal sealed class ThiefGameState : GameStateBase
+    public sealed class ThiefGameState : GameStateBase
     {
         [SerializeField] private ThiefController thief;
         

@@ -21,7 +21,7 @@ namespace B3.GameStateSystem
             var gameState = gameStates[startStateIndex];
             ChangeState(gameState);
         }
-        
+        public GameStateBase CurrentGameState => _currentState;
         internal void ChangeState<T>()
         {
             foreach (var state in gameStates)
@@ -51,6 +51,7 @@ namespace B3.GameStateSystem
         
         private void ChangeState(GameStateBase state)
         {
+            Debug.Log($" [ChangeState] Change State to {state.GetType().Name}");
             if (_currentState == state)
                 return;
             

@@ -47,7 +47,7 @@ namespace B3.PlayerSystem
             }
         }
         
-        public void AddResource(ResourceType resource, int amount)
+        public void AddResource(ResourceType resource, int amount)//De modificat pe UI staturile corespunzatoare
         {
             int resourceIndex = (int)resource;
             Resources[resourceIndex] += amount;

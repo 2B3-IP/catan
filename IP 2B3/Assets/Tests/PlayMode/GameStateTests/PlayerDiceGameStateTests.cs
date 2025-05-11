@@ -18,10 +18,10 @@ public class ResourceGameStateIntegrationTest
     {
         SceneManager.LoadScene("SampleScene");
         yield return null;
-        yield return new WaitForSeconds(10f); // așteptăm scena
+        yield return new WaitForSeconds(10f); // așteptăm scena sa se incarce
 
         gsm = Object.FindObjectOfType<GameStateMachine>();
-        Assert.IsNotNull(gsm, "❌ GameStateMachine not found.");
+        Assert.IsNotNull(gsm, "GameStateMachine not found.");
 
         // ⚙️ Creează un player
         var playerGO = new GameObject("TestPlayer");
@@ -31,7 +31,7 @@ public class ResourceGameStateIntegrationTest
         var playersManager = gsm.GetType()
             .GetField("playersManager", BindingFlags.NonPublic | BindingFlags.Instance)
             ?.GetValue(gsm) as PlayersManager;
-        Assert.IsNotNull(playersManager, "❌ PlayersManager is null.");
+        Assert.IsNotNull(playersManager, "PlayersManager is null.");
         typeof(PlayersManager)
             .GetProperty("ActivePlayers")
             ?.SetValue(playersManager, new System.Collections.Generic.List<PlayerBase> { player });
@@ -45,33 +45,32 @@ public class ResourceGameStateIntegrationTest
     [UnityTest]
     public IEnumerator ResourceGameState_TransitionsToPlayerFreeGameState()
     {
-        // 🎯 Găsește ResourceGameState din Inspector
+        //  Găsește ResourceGameState din Inspector
         var gameStates = typeof(GameStateMachine)
             .GetField("gameStates", BindingFlags.NonPublic | BindingFlags.Instance)
             ?.GetValue(gsm) as GameStateBase[];
 
-        Assert.IsNotNull(gameStates, "❌ Nu s-a putut extrage gameStates.");
+        Assert.IsNotNull(gameStates, "Nu s-a putut extrage gameStates.");
         var resourceState = gameStates.FirstOrDefault(s => s is ResourceGameState) as ResourceGameState;
-        Assert.IsNotNull(resourceState, "❌ ResourceGameState nu a fost găsit în gameStates.");
+        Assert.IsNotNull(resourceState, "ResourceGameState nu a fost găsit în gameStates.");
 
-        // 📥 Setează DiceRolls la o valoare validă
+        // Setează DiceRolls la o valoare validă
         var diceThrowerField = typeof(ResourceGameState)
             .GetField("diceThrower", BindingFlags.NonPublic | BindingFlags.Instance);
         var thrower = diceThrowerField?.GetValue(resourceState) as B3.DiceSystem.DiceThrower;
-        Assert.IsNotNull(thrower, "❌ DiceThrower nu e setat în ResourceGameState.");
+        Assert.IsNotNull(thrower, " DiceThrower nu e setat în ResourceGameState.");
         thrower.SetResult(6);
-
-        // ▶️ Rulează OnEnter
+        
         yield return resourceState.OnEnter(gsm);
 
-        // ✅ Verifică dacă starea curentă este PlayerFreeGameState
+        //  Verifică dacă starea curentă este PlayerFreeGameState
         var currentState = typeof(GameStateMachine)
             .GetField("_currentState", BindingFlags.NonPublic | BindingFlags.Instance)
             ?.GetValue(gsm);
 
-        Assert.IsNotNull(currentState, "❌ _currentState este null după OnEnter.");
-        Assert.AreEqual(typeof(PlayerFreeGameState), currentState.GetType(), "❌ Nu s-a trecut în PlayerFreeGameState.");
-        Debug.Log("✅ Test trecut: ResourceGameState → PlayerFreeGameState.");
+        Assert.IsNotNull(currentState, "_currentState este null după OnEnter.");
+        Assert.AreEqual(typeof(PlayerFreeGameState), currentState.GetType(), "Nu s-a trecut în PlayerFreeGameState.");
+        Debug.Log("Test trecut: ResourceGameState  PlayerFreeGameState.");
     }
     [UnityTest]
     public IEnumerator PlayerDiceGameState_TransitionsToResourceGameState_WhenDiceIsNotSeven()
@@ -81,7 +80,7 @@ public class ResourceGameStateIntegrationTest
             .GetField("gameStates", BindingFlags.NonPublic | BindingFlags.Instance)
             ?.GetValue(gsm) as GameStateBase[];
 
-        Assert.IsNotNull(gameStates, "❌ gameStates nu e setat.");
+        Assert.IsNotNull(gameStates, "gameStates nu e setat.");
 
         // 🧩 Găsește PlayerDiceGameState
         var playerDiceState = gameStates.FirstOrDefault(s => s is PlayerDiceGameState) as PlayerDiceGameState;
@@ -92,7 +91,7 @@ public class ResourceGameStateIntegrationTest
             .GetField("diceThrower", BindingFlags.NonPublic | BindingFlags.Instance);
 
         var thrower = diceThrowerField?.GetValue(playerDiceState) as B3.DiceSystem.DiceThrower;
-        Assert.IsNotNull(thrower, "❌ DiceThrower nu e injectat în PlayerDiceGameState.");
+        Assert.IsNotNull(thrower, "DiceThrower nu e injectat în PlayerDiceGameState.");
         thrower.SetResult(6); // oricare diferit de 7
 
         // ▶️ Rulează PlayerDiceGameState

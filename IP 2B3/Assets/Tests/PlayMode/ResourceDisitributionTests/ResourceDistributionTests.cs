@@ -29,25 +29,25 @@ public class SimpleResourceDistributionTest
     public IEnumerator PlayerReceivesResources_WhenSettlementIsManuallyLinked()
     {
         board = Object.FindObjectOfType<BoardController>();
-        Assert.IsNotNull(board, "❌ BoardController not found.");
+        Assert.IsNotNull(board, "BoardController not found.");
         var gameObject = new GameObject(); _bankController = gameObject.AddComponent<BankController>();
-        // 🔍 Găsește o piesă validă
+        //  Găsește o piesă validă
         var piece = board._pieceControllers
             .FirstOrDefault(p => p != null && !p.IsBlocked);
 
-        Assert.IsNotNull(piece, "❌ Nu s-a găsit un PieceController valid.");
+        Assert.IsNotNull(piece, "Nu s-a găsit un PieceController valid.");
 
-        // 🔍 Găsește un settlement din scenă
+        //  Găsește un settlement din scenă
         var settlement = Object.FindObjectsOfType<SettlementController>()
             .FirstOrDefault(s => s != null && s.Owner == null);
 
-        Assert.IsNotNull(settlement, "❌ Nu s-a găsit niciun SettlementController liber.");
+        Assert.IsNotNull(settlement, "Nu s-a găsit niciun SettlementController liber.");
 
-        // 🧪 Creează un jucător de test
+        //  Creează un jucător de test
         var playerGO = new GameObject("TestPlayer");
         player = playerGO.AddComponent<FakePlayer>();
 
-        // 🧩 Leagă settlement-ul de player și piesă
+        //  Leagă settlement-ul de player și piesă
         settlement.SetOwner(player);
         piece.Settlements.Add(settlement);
         Debug.Log($"[DEBUG] Settlement linked to Piece: {piece.name}");
@@ -83,12 +83,12 @@ public class SimpleResourceDistributionTest
         // Găsește o piesă validă
         var piece = board._pieceControllers
             .FirstOrDefault(p => p != null && !p.IsBlocked);
-        Assert.IsNotNull(piece, "❌ No valid PieceController found.");
+        Assert.IsNotNull(piece, "No valid PieceController found.");
 
         // Găsește un settlement
         var settlement = Object.FindObjectsOfType<SettlementController>()
             .FirstOrDefault(s => s != null && s.Owner == null);
-        Assert.IsNotNull(settlement, "❌ No available SettlementController.");
+        Assert.IsNotNull(settlement, "No available SettlementController.");
 
         // Creează player + resources
         var playerGO = new GameObject("CityPlayer");
@@ -110,7 +110,7 @@ public class SimpleResourceDistributionTest
         int after = cityPlayer.Resources[resourceIndex];
         Debug.Log($"[TEST] City - After: {after} resurse {piece.ResourceType}");
 
-        Assert.AreEqual(before + 2, after, "❌ Orașul nu a primit 2 resurse!");
+        Assert.AreEqual(before + 2, after, "Orașul nu a primit 2 resurse!");
     }
     [UnityTest]
     public IEnumerator BlockedPiece_DoesNotGiveResources()
@@ -128,14 +128,14 @@ public class SimpleResourceDistributionTest
         // Găsește o piesă validă
         var piece = board._pieceControllers
             .FirstOrDefault(p => p != null);
-        Assert.IsNotNull(piece, "❌ No PieceController found.");
+        Assert.IsNotNull(piece, "No PieceController found.");
 
         piece.IsBlocked = true; // 🔒 blocăm piesa
 
         // Găsește un settlement
         var settlement = Object.FindObjectsOfType<SettlementController>()
             .FirstOrDefault(s => s != null && s.Owner == null);
-        Assert.IsNotNull(settlement, "❌ No available SettlementController.");
+        Assert.IsNotNull(settlement, "No available SettlementController.");
 
         // Creează player
         var playerGO = new GameObject("BlockedPlayer");
@@ -156,7 +156,7 @@ public class SimpleResourceDistributionTest
         int after = blockedPlayer.Resources[resourceIndex];
         Debug.Log($"[TEST] Blocked piece: After: {after}");
 
-        Assert.AreEqual(before, after, "❌ Resursele au fost distribuite deși piesa era blocată.");
+        Assert.AreEqual(before, after, "Resursele au fost distribuite deși piesa era blocată.");
     }
 
 

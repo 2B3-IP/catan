@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using B3.ResourcesSystem;
 using B3.SettlementSystem;
 using UnityEngine;

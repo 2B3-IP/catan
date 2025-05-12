@@ -1,108 +1,83 @@
-using System.Collections;
-using B3.BankSystem;
 using UnityEngine;
+using TMPro;
 using B3.PieceSystem;
-using B3.PortSystem;
 
 namespace B3.BoardSystem
 {
     public class BoardController : MonoBehaviour
     {
-        [SerializeField] private float pieceSpawnDelay = 0.5f;
+        private const int GRID_WIDTH = 6;
+        private const int GRID_HEIGHT = 7;
         
-        [SerializeField] private BoardLine[] lines;
         [SerializeField] private BoardPiece[] pieces;
-        [SerializeField] private PortPiece[] ports;
-        [SerializeField] private BoardLine[] portLines;
+        [SerializeField] private BoardPiece[] ports;
         
-        [SerializeField] private BankController bankController;
+        [SerializeField] private GameObject debugTextPrefab;
+        
+        private readonly HexGrid<PieceController> _boardGrid = new(GRID_WIDTH, GRID_HEIGHT);
         
         private int _currentIndex;
         
-        public PieceController[] _pieceControllers { get; } = new PieceController[19];
-        public PortController[] _portControllers { get; } = new PortController[9];
-        private void Start() =>
-            Generate();
-        
-        public void GiveResources(int pieceNumber)
+        [ContextMenu("Generate")]
+        public void Generate()
         {
-            foreach (var piece in _pieceControllers)
-            {
-                if (piece.Number != pieceNumber)
-                    continue;
-
-                foreach (var settlement in piece.Settlements)
-                {
-                    var resourceType = piece.ResourceType;
-                    
-                    var player = settlement.Owner;
-                    int resourceAmount = settlement.ResourceAmount;
-                    
-                    bankController.GetResources(resourceType, resourceAmount);
-                    player.AddResource(resourceType, resourceAmount);
-                }
-            }
-        }
-        
-        private void Generate() =>
-            StartCoroutine(GenerateCoroutine());
-
-        private IEnumerator GenerateCoroutine()
-        {
-            var wait = new WaitForSeconds(pieceSpawnDelay);
+            SpawnLine(0, 2, -2, false);
+            SpawnLine(-1, 2, -1, false);
+            SpawnLine(-2, 2, 0, false);
+            SpawnLine(-2, 1, 1, false);
+            SpawnLine(-2,0, 2, false);
             
-            foreach (var line in lines)
-            {
-                var spawnPosition = line.SpawnPosition.position;
+            SpawnPiece(0, -3, true);
+            SpawnPiece(2, -3, true);
+            SpawnPiece(3, -2, true);
+            SpawnPiece(3, 0, true);
+            SpawnPiece(1, 2, true);
+            SpawnPiece(-1, 3, true);
+            SpawnPiece(-3, 3, true);
+            SpawnPiece(-3, 1, true);
+            SpawnPiece(-2, -1, true);
+        }
+
+        private void SpawnLine(int iMin, int iMax, int j, bool arePortPieces)
+        {
+            for (int i = iMin; i <= iMax; i++)
+                SpawnPiece(i, j, arePortPieces);
+        }
+
+        private void SpawnPiece(int i, int j, bool arePortPieces)
+        {
+            var position = new HexPosition(i, j);
                 
-                foreach (var endPosition in line.EndPositions)
-                {
-                    var piece = GetRandomPiece();
-                    var instance = piece.Spawn(spawnPosition, endPosition.position);
-                    
-                    _pieceControllers[_currentIndex++] = instance;
-                    yield return wait;
-                }
-            }
-
-            _currentIndex = 0;
-            foreach (var portLine in portLines)
+            var boardPiece = GetRandomPiece(arePortPieces);
+            if (boardPiece == null)
             {
-                var spawnPosition = portLine.SpawnPosition.position;
-
-                foreach (var endPosition in portLine.EndPositions)
-                {
-                    var piece = GetRandomPortPiece();
-                    var instance = piece.Spawn(spawnPosition, endPosition.position);
-                    
-                    _portControllers[_currentIndex++] = instance;
-                    yield return wait;
-                }
+                Debug.Log(i + " " + j);
+                return;
             }
 
+            var worldPosition = _boardGrid.ToWorldPosition(position);
+            var pieceController = boardPiece.Spawn(new Vector3(worldPosition.x, 0, worldPosition.y));
+            
+            _boardGrid[position] = pieceController;
+                
+            var debugText = Instantiate(debugTextPrefab, 
+                new Vector3(worldPosition.x, 2, worldPosition.y), Quaternion.identity);
+                
+            debugText.GetComponentInChildren<TMP_Text>()
+                .SetText(i + " " + j);
         }
         
-        private BoardPiece GetRandomPiece()
+        private BoardPiece GetRandomPiece(bool isPortPiece)
         {
             BoardPiece piece;
             
             do
             {
-                int index = Random.Range(0, pieces.Length);
-                piece = pieces[index];
+                int length = isPortPiece ? ports.Length : pieces.Length;
+                int index = Random.Range(0, length);
                 
-            } while (!piece.CanSpawn);
-            
-            return piece;
-        }
-
-        private PortPiece GetRandomPortPiece()
-        {
-            PortPiece piece;
-            do
-            {
-                int index = Random.Range(0, ports.Length);
-                piece=ports[index];
+                piece = isPortPiece ? ports[index] : pieces[index];
+                
             } while (!piece.CanSpawn);
             
             return piece;

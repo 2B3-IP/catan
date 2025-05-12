@@ -116,7 +116,7 @@ public class SimpleResourceDistributionTest
     public IEnumerator BlockedPiece_DoesNotGiveResources()
     {
         board = Object.FindObjectOfType<BoardController>();
-        Assert.IsNotNull(board, "❌ BoardController not found.");
+        Assert.IsNotNull(board, "BoardController not found.");
 
         // Injectează BankController
         var bankGO = new GameObject("FakeBank");
@@ -130,7 +130,7 @@ public class SimpleResourceDistributionTest
             .FirstOrDefault(p => p != null);
         Assert.IsNotNull(piece, "No PieceController found.");
 
-        piece.IsBlocked = true; // 🔒 blocăm piesa
+        piece.IsBlocked = true; // blocăm piesa
 
         // Găsește un settlement
         var settlement = Object.FindObjectsOfType<SettlementController>()

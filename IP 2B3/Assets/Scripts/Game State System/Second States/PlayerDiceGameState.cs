@@ -28,7 +28,7 @@ namespace B3.GameStateSystem
             float throwForce = currentPlayer.DiceThrowForce;
             Debug.Log($"[State] Force = {throwForce}");
 
-            var startPosition = _camera.transform.forward+ new Vector3(0, 2, 0);//nu era ok cum era inainte
+            var startPosition = _camera.transform.forward+ new Vector3(0, 2, -15);//nu era ok cum era inainte
             Debug.Log($"[State] Throwing from position {startPosition} with force {throwForce}");
             yield return diceThrower.ThrowCoroutine(startPosition, throwForce);
             Debug.Log($"[State] ThrowCoroutine DONE");

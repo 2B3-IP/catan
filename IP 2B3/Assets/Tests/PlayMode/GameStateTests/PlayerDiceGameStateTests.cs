@@ -23,11 +23,11 @@ public class ResourceGameStateIntegrationTest
         gsm = Object.FindObjectOfType<GameStateMachine>();
         Assert.IsNotNull(gsm, "GameStateMachine not found.");
 
-        // ⚙️ Creează un player
+        //  Creează un player
         var playerGO = new GameObject("TestPlayer");
         player = playerGO.AddComponent<TestPlayer>();
 
-        // 🧩 Injectează player-ul în PlayersManager
+        //  Injectează player-ul în PlayersManager
         var playersManager = gsm.GetType()
             .GetField("playersManager", BindingFlags.NonPublic | BindingFlags.Instance)
             ?.GetValue(gsm) as PlayersManager;
@@ -75,18 +75,18 @@ public class ResourceGameStateIntegrationTest
     [UnityTest]
     public IEnumerator PlayerDiceGameState_TransitionsToResourceGameState_WhenDiceIsNotSeven()
     {
-        // 🎯 Găsește gameStates[]
+        // Găsește gameStates[]
         var gameStates = typeof(GameStateMachine)
             .GetField("gameStates", BindingFlags.NonPublic | BindingFlags.Instance)
             ?.GetValue(gsm) as GameStateBase[];
 
         Assert.IsNotNull(gameStates, "gameStates nu e setat.");
 
-        // 🧩 Găsește PlayerDiceGameState
+        // Găsește PlayerDiceGameState
         var playerDiceState = gameStates.FirstOrDefault(s => s is PlayerDiceGameState) as PlayerDiceGameState;
-        Assert.IsNotNull(playerDiceState, "❌ PlayerDiceGameState nu a fost găsit.");
+        Assert.IsNotNull(playerDiceState, " PlayerDiceGameState nu a fost găsit.");
 
-        // 🎲 Injectează DiceThrower cu rezultat ≠ 7
+        // Injectează DiceThrower cu rezultat ≠ 7
         var diceThrowerField = typeof(PlayerDiceGameState)
             .GetField("diceThrower", BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -94,16 +94,16 @@ public class ResourceGameStateIntegrationTest
         Assert.IsNotNull(thrower, "DiceThrower nu e injectat în PlayerDiceGameState.");
         thrower.SetResult(6); // oricare diferit de 7
 
-        // ▶️ Rulează PlayerDiceGameState
+        //  Rulează PlayerDiceGameState
         yield return playerDiceState.OnEnter(gsm);
 
-        // ✅ Verifică tranziția către ResourceGameState
+        // Verifică tranziția către ResourceGameState
         var currentState = typeof(GameStateMachine)
             .GetField("_currentState", BindingFlags.NonPublic | BindingFlags.Instance)
             ?.GetValue(gsm);
 
-        Assert.AreEqual(typeof(PlayerFreeGameState), currentState.GetType(), "❌ Nu s-a trecut în PlayerFreeGameState.");
-        Debug.Log("✅ PlayerDiceGameState → ResourceGameState → PlayerFreeGameState");
+        Assert.AreEqual(typeof(PlayerFreeGameState), currentState.GetType(), " Nu s-a trecut în PlayerFreeGameState.");
+        Debug.Log(" PlayerDiceGameState  ResourceGameState  PlayerFreeGameState");
     }
 
 

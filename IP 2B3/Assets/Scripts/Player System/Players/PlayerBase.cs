@@ -19,6 +19,7 @@ namespace B3.PlayerSystem
         /// Mapat cu ResourceType (Resources[0] = Ore, Resources[1] = Wheat, Resources[2] = Wood, Resources[3] = Brick, Resources[4] = Sheep)
         /// </summary>
         public int[] Resources { get; private set; }  = new int[5];
+
         public int VictoryPoints { get; private set; }
         public float DiceThrowForce { get; protected set; }
         

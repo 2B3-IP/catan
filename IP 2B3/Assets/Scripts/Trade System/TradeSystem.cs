@@ -10,14 +10,26 @@ namespace B3.TradeSystem
     {
         [SerializeField] private BankController bankController;
         
+        // +value = daca oferi
+        // -value = daca primesti
         protected void TradeResources(PlayerBase player, PlayerBase otherPlayer, int[] resourcesToTrade)
         {
             for (int i = 0; i < resourcesToTrade.Length; i++)
             {
-                var resource = (ResourceType)resourcesToTrade[i];
+                int value = resourcesToTrade[i];
+                var resource = (ResourceType)Mathf.Abs(resourcesToTrade[i]);
+
+                if (value > 0)
+                {
+                    player.RemoveResource(resource, resourcesToTrade[i]);
+                    otherPlayer.AddResource(resource, resourcesToTrade[i]);
+                }
+                else
+                {
+                    player.AddResource(resource, -resourcesToTrade[i]);
+                    otherPlayer.RemoveResource(resource, -resourcesToTrade[i]);
+                }
                 
-                player.RemoveResource(resource, resourcesToTrade[i]);
-                otherPlayer.AddResource(resource, resourcesToTrade[i]);
             }
         }
 

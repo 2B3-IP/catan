@@ -17,7 +17,8 @@ namespace B3.BoardSystem
         private readonly HexGrid<PieceController> _boardGrid = new(GRID_WIDTH, GRID_HEIGHT);
         
         private int _currentIndex;
-        
+        public HexGrid<PieceController> BoardGrid => _boardGrid;
+
         [ContextMenu("Generate")]
         public void Generate()
         {

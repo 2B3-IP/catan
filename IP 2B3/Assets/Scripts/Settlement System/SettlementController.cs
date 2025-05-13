@@ -25,7 +25,7 @@ namespace B3.SettlementSystem
         
         private void Awake()
         {
-            houseObject.SetActive(false);
+            houseObject.SetActive(true);
             cityObject.SetActive(false);
             
             _renderer = houseObject.GetComponent<Renderer>();
@@ -48,7 +48,7 @@ namespace B3.SettlementSystem
             _selectable = value;
         }
         
-        public void BuildHouse()
+        /*public void BuildHouse()
         {
             if (IsCity)
                 return;
@@ -56,7 +56,7 @@ namespace B3.SettlementSystem
             houseObject.SetActive(true);
             cityObject.SetActive(false);
             IsCity = true;
-        }
+        }*/
         
         public void SetOwner(PlayerBase player)
         {

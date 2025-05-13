@@ -22,7 +22,7 @@ namespace B3.PlayerSystem
 
         public int VictoryPoints { get; private set; }
         public float DiceThrowForce { get; protected set; }
-        
+        public Vector2? ClosestCorner { get; protected set; }
         public bool IsTurnEnded { get; set; }
         
         public PlayerBuffs PlayerBuffs { get; private set; }
@@ -39,6 +39,8 @@ namespace B3.PlayerSystem
         public abstract IEnumerator MoveThiefCoroutine(ThiefController thiefController);
         public abstract void OnTradeAndBuildUpdate();
 
+        public abstract IEnumerator BuildHouseCoroutine();
+        
         public IEnumerator EndTurnCoroutine()
         {
             while (!IsTurnEnded)

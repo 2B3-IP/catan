@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using B3.PieceSystem;
+using Game_Settings;
 
 namespace B3.BoardSystem
 {
@@ -83,5 +84,19 @@ namespace B3.BoardSystem
             
             return piece;
         }
+        
+        // private void Start()
+        // {
+        //     if (gameSettings == null)
+        //     {
+        //         Debug.LogError("gameSettings is not assigned!");
+        //         return;
+        //     }
+        //
+        //     if (gameSettings.autoGenerateBoard)
+        //     {
+        //         Generate();
+        //     }
+        // }
     }
 }

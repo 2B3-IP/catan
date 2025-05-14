@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using B3.DevelopmentCardSystem;
 using B3.PlayerInventorySystem;
+using Game_Settings;
 using UnityEngine;
 using UnityEngine.Serialization;
 

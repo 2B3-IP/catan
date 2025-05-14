@@ -27,6 +27,6 @@ public class UpdateAIPlayersResources : MonoBehaviour
             sum += chatGPT.Resources[i];
         }
         resourcesCountText.text = sum.ToString();
-        developmentCardsCountText.text = playerInventoryController.PlayerCount.ToString();    
+        developmentCardsCountText.text = playerInventoryController.ItemCount.ToString();    
     }
 }

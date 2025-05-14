@@ -14,7 +14,7 @@ namespace B3.PlayerInventorySystem
         public DevelopmentCardController developmentCardController;
         private PlayerBase _player;
         
-        public int PlayerCount => _playerItems.Count;
+        public int ItemCount => _playerItems.Count;
         
         private void Awake() =>
             _player = GetComponent<PlayerBase>();

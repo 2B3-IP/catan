@@ -13,7 +13,7 @@ namespace B3.BoardSystem
         private int CenterX => _width / 2;
         private int CenterY => _height / 2;
 
-        public HexGrid(int width, int height, float distanceFromCenter = 4f)
+        public HexGrid(int width, int height, float distanceFromCenter = 6f)
         {
             _width = width * 2 + 1;
             _height = height * 2 + 1;

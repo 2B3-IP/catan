@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using B3.PieceSystem;
+using NaughtyAttributes;
 
 namespace B3.BoardSystem
 {
@@ -19,7 +20,7 @@ namespace B3.BoardSystem
         private int _currentIndex;
         public HexGrid<PieceController> BoardGrid => _boardGrid;
 
-        [ContextMenu("Generate")]
+        [Button]
         public void Generate()
         {
             SpawnLine(0, 2, -2, false);
@@ -57,12 +58,15 @@ namespace B3.BoardSystem
             }
 
             var worldPosition = _boardGrid.ToWorldPosition(position);
-            var pieceController = boardPiece.Spawn(new Vector3(worldPosition.x, 0, worldPosition.y));
+            var pieceController = boardPiece.Spawn(new Vector3(worldPosition.x, 0, worldPosition.y), transform);
             
             _boardGrid[position] = pieceController;
                 
-            var debugText = Instantiate(debugTextPrefab, 
-                new Vector3(worldPosition.x, 2, worldPosition.y), Quaternion.identity);
+            var debugText = Instantiate(
+                debugTextPrefab, 
+                new Vector3(worldPosition.x, 2, worldPosition.y), 
+                Quaternion.identity, 
+                transform);
                 
             debugText.GetComponentInChildren<TMP_Text>()
                 .SetText(i + " " + j);

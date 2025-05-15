@@ -75,26 +75,74 @@ namespace B3.BuildingSystem
             }
         }
 
-        private bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player, Path[] allPaths)
+        protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player, Path[] allPaths)
         {
-            bool hasConnectedRoad = allPaths.Any(p => p.Owner == player && p.ConnectsTo(targetSettlement));
-            
-            if (!hasConnectedRoad)
+            //vedem daca playerul mai are case la dispozitie
+            if (!CanBuildHouse(player))
+                return false;
+            //vf daca asezarea este deja ocupata
+            if (targetSettlement.HasOwner)
                 return false;
 
-            Queue<(SettlementController settlement, int distance)> queue = new();
-            HashSet<SettlementController> visited = new();
-            queue.Enqueue((targetSettlement,0));
+            bool isConnectedToOwnRoad = false;
+
+            HashSet<SettlementController> visited = new HashSet<SettlementController>();
+            Stack<SettlementController> stack = new Stack<SettlementController>();
+
+            foreach (var settlement in player.Settlements)
+            {
+                stack.Push(settlement);
+                visited.Add(settlement);
+            }
+
+            while (stack.Count > 0)
+            {
+                var current = stack.Pop();
+                foreach (var path in allPaths)
+                {
+                    //daca drumul apartine playerului
+                    if (path.Owner == player)
+                    {
+                        if (path.ConnectsTo(current))
+                        {
+                            //vf daca drumul este conectat la asezarea curenta
+                            var connectedSettlement = path.GetOtherSettlement(current);
+                            if (connectedSettlement == targetSettlement)
+                            {
+                                //obtinem cealalta asezarea de la capatul drumului
+                                isConnectedToOwnRoad = true;
+                                break;
+                            }
+                            //daca este asezarea tinta am gasit o conexiune
+                            if (connectedSettlement != null && !visited.Contains(connectedSettlement))
+                            {
+                                visited.Add(connectedSettlement);
+                                stack.Push(connectedSettlement);
+                            }
+                        }
+                    }
+                }
+
+                if (isConnectedToOwnRoad)
+                    break;
+            }
+
+            if (!isConnectedToOwnRoad)
+                return false;
+            
+            //vf regula distantei de 2 intre oricare doua asezari
+            visited.Clear();
+            Queue<(SettlementController settlementController, int distance)> queue = new Queue<(SettlementController, int)>();
+            queue.Enqueue((targetSettlement, 0));
             visited.Add(targetSettlement);
 
             while (queue.Count > 0)
             {
                 var (current, distance) = queue.Dequeue();
-                if (distance > 0 && current.HasOwner)
+                if (distance > 0 && distance < 2 && current.HasOwner)
                     return false;
                 if (distance >= 2)
                     continue;
-
                 foreach (var path in allPaths)
                 {
                     if (path.ConnectsTo(current))
@@ -104,11 +152,46 @@ namespace B3.BuildingSystem
                         {
                             visited.Add(neighbor);
                             queue.Enqueue((neighbor, distance + 1));
+                            
                         }
                     }
-                }   
+                }
             }
+
             return true;
+        }
+
+        protected override bool CanBuildRoad(PlayerBase player, Path targetPath, Path[] allPaths)
+        {
+            //vf daca mai avem drumuri la dispozitie
+            if (!base.CanBuildRoad(player))
+                return false;
+            //vf daca drumul e deja ocupat
+            if (targetPath.Owner != null)
+                return false;
+            
+            //un drum poate fi construit daca unul din capete are o asezare a playerului
+            bool hasOwnedSettlement = (targetPath.SettlementA != null && targetPath.SettlementA.HasOwner &&
+                                       targetPath.SettlementA.Owner == player) ||
+                                      (targetPath.SettlementB != null && targetPath.SettlementB.HasOwner &&
+                                       targetPath.SettlementB.Owner == player);
+            
+            //sau daca este conectat la un alt drum al sau
+            bool isConnectedToOwnedRoad = false;
+            foreach (var path in allPaths)
+            {
+                if (path.Owner == player)
+                {
+                    if ((path.ConnectsTo(targetPath.SettlementA) && targetPath.SettlementA != null) ||
+                        (path.ConnectsTo(targetPath.SettlementB) && targetPath.SettlementB != null))
+                    {
+                        isConnectedToOwnedRoad = true;
+                        break;
+                    }
+                }
+            }
+
+            return hasOwnedSettlement || isConnectedToOwnedRoad;
         }
         public override IEnumerator BuildRoad(PlayerBase player)
         {

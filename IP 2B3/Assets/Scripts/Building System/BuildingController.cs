@@ -5,6 +5,8 @@ using UnityEngine;
 using System.Linq;
 using B3.SettlementSystem;
 using B3.PlayerSystem;
+using B3.BoardSystem;
+using B3.PieceSystem;
 using UnityEngine.InputSystem;
 
 namespace B3.BuildingSystem
@@ -197,9 +199,7 @@ namespace B3.BuildingSystem
         {
             if (!CanBuildRoad(player))
                 yield break;
-            
-            //daca drumul nu este ocupat si unul din capete este owned de un player
-            //sau daca este conectat de un alt drum al playerului atunci putem construi drumul
+
             var availablePaths = _allPaths
                 .Where(p => p.Owner == null && (
                     (p.SettlementA != null && p.SettlementA.HasOwner && p.SettlementA.Owner == player) ||
@@ -214,11 +214,12 @@ namespace B3.BuildingSystem
             }
 
             HighlightPaths(availablePaths, true);
-            Path selectedPath = null;
             bool roadPlaced = false;
 
             clickButton.action.Enable();
-            //daca obiectul (adica aici drumul) pe care a dat click playerul este printre pathurile available setam drept Owner playerul 
+
+            BoardController board = FindObjectOfType<BoardController>();
+
             while (!roadPlaced)
             {
                 if (clickButton.action.WasPressedThisFrame())
@@ -226,22 +227,34 @@ namespace B3.BuildingSystem
                     var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
                     if (Physics.Raycast(ray, out RaycastHit hit, 100f))
                     {
-                        var path = hit.transform.GetComponent<Path>();
-                        if (path != null && availablePaths.Contains(path))
+                        Vector3 hitPoint = hit.point;
+
+                        PieceController piece = board.GetPieceAt(hitPoint);
+                        if (piece == null)
+                            continue;
+
+                        Vector3 edgeMidpoint = board.GetClosestEdgeMidpoint(piece, hitPoint);
+
+                        foreach (var path in availablePaths)
                         {
-                            path.Owner = player;
-                            player.Paths.Add(path);
-                            Debug.Log($"Road built between {path.SettlementA?.name} and {path.SettlementB?.name} by {player.name}");
-                            roadPlaced = true;
-                            selectedPath = path;
+                            if (path.IsNearEdge(edgeMidpoint))
+                            {
+                                path.Owner = player;
+                                player.Paths.Add(path);
+                                Debug.Log($"Road built along edge near {edgeMidpoint} by {player.name}");
+                                roadPlaced = true;
+                                break;
+                            }
                         }
                     }
                 }
+
                 yield return null;
             }
 
             HighlightPaths(availablePaths, false);
         }
+
 
         private void HighlightPaths(List<Path> paths, bool highlight)
         {

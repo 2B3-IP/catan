@@ -120,6 +120,19 @@ namespace B3.BoardSystem
             return neighbors;
         }
         
-        
+        public T GetCellAtAxial(Vector2 axialCoords)
+        {
+            int x = Mathf.RoundToInt(axialCoords.x);
+            int y = Mathf.RoundToInt(axialCoords.y);
+    
+            HexPosition position = new HexPosition(x, y);
+            return this[position];
+        }
+
+        public Vector2 WorldToAxial(Vector3 worldPosition)
+        {
+            HexPosition hexPos = FromWorldPosition(new Vector2(worldPosition.x, worldPosition.z));
+            return new Vector2(hexPos.X, hexPos.Y);
+        }
     }
 }

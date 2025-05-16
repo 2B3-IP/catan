@@ -2,6 +2,8 @@ using UnityEngine;
 using TMPro;
 using B3.PieceSystem;
 using NaughtyAttributes;
+using System.Linq;
+using Game_Settings;
 
 namespace B3.BoardSystem
 {
@@ -38,6 +40,19 @@ namespace B3.BoardSystem
             SpawnPiece(-3, 3, true);
             SpawnPiece(-3, 1, true);
             SpawnPiece(-2, -1, true);
+        }
+        
+        public Vector3 GetClosestEdgeMidpoint(PieceController piece, Vector3 clickPosition)
+        {
+            Vector3[] edgeMidpoints = piece.GetEdgeMidpoints();
+            return edgeMidpoints.OrderBy(p => Vector3.Distance(p, clickPosition)).First();
+        }
+        
+        public PieceController GetPieceAt(Vector3 position)
+        {
+            Vector2 axialCoords = _boardGrid.WorldToAxial(position);
+            PieceController piece = _boardGrid.GetCellAtAxial(axialCoords);
+            return piece;
         }
 
         private void SpawnLine(int iMin, int iMax, int j, bool arePortPieces)
@@ -87,5 +102,19 @@ namespace B3.BoardSystem
             
             return piece;
         }
+        
+        // private void Start()
+        // {
+        //     if (gameSettings == null)
+        //     {
+        //         Debug.LogError("gameSettings is not assigned!");
+        //         return;
+        //     }
+        //
+        //     if (gameSettings.autoGenerateBoard)
+        //     {
+        //         Generate();
+        //     }
+        // }
     }
 }

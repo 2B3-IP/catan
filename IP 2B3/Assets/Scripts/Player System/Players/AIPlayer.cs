@@ -27,5 +27,9 @@ namespace B3.PlayerSystem
         {
             throw new System.NotImplementedException();
         }
+        public override IEnumerator UpgradeToCityCoroutine()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

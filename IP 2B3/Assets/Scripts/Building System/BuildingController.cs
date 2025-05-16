@@ -5,6 +5,8 @@ using UnityEngine;
 using System.Linq;
 using B3.SettlementSystem;
 using B3.PlayerSystem;
+using B3.BoardSystem;
+using B3.PieceSystem;
 using UnityEngine.InputSystem;
 
 namespace B3.BuildingSystem
@@ -75,26 +77,74 @@ namespace B3.BuildingSystem
             }
         }
 
-        private bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player, Path[] allPaths)
+        protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player, Path[] allPaths)
         {
-            bool hasConnectedRoad = allPaths.Any(p => p.Owner == player && p.ConnectsTo(targetSettlement));
-            
-            if (!hasConnectedRoad)
+            //vedem daca playerul mai are case la dispozitie
+            if (!CanBuildHouse(player))
+                return false;
+            //vf daca asezarea este deja ocupata
+            if (targetSettlement.HasOwner)
                 return false;
 
-            Queue<(SettlementController settlement, int distance)> queue = new();
-            HashSet<SettlementController> visited = new();
-            queue.Enqueue((targetSettlement,0));
+            bool isConnectedToOwnRoad = false;
+
+            HashSet<SettlementController> visited = new HashSet<SettlementController>();
+            Stack<SettlementController> stack = new Stack<SettlementController>();
+
+            foreach (var settlement in player.Settlements)
+            {
+                stack.Push(settlement);
+                visited.Add(settlement);
+            }
+
+            while (stack.Count > 0)
+            {
+                var current = stack.Pop();
+                foreach (var path in allPaths)
+                {
+                    //daca drumul apartine playerului
+                    if (path.Owner == player)
+                    {
+                        if (path.ConnectsTo(current))
+                        {
+                            //vf daca drumul este conectat la asezarea curenta
+                            var connectedSettlement = path.GetOtherSettlement(current);
+                            if (connectedSettlement == targetSettlement)
+                            {
+                                //obtinem cealalta asezarea de la capatul drumului
+                                isConnectedToOwnRoad = true;
+                                break;
+                            }
+                            //daca este asezarea tinta am gasit o conexiune
+                            if (connectedSettlement != null && !visited.Contains(connectedSettlement))
+                            {
+                                visited.Add(connectedSettlement);
+                                stack.Push(connectedSettlement);
+                            }
+                        }
+                    }
+                }
+
+                if (isConnectedToOwnRoad)
+                    break;
+            }
+
+            if (!isConnectedToOwnRoad)
+                return false;
+            
+            //vf regula distantei de 2 intre oricare doua asezari
+            visited.Clear();
+            Queue<(SettlementController settlementController, int distance)> queue = new Queue<(SettlementController, int)>();
+            queue.Enqueue((targetSettlement, 0));
             visited.Add(targetSettlement);
 
             while (queue.Count > 0)
             {
                 var (current, distance) = queue.Dequeue();
-                if (distance > 0 && current.HasOwner)
+                if (distance > 0 && distance < 2 && current.HasOwner)
                     return false;
                 if (distance >= 2)
                     continue;
-
                 foreach (var path in allPaths)
                 {
                     if (path.ConnectsTo(current))
@@ -104,19 +154,52 @@ namespace B3.BuildingSystem
                         {
                             visited.Add(neighbor);
                             queue.Enqueue((neighbor, distance + 1));
+                            
                         }
                     }
-                }   
+                }
             }
+
             return true;
+        }
+
+        protected override bool CanBuildRoad(PlayerBase player, Path targetPath, Path[] allPaths)
+        {
+            //vf daca mai avem drumuri la dispozitie
+            if (!base.CanBuildRoad(player))
+                return false;
+            //vf daca drumul e deja ocupat
+            if (targetPath.Owner != null)
+                return false;
+            
+            //un drum poate fi construit daca unul din capete are o asezare a playerului
+            bool hasOwnedSettlement = (targetPath.SettlementA != null && targetPath.SettlementA.HasOwner &&
+                                       targetPath.SettlementA.Owner == player) ||
+                                      (targetPath.SettlementB != null && targetPath.SettlementB.HasOwner &&
+                                       targetPath.SettlementB.Owner == player);
+            
+            //sau daca este conectat la un alt drum al sau
+            bool isConnectedToOwnedRoad = false;
+            foreach (var path in allPaths)
+            {
+                if (path.Owner == player)
+                {
+                    if ((path.ConnectsTo(targetPath.SettlementA) && targetPath.SettlementA != null) ||
+                        (path.ConnectsTo(targetPath.SettlementB) && targetPath.SettlementB != null))
+                    {
+                        isConnectedToOwnedRoad = true;
+                        break;
+                    }
+                }
+            }
+
+            return hasOwnedSettlement || isConnectedToOwnedRoad;
         }
         public override IEnumerator BuildRoad(PlayerBase player)
         {
             if (!CanBuildRoad(player))
                 yield break;
-            
-            //daca drumul nu este ocupat si unul din capete este owned de un player
-            //sau daca este conectat de un alt drum al playerului atunci putem construi drumul
+
             var availablePaths = _allPaths
                 .Where(p => p.Owner == null && (
                     (p.SettlementA != null && p.SettlementA.HasOwner && p.SettlementA.Owner == player) ||
@@ -131,11 +214,12 @@ namespace B3.BuildingSystem
             }
 
             HighlightPaths(availablePaths, true);
-            Path selectedPath = null;
             bool roadPlaced = false;
 
             clickButton.action.Enable();
-            //daca obiectul (adica aici drumul) pe care a dat click playerul este printre pathurile available setam drept Owner playerul 
+
+            BoardController board = FindObjectOfType<BoardController>();
+
             while (!roadPlaced)
             {
                 if (clickButton.action.WasPressedThisFrame())
@@ -143,22 +227,34 @@ namespace B3.BuildingSystem
                     var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
                     if (Physics.Raycast(ray, out RaycastHit hit, 100f))
                     {
-                        var path = hit.transform.GetComponent<Path>();
-                        if (path != null && availablePaths.Contains(path))
+                        Vector3 hitPoint = hit.point;
+
+                        PieceController piece = board.GetPieceAt(hitPoint);
+                        if (piece == null)
+                            continue;
+
+                        Vector3 edgeMidpoint = board.GetClosestEdgeMidpoint(piece, hitPoint);
+
+                        foreach (var path in availablePaths)
                         {
-                            path.Owner = player;
-                            player.Paths.Add(path);
-                            Debug.Log($"Road built between {path.SettlementA?.name} and {path.SettlementB?.name} by {player.name}");
-                            roadPlaced = true;
-                            selectedPath = path;
+                            if (path.IsNearEdge(edgeMidpoint))
+                            {
+                                path.Owner = player;
+                                player.Paths.Add(path);
+                                Debug.Log($"Road built along edge near {edgeMidpoint} by {player.name}");
+                                roadPlaced = true;
+                                break;
+                            }
                         }
                     }
                 }
+
                 yield return null;
             }
 
             HighlightPaths(availablePaths, false);
         }
+
 
         private void HighlightPaths(List<Path> paths, bool highlight)
         {

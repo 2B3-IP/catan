@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using B3.DevelopmentCardSystem;
 using B3.PlayerInventorySystem;
+using Game_Settings;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,6 +10,7 @@ namespace B3.PlayerSystem
     public class PlayersManager : MonoBehaviour
     {
         public List<PlayerBase> players;
+        public static event System.Action<int> OnPlayersInitialized;
 
         public HumanPlayer humanPlayer => (HumanPlayer) players[0];
         
@@ -25,6 +27,7 @@ namespace B3.PlayerSystem
                 Destroy(players[i].gameObject);
                 players.RemoveAt(i);
             }
+            OnPlayersInitialized?.Invoke(numberOfPlayers);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace B3.BoardSystem
@@ -93,7 +94,45 @@ namespace B3.BoardSystem
 
             return new HexPosition(hexX, hexY);
         }
+        //metoda care returneaza cele 6 pozitii vecine ale hexagonului
+        public List<HexPosition> GetNeighbors(HexPosition position)
+        {
+            return new List<HexPosition>
+            {
+                position.Top,
+                position.TopRight,
+                position.BottomRight,
+                position.Bottom,
+                position.BottomLeft,
+                position.TopLeft
+            };
+        }
+        //metoda care iti returneaza continutul vecinilor
+        public List<T> GetNeighborValues(HexPosition position)
+        {
+            List<T> neighbors = new();
+            foreach (var neighborPos in GetNeighbors(position))
+            {
+                var value = this[neighborPos];
+                if (value != null)
+                    neighbors.Add(value);
+            }
+            return neighbors;
+        }
         
-        
+        public T GetCellAtAxial(Vector2 axialCoords)
+        {
+            int x = Mathf.RoundToInt(axialCoords.x);
+            int y = Mathf.RoundToInt(axialCoords.y);
+    
+            HexPosition position = new HexPosition(x, y);
+            return this[position];
+        }
+
+        public Vector2 WorldToAxial(Vector3 worldPosition)
+        {
+            HexPosition hexPos = FromWorldPosition(new Vector2(worldPosition.x, worldPosition.z));
+            return new Vector2(hexPos.X, hexPos.Y);
+        }
     }
 }

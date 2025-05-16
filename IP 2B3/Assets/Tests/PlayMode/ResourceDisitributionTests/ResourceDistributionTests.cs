@@ -103,7 +103,6 @@ public class SimpleResourceDistributionTest
         int before = cityPlayer.Resources[resourceIndex];
 
         Debug.Log($"[TEST] City - Before: {before} resurse {piece.ResourceType}");
-
         board.GiveResources(piece.Number);
         yield return null;
 
@@ -164,6 +163,11 @@ public class SimpleResourceDistributionTest
     {
         public override IEnumerator DiceThrowForceCoroutine() => null;
         public override IEnumerator MoveThiefCoroutine(B3.ThiefSystem.ThiefController _) => null;
-        public override void OnTradeAndBuildUpdate() { }
+
+        public override void OnTradeAndBuildUpdate()
+        {
+        }
+
+        public override IEnumerator BuildHouseCoroutine() => null;
     }
 }

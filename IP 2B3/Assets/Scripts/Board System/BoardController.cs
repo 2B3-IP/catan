@@ -87,5 +87,10 @@ namespace B3.BoardSystem
             
             return piece;
         }
+
+        public void GiveResources(object number)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

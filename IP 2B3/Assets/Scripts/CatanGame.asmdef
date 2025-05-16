@@ -2,7 +2,12 @@
     "name": "CatanGame",
     "rootNamespace": "",
     "references": [
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "scrypting",
+        "NaughtyAttributes.Core",
+        "NaughtyAttributes.Editor",
+        "NaughtyAttributes.Test",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

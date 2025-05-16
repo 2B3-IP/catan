@@ -8,10 +8,10 @@ namespace B3.PieceSystem
 {
     public sealed class PieceController : MovingPieceController
     {
-        [field:SerializeField] public ResourceType ResourceType { get; private set; }
+        [field:SerializeField] public ResourceType ResourceType { get; set; }
         [field:SerializeField] public bool IsBlocked { get; set; }
         [field:SerializeField] public Transform ThiefPivot { get; private set; }
-        public List<SettlementController> Settlements { get; } = new();
+        public List<SettlementController> Settlements { get; set; } = new();
         public int Number { get; set; }
         
     }

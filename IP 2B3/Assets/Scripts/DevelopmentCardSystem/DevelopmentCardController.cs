@@ -3,7 +3,6 @@ using B3.GameStateSystem;
 using B3.PlayerSystem;
 using NaughtyAttributes;
 using UnityEngine;
-
 namespace B3.DevelopmentCardSystem
 {
     public sealed class DevelopmentCardController : MonoBehaviour

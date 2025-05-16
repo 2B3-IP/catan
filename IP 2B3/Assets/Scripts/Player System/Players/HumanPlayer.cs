@@ -14,7 +14,14 @@ namespace B3.PlayerSystem
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private LayerMask pieceLayerMask;
         
+        //private readonly Camera _playerCamera = Camera.main;
+        private  Camera _playerCamera;
+
         private readonly RaycastHit[] _hits = new RaycastHit[5];
+        private void Awake()
+        {
+            _playerCamera = Camera.main; // ✅ permis aici
+        }
 
         private void OnEnable() =>
             UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
@@ -46,7 +53,7 @@ namespace B3.PlayerSystem
             int hitCount = 0;
             while(hitCount == 0)
             {
-                var ray = Camera.main.ScreenPointToRay(Mouse.current.position.value);
+                var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
                 hitCount = Physics.RaycastNonAlloc(ray, _hits, float.MaxValue, pieceLayerMask);
             }
 

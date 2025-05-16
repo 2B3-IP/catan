@@ -9,7 +9,7 @@ using System.Linq;
 namespace B3.GameStateSystem
 {
     [System.Serializable]
-    internal sealed class ResourceGameState : GameStateBase
+    public sealed class ResourceGameState : GameStateBase
     {
         [SerializeField] private DiceThrower diceThrower;
         [SerializeField] private List<PieceController> allPieces;
@@ -29,7 +29,7 @@ namespace B3.GameStateSystem
                     var owner = settlement.Owner;
                     var resourceType = piece.ResourceType;
                     int amount = settlement.ResourceAmount;
-                    
+        
                     owner.AddResource(resourceType, amount);
                 }
             }

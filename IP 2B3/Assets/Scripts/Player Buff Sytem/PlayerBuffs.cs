@@ -19,13 +19,19 @@ namespace B3.PlayerBuffSystem
 
         public void AddBuff(ResourceType resourceType, PlayerBuff buff)
         {
-            var currentBuffIndex = _buffs[resourceType];
-            if (buff < currentBuffIndex)
-                return;
-            
-            _buffs.Add(resourceType, buff);
-        }
+            if (!_buffs.ContainsKey(resourceType))//adaugat cod dadea eroare cand nu exista
+            {
+                _buffs[resourceType] = buff; // Dacă nu există, adaugă un buff implicit
+            }
+            else
+            {
+                var currentBuffIndex = _buffs[resourceType];
+                if (buff < currentBuffIndex)
+                    return;
 
+                _buffs[resourceType] = buff; // Înlocuiește cu buff-ul mai puternic
+            }
+        }
         public int GetResourceAmount(ResourceType resourceType)
         {
             return _buffs[resourceType] switch
@@ -35,6 +41,10 @@ namespace B3.PlayerBuffSystem
                 PlayerBuff.Trade2_1 => 2,
                 _ => 0
             };
+        }
+        public PlayerBuff GetBuffForResource(ResourceType resourceType)
+        {
+            return _buffs.ContainsKey(resourceType) ? _buffs[resourceType] : PlayerBuff.Trade4_1;
         }
     }
 }

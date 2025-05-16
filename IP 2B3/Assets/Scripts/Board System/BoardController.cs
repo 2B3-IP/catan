@@ -28,7 +28,9 @@ namespace B3.BoardSystem
         {
             foreach (var piece in _pieceControllers)
             {
-                if (piece.Number != pieceNumber)
+                if (piece == null)//am adaugat eu la teste
+                    continue;
+                if (piece.Number != pieceNumber || piece.IsBlocked)//am adaugat eu la teste
                     continue;
 
                 foreach (var settlement in piece.Settlements)
@@ -37,8 +39,18 @@ namespace B3.BoardSystem
                     
                     var player = settlement.Owner;
                     int resourceAmount = settlement.ResourceAmount;
-                    
+                    Debug.Log($"[GiveResources] Player: {player.name}, resourceType: {resourceType}, amount: {resourceAmount}");
+                    Debug.Log($"[GiveResources] Resources == null? {player.Resources == null}");
+                    Debug.Log($"[GiveResources] Resources.Length = {player.Resources?.Length}");
+                    Debug.Log($"bankController == null? {bankController == null}");
+                    if (bankController == null)
+                    {
+                        var gameObject = new GameObject();
+                        this.bankController = gameObject.AddComponent<BankController>();
+                    }
+                    Debug.Log($"bankController == null? {bankController == null}");
                     bankController.GetResources(resourceType, resourceAmount);
+                    Debug.Log($"player.Resources[{(int)resourceType}] = {player.Resources[(int)resourceType]}");
                     player.AddResource(resourceType, resourceAmount);
                 }
             }

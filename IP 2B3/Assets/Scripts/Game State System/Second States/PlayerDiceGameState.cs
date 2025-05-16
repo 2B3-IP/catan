@@ -5,7 +5,7 @@ using B3.DiceSystem;
 namespace B3.GameStateSystem
 {
     [System.Serializable]
-    internal sealed class PlayerDiceGameState : GameStateBase
+    public sealed class PlayerDiceGameState : GameStateBase
     {
         private const int THIEF_ROLL = 7;
         
@@ -15,26 +15,33 @@ namespace B3.GameStateSystem
 
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
+            Debug.Log("[State] Entered PlayerDiceGameState");
+
             _camera ??= Camera.main;
-            
-            // TODO(front): inlocuieste Vector3.zero cu pozitia camerei playerului curent
-            // + trb sa astepti ca playerul ca tina apasat pe un buton iar apoi sa i pasezi forta la coroutina
-            // adica, cu cat mai mult tine apasat pe buton cu atat mai tare arunca zaru
 
             var currentPlayer = stateMachine.CurrentPlayer;
-            
-            yield return currentPlayer.DiceThrowForceCoroutine();
-            float throwForce = currentPlayer.DiceThrowForce;
-            // player - de la input
-            // ai - random
+            Debug.Log($"[State] CurrentPlayer: {currentPlayer?.name}");
 
-            var startPosition = _camera.transform.forward;
+            yield return currentPlayer.DiceThrowForceCoroutine();
+            Debug.Log("[State] DiceThrowForceCoroutine DONE");
+            
+            float throwForce = currentPlayer.DiceThrowForce;
+            Debug.Log($"[State] Force = {throwForce}");
+
+            var startPosition = _camera.transform.forward+ new Vector3(0, 2, -15);//nu era ok cum era inainte
+            Debug.Log($"[State] Throwing from position {startPosition} with force {throwForce}");
             yield return diceThrower.ThrowCoroutine(startPosition, throwForce);
+            Debug.Log($"[State] ThrowCoroutine DONE");
 
             int diceRolls = diceThrower.DiceRolls;
-            
-            if(diceRolls == THIEF_ROLL) stateMachine.ChangeState<ThiefGameState>();
-            else stateMachine.ChangeState<ResourceGameState>();
+            Debug.Log($"[State] Dice rolled: {diceRolls}");
+
+            if(diceRolls == 7)
+                stateMachine.ChangeState<ThiefGameState>();
+            else
+                stateMachine.ChangeState<ResourceGameState>();
+
+            Debug.Log("[State] ChangeState called");
         }
     }
 }

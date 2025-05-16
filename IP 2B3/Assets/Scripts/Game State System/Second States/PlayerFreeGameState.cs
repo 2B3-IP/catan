@@ -4,7 +4,7 @@ using UnityEngine;
 namespace B3.GameStateSystem
 {
     [System.Serializable]
-    internal sealed class PlayerFreeGameState : GameStateBase
+    public sealed class PlayerFreeGameState : GameStateBase
     {
         [SerializeField] private float _waitTimeRound = 10f;
         

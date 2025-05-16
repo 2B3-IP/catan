@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace B3.SettlementSystem
 {
-    public sealed class SettlementController : MonoBehaviour
+    public class SettlementController : MonoBehaviour
     {
         [SerializeField] private GameObject houseObject;
         [SerializeField] private GameObject cityObject;

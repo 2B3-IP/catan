@@ -10,6 +10,7 @@ namespace B3.PlayerSystem
     public class PlayersManager : MonoBehaviour
     {
         public List<PlayerBase> players;
+        public static event System.Action<int> OnPlayersInitialized;
 
         public HumanPlayer humanPlayer => (HumanPlayer) players[0];
         
@@ -26,6 +27,7 @@ namespace B3.PlayerSystem
                 Destroy(players[i].gameObject);
                 players.RemoveAt(i);
             }
+            OnPlayersInitialized?.Invoke(numberOfPlayers);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace B3.BuildingSystem
     {  
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private LayerMask settlementLayerMask;
+        [SerializeField] private SettlementController settlementController;
+        
         private readonly Camera _playerCamera = Camera.main;
         private readonly RaycastHit[] _hits = new RaycastHit[5];
         
@@ -30,36 +32,25 @@ namespace B3.BuildingSystem
 
         public override IEnumerator BuildHouse(PlayerBase player)
         {
-            if (!CanBuildHouse(player))
-                yield break;
-            
-            var availableSettlements =
-                _settlements.Where(s => !s.HasOwner && CanBuildHouse(s, player, _allPaths)).ToArray();
-            
-            if (availableSettlements.Length == 0)
-            {
-                Debug.Log("No available settlements to build a house.");
-                yield break;
-            }
-            
-            ShowAvailableSettlements(availableSettlements);
+            yield return player.BuildHouseCoroutine();
 
-            _housePlaced = false;
-            SettlementController.OnSettlementSelected += OnSettlementSelected;
-            
-            while (!_housePlaced)
+            Vector2? closestCorner = player.ClosestCorner;
+
+            if (closestCorner.HasValue)
             {
-                yield return null;
+                Vector3 position = new Vector3(closestCorner.Value.x, 0f, closestCorner.Value.y);
+        
+                var house = Instantiate(settlementController, position, Quaternion.identity);
+
+                house.SetOwner(player);
+                player.Settlements.Add(house);
+        
+                Debug.Log($"House built at {position} by {player.name}");
             }
-            
-            if (_selectedSettlement != null)
+            else
             {
-                _selectedSettlement.SetOwner(player);
-                _selectedSettlement.BuildHouse();
-                player.Settlements.Add(_selectedSettlement);
-                Debug.Log($"House built at {_selectedSettlement.name} by {player.name}");
+                Debug.LogWarning("No valid closest corner found. House not built.");
             }
-            SettlementController.OnSettlementSelected -= OnSettlementSelected;
         }
         
         private void ShowAvailableSettlements(SettlementController[] availableSettlements)

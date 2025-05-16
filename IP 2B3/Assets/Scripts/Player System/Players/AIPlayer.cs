@@ -22,5 +22,10 @@ namespace B3.PlayerSystem
             // verifica daca are de contruit + de dat trade
             // daca nu mai are IsTurnEnded = false;
         }
+
+        public override IEnumerator BuildHouseCoroutine()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

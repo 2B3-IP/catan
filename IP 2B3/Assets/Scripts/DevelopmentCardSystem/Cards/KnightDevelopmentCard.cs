@@ -14,15 +14,13 @@ namespace B3.DevelopmentCardSystem
         [SerializeField] private LayerMask pieceLayerMask;
         [SerializeField] private InputActionReference clickButton;
 
-        private  Camera _playerCamera;
+        private Camera _playerCamera;
         private RaycastHit[] _hits = new RaycastHit[5];
-
-        public void Awake()
-        {
-            _playerCamera=Camera.main;
-        }
+        
         public override IEnumerator UseCard(PlayerBase player)
         {
+            _playerCamera ??= Camera.main;
+            
             var action = clickButton.action;
             while (!action.WasPressedThisFrame())
                 yield return null;

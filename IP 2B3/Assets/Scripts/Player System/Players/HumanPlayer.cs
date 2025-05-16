@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using B3.BoardSystem;
 using B3.BuildingSystem;
 using B3.GameStateSystem;
@@ -63,7 +65,7 @@ namespace B3.PlayerSystem
         }
 
         public override IEnumerator BuildHouseCoroutine()
-        {
+        { 
             yield return RayCastCoroutine();
             
             HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
@@ -72,6 +74,56 @@ namespace B3.PlayerSystem
 
             this.ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
             
+        }
+        
+        public override IEnumerator UpgradeToCityCoroutine()
+        { 
+            yield return RayCastCoroutine();
+            HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
+            var hexCenter=boardController.BoardGrid.ToWorldPosition(hexPosition);
+            this.ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
+         
+            if (!ClosestCorner.HasValue)
+            {
+                Debug.Log("No corner detected.");
+                yield break;
+            }
+            
+           
+           SettlementController settlement = null;
+           // TODO: De implementat hexboard pt settlements
+           
+           var TempSettlements = GameObject.FindObjectsOfType<SettlementController>().ToList(); //Array temporar!
+           foreach (var s in TempSettlements)
+           {
+               Vector2 sPosition2D = new Vector2(s.transform.position.x, s.transform.position.z);
+               if (Vector2.Distance(sPosition2D, ClosestCorner.Value) < 0.1f)
+               {
+                   settlement = s;
+                   break;
+               }
+           }
+
+            if (settlement == null)
+            {
+                Debug.Log("No settlement found.");
+                yield break;
+            }
+
+            if (settlement.Owner != this)
+            {
+                Debug.Log("Not your house.");
+                yield break;
+            }
+
+            if (settlement.IsCity)
+            {
+                Debug.Log("Already a city.");
+                yield break;
+            }
+            settlement.UpgradeToCity();
+          
+
         }
 
         private IEnumerator RayCastCoroutine()

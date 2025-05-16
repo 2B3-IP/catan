@@ -41,6 +41,8 @@ namespace B3.PlayerSystem
 
         public abstract IEnumerator BuildHouseCoroutine();
         
+        public abstract IEnumerator UpgradeToCityCoroutine();
+        
         public IEnumerator EndTurnCoroutine()
         {
             while (!IsTurnEnded)

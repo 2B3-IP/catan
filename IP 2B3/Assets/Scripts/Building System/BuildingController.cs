@@ -32,38 +32,75 @@ namespace B3.BuildingSystem
         public override IEnumerator BuildHouse(PlayerBase player)
         {
             yield return player.BuildHouseCoroutine();
-
-            Vector2? closestCorner = player.ClosestCorner;
-
-            if (closestCorner.HasValue)
-            {
-                Vector3 position = new Vector3(closestCorner.Value.x, 0f, closestCorner.Value.y);
-        
-                var house = Instantiate(settlementPrefab, position, Quaternion.identity);
-
-                house.SetOwner(player);
-                player.Settlements.Add(house);
-        
-                Debug.Log($"House built at {position} by {player.name}");
-            }
-            else
-            {
-                Debug.LogWarning("No valid closest corner found. House not built.");
-            }
-        }
-        
-        private void ShowAvailableSettlements(SettlementController[] availableSettlements)
-        {
-            foreach (var settlement in availableSettlements)
-            {
-                settlement.Highlight(true);
-                settlement.AllowSelection(true);
-            }
-        }
-
-        private void OnSettlementSelected(SettlementController settlement)
-        {
             
+            var closestCorner = player.ClosestCorner;
+
+            closestCorner.SetOwner(player);
+            closestCorner.BuildHouse();
+            player.Settlements.Add(closestCorner);
+    
+            Debug.Log($"House built at {closestCorner.transform.position} by {player.name}");
+        }
+        
+        public override IEnumerator BuildRoad(PlayerBase player)
+        {
+            if (!CanBuildRoad(player))
+                yield break;
+
+            
+            var availablePaths = _allPaths
+                .Where(p => p.Owner == null && (
+                    (p.SettlementA != null && p.SettlementA.HasOwner && p.SettlementA.Owner == player) ||
+                    (p.SettlementB != null && p.SettlementB.HasOwner && p.SettlementB.Owner == player) ||
+                    IsConnectedToOwnedRoad(p, player)
+                )).ToList();
+
+            if (availablePaths.Count == 0)
+            {
+                Debug.Log("No available paths to build a road.");
+                yield break;
+            }
+
+            HighlightPaths(availablePaths, true);
+            bool roadPlaced = false;
+
+            clickButton.action.Enable();
+
+            BoardController board = FindObjectOfType<BoardController>();
+
+            while (!roadPlaced)
+            {
+                if (clickButton.action.WasPressedThisFrame())
+                {
+                    var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
+                    if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+                    {
+                        Vector3 hitPoint = hit.point;
+
+                        PieceController piece = board.GetPieceAt(hitPoint);
+                        if (piece == null)
+                            continue;
+
+                        Vector3 edgeMidpoint = board.GetClosestEdgeMidpoint(piece, hitPoint);
+
+                        foreach (var path in availablePaths)
+                        {
+                            if (path.IsNearEdge(edgeMidpoint))
+                            {
+                                path.Owner = player;
+                                player.Paths.Add(path);
+                                Debug.Log($"Road built along edge near {edgeMidpoint} by {player.name}");
+                                roadPlaced = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                yield return null;
+            }
+
+            HighlightPaths(availablePaths, false);
         }
 
         protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player, Path[] allPaths)
@@ -184,67 +221,6 @@ namespace B3.BuildingSystem
 
             return hasOwnedSettlement || isConnectedToOwnedRoad;
         }
-        public override IEnumerator BuildRoad(PlayerBase player)
-        {
-            yield break;
-            if (!CanBuildRoad(player))
-                yield break;
-
-            var availablePaths = _allPaths
-                .Where(p => p.Owner == null && (
-                    (p.SettlementA != null && p.SettlementA.HasOwner && p.SettlementA.Owner == player) ||
-                    (p.SettlementB != null && p.SettlementB.HasOwner && p.SettlementB.Owner == player) ||
-                    IsConnectedToOwnedRoad(p, player)
-                )).ToList();
-
-            if (availablePaths.Count == 0)
-            {
-                Debug.Log("No available paths to build a road.");
-                yield break;
-            }
-
-            HighlightPaths(availablePaths, true);
-            bool roadPlaced = false;
-
-            clickButton.action.Enable();
-
-            BoardController board = FindObjectOfType<BoardController>();
-
-            while (!roadPlaced)
-            {
-                if (clickButton.action.WasPressedThisFrame())
-                {
-                    var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
-                    if (Physics.Raycast(ray, out RaycastHit hit, 100f))
-                    {
-                        Vector3 hitPoint = hit.point;
-
-                        PieceController piece = board.GetPieceAt(hitPoint);
-                        if (piece == null)
-                            continue;
-
-                        Vector3 edgeMidpoint = board.GetClosestEdgeMidpoint(piece, hitPoint);
-
-                        foreach (var path in availablePaths)
-                        {
-                            if (path.IsNearEdge(edgeMidpoint))
-                            {
-                                path.Owner = player;
-                                player.Paths.Add(path);
-                                Debug.Log($"Road built along edge near {edgeMidpoint} by {player.name}");
-                                roadPlaced = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                yield return null;
-            }
-
-            HighlightPaths(availablePaths, false);
-        }
-
 
         private void HighlightPaths(List<Path> paths, bool highlight)
         {

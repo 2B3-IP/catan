@@ -1,14 +1,14 @@
-﻿using B3.GameStateSystem;
-using B3.PlayerBuffSystem;
+﻿using B3.PlayerBuffSystem;
+using B3.PlayerSystem;
 using B3.ResourcesSystem;
 
 namespace B3.PortSystem
 {
     public sealed class RandomPortController : PortController
     {
-        public override void AddPlayerBuff()
+        public override void AddPlayerBuff(PlayerBase player)
         {
-            var ownerBuffs = OwnerBuffs;
+            var ownerBuffs = player.GetComponent<PlayerBuffs>();
             if (ownerBuffs == null)
                 return;
 

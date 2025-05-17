@@ -7988,6 +7988,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 4843176512489315391, guid: 947e18f52accac94daf9ef3ad708303f, type: 3}
+      propertyPath: hitDistance
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 4843176512489315391, guid: 947e18f52accac94daf9ef3ad708303f, type: 3}
       propertyPath: boardController
       value: 
       objectReference: {fileID: 181466517}
@@ -8495,6 +8499,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1246586736062280716, guid: da8fa586852415d438f2b23fe74058f8, type: 3}
+      propertyPath: settlementPrefab
+      value: 
+      objectReference: {fileID: 5200040358732198354, guid: 6cd7e780901bac74a8182dd61c3a8ff8, type: 3}
     - target: {fileID: 2969164075359656873, guid: da8fa586852415d438f2b23fe74058f8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

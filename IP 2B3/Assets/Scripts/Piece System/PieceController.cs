@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using B3.BoardSystem;
 using B3.ResourcesSystem;
 using B3.SettlementSystem;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace B3.PieceSystem
         [field:SerializeField] public Transform ThiefPivot { get; private set; }
         public List<SettlementController> Settlements { get; } = new();
         public int Number { get; set; }
+        public HexPosition HexPosition { get; set; }
         
         public float radius = 1f;
 

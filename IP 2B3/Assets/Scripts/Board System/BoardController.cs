@@ -3,7 +3,9 @@ using TMPro;
 using B3.PieceSystem;
 using NaughtyAttributes;
 using System.Linq;
-using Game_Settings;
+using B3.BuildingSystem;
+using B3.SettlementSystem;
+using Random = UnityEngine.Random;
 
 namespace B3.BoardSystem
 {
@@ -15,13 +17,37 @@ namespace B3.BoardSystem
         [SerializeField] private BoardPiece[] pieces;
         [SerializeField] private BoardPiece[] ports;
         
+        [SerializeField] private SettlementController settlementPrefab;
+        
         [SerializeField] private GameObject debugTextPrefab;
-        
-        private readonly HexGrid<PieceController> _boardGrid = new(GRID_WIDTH, GRID_HEIGHT);
-        
-        private int _currentIndex;
-        public HexGrid<PieceController> BoardGrid => _boardGrid;
 
+        private int _currentIndex;
+        public FullHexGrid<PieceController, SettlementController, Path> BoardGrid { get; private set; }
+
+        private void Awake()
+        {
+            BoardGrid = new FullHexGrid<PieceController, SettlementController, Path>
+                (GRID_WIDTH, GRID_HEIGHT, VertexFactory, EdgeFactory);
+        }
+
+        private Path EdgeFactory(PieceController cell, HexPosition hex, HexEdgeDir dir)
+        {
+            return null;
+        }
+
+        private SettlementController VertexFactory(PieceController cell, HexPosition hex, HexVertexDir dir)
+        {
+            var cornerPosition = BoardGrid.GetHexCorner(dir, hex);
+
+            var settlementPosition = new Vector3(cornerPosition.x, 0, cornerPosition.y);
+            var instance = Instantiate(settlementPrefab, settlementPosition, Quaternion.identity);
+            
+            instance.HexPosition = hex;
+            instance.VertexDir = dir;
+            
+            return instance;
+        }
+        
         [Button]
         public void Generate()
         {
@@ -50,9 +76,10 @@ namespace B3.BoardSystem
         
         public PieceController GetPieceAt(Vector3 position)
         {
-            Vector2 axialCoords = _boardGrid.WorldToAxial(position);
-            PieceController piece = _boardGrid.GetCellAtAxial(axialCoords);
-            return piece;
+            //Vector2 axialCoords = BoardGrid.WorldToAxial(position);
+            //PieceController piece = BoardGrid.GetCellAtAxial(axialCoords);
+            //return piece;
+            return null;
         }
 
         private void SpawnLine(int iMin, int iMax, int j, bool arePortPieces)
@@ -67,15 +94,13 @@ namespace B3.BoardSystem
                 
             var boardPiece = GetRandomPiece(arePortPieces);
             if (boardPiece == null)
-            {
-                Debug.Log(i + " " + j);
                 return;
-            }
 
-            var worldPosition = _boardGrid.ToWorldPosition(position);
+            var worldPosition = BoardGrid.ToWorldPosition(position);
             var pieceController = boardPiece.Spawn(new Vector3(worldPosition.x, 0, worldPosition.y), transform);
-            
-            _boardGrid[position] = pieceController;
+
+            pieceController.HexPosition = position;
+            BoardGrid[position] = pieceController;
                 
             var debugText = Instantiate(
                 debugTextPrefab, 

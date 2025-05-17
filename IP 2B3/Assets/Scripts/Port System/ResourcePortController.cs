@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using B3.GameStateSystem;
 using B3.PlayerBuffSystem;
+using B3.PlayerSystem;
 using B3.ResourcesSystem;
 
 namespace B3.PortSystem
@@ -9,7 +10,7 @@ namespace B3.PortSystem
     {
         [SerializeField] private ResourceType resourceType;
         
-        public override void AddPlayerBuff()
+        public override void AddPlayerBuff(PlayerBase player)
         {
             var ownerBuffs = OwnerBuffs;
             

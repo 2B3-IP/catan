@@ -4,6 +4,7 @@ using B3.BuildingSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.PlayerBuffSystem;
+using B3.PlayerSystem;
 using B3.SettlementSystem;
 using UnityEngine;
 
@@ -30,7 +31,7 @@ namespace B3.PortSystem
             }
         }
 
-        public abstract void AddPlayerBuff();
+        public abstract void AddPlayerBuff(PlayerBase player);
         
         private HashSet<SettlementController> GetNearbyCornerSettlements()
         {
@@ -42,10 +43,10 @@ namespace B3.PortSystem
             const float threshold = 0.4f;
 
             HashSet<SettlementController> nearbySettlements = new();
-
+/*
             foreach (var corner in portCorners)
             {
-                // Transformă colțul într-o poziție de hex
+                // Transforma coltul intr-o pozitie de hex
                 HexPosition cornerHexPos = hexGrid.FromWorldPosition(corner);
                 var piece = hexGrid[cornerHexPos];
 
@@ -61,7 +62,7 @@ namespace B3.PortSystem
                         nearbySettlements.Add(settlement);
                     }
                 }
-            }
+            }*/
 
             return nearbySettlements;
         }

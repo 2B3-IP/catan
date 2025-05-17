@@ -26,8 +26,13 @@ namespace B3.PlayerSystem
         private readonly RaycastHit[] _hits = new RaycastHit[5];
         private RaycastHit _closestHit;
         
-        private const float CornerDistanceThreshold = 0.4f;
- 
+        private Camera _playerCamera;
+        
+        private const float CornerDistanceThreshold = 0.5f;
+
+        private void Start() =>
+            _playerCamera = Camera.main;
+
         private void OnEnable() =>
             UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
         
@@ -66,18 +71,23 @@ namespace B3.PlayerSystem
         }
 
         public override IEnumerator BuildHouseCoroutine()
-        { 
-            yield return RayCastCoroutine();
-            HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
+        {
+            ClosestCorner = null;
             
-            var hexCenter= boardController.BoardGrid.ToWorldPosition(hexPosition);
-            ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
+            while (ClosestCorner == null)
+            {
+                yield return RayCastCoroutine();
+                var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
+
+                var hexPosition = pieceController.HexPosition;
+                ClosestCorner = GetClosestCorner(hexPosition, _closestHit.point);
+            }
         }
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
             yield return RayCastCoroutine();
-            this.SelectedSettlement = null;
+            /*
             HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
             var hexCenter=boardController.BoardGrid.ToWorldPosition(hexPosition);
             this.ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
@@ -89,6 +99,7 @@ namespace B3.PlayerSystem
             }
             
            
+           SettlementController settlement = null;
            // TODO: De implementat hexboard pt settlements
            
            var TempSettlements = GameObject.FindObjectsOfType<SettlementController>().ToList(); //Array temporar!
@@ -97,10 +108,29 @@ namespace B3.PlayerSystem
                Vector2 sPosition2D = new Vector2(s.transform.position.x, s.transform.position.z);
                if (Vector2.Distance(sPosition2D, ClosestCorner.Value) < 0.1f)
                {
-                   this.SelectedSettlement = s;
+                   settlement = s;
                    break;
                }
            }
+
+            if (settlement == null)
+            {
+                Debug.Log("No settlement found.");
+                yield break;
+            }
+
+            if (settlement.Owner != this)
+            {
+                Debug.Log("Not your house.");
+                yield break;
+            }
+
+            if (settlement.IsCity)
+            {
+                Debug.Log("Already a city.");
+                yield break;
+            }
+            settlement.UpgradeToCity();*/
           
 
         }
@@ -118,7 +148,7 @@ namespace B3.PlayerSystem
                     yield return null;
                 }
                 
-                var ray = Camera.main.ScreenPointToRay(Mouse.current.position.value);
+                var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
                 hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask);
                 Debug.Log("aaa: " + hitCount);
             }
@@ -147,19 +177,24 @@ namespace B3.PlayerSystem
             return corners;
         }
 
-        private Vector2? GetClosestCorner(Vector2 center, Vector2 hitPoint, float radius)
+        private SettlementController GetClosestCorner(HexPosition position, Vector3 hitPoint)
         {
-            var corners = GetHexCorners(center, radius);
-            Vector2? closestCorner = null;
+            var boardGrid = boardController.BoardGrid;
+            var corners = boardGrid.GetHexVertices(position);
+            
+            SettlementController closestCorner = null;
             float minDistance = float.MaxValue;
 
             foreach (var corner in corners)
             {
-                float distance = Vector2.Distance(hitPoint, corner);
+                var cornerPosition = boardGrid.GetHexCorner(corner.Item2, position);
+                var settlementPosition = new Vector3(cornerPosition.x, 0, cornerPosition.y);
+                
+                float distance = Vector3.Distance(hitPoint, settlementPosition);
                 if (distance <= CornerDistanceThreshold && distance < minDistance)
                 {
                     minDistance = distance;
-                    closestCorner = corner;
+                    closestCorner = corner.Item1;
                 }
             }
 

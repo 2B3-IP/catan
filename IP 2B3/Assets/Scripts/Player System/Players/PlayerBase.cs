@@ -18,6 +18,7 @@ namespace B3.PlayerSystem
         /// <summary>
         /// Mapat cu ResourceType (Resources[0] = Ore, Resources[1] = Wheat, Resources[2] = Wood, Resources[3] = Brick, Resources[4] = Sheep)
         /// </summary>
+        /// 
         public int[] Resources { get; private set; }  = new int[5];
 
         public int VictoryPoints { get; private set; }
@@ -31,12 +32,13 @@ namespace B3.PlayerSystem
         public List<Path> Paths { get; private set; } = new();
         
         public PieceController SelectedThiefPiece { get; protected set; }
+        public SettlementController SelectedSettlement { get; protected set; }
         
         private void Awake() =>
             PlayerBuffs = GetComponent<PlayerBuffs>();
 
         public abstract IEnumerator DiceThrowForceCoroutine();
-        public abstract IEnumerator MoveThiefCoroutine(ThiefController thiefController);
+        public abstract IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController);
         public abstract void OnTradeAndBuildUpdate();
 
         public abstract IEnumerator BuildHouseCoroutine();

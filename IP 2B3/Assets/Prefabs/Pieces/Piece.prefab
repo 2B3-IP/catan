@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6353825636534302838}
   - component: {fileID: 5022685486829936994}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Piece
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,6 +50,7 @@ MonoBehaviour:
   <ResourceType>k__BackingField: 0
   <IsBlocked>k__BackingField: 0
   <ThiefPivot>k__BackingField: {fileID: 0}
+  radius: 1
 --- !u!1 &7779977402117031791
 GameObject:
   m_ObjectHideFlags: 0
@@ -62,7 +63,7 @@ GameObject:
   - component: {fileID: 8699602833896454440}
   - component: {fileID: 2622463852517601607}
   - component: {fileID: 2846589395162946154}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Base frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +172,7 @@ GameObject:
   - component: {fileID: 6736805376224820131}
   - component: {fileID: 5380163187218900059}
   - component: {fileID: 3076110230580040464}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plate
   m_TagString: Untagged
   m_Icon: {fileID: 0}

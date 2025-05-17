@@ -11,11 +11,11 @@ namespace B3.GameStateSystem
         
         [SerializeField] private DiceThrower diceThrower;
 
-        private Camera _camera;
+        private Transform _cameraTransform;
 
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
-            _camera ??= Camera.main;
+            _cameraTransform ??= Camera.main.transform;
             
             // TODO(front): inlocuieste Vector3.zero cu pozitia camerei playerului curent
             // + trb sa astepti ca playerul ca tina apasat pe un buton iar apoi sa i pasezi forta la coroutina
@@ -28,7 +28,7 @@ namespace B3.GameStateSystem
             // player - de la input
             // ai - random
 
-            var startPosition = _camera.transform.forward;
+            var startPosition = _cameraTransform.forward;
             yield return diceThrower.ThrowCoroutine(startPosition, throwForce);
 
             int diceRolls = diceThrower.DiceRolls;

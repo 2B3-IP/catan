@@ -10,7 +10,7 @@ namespace B3.DevelopmentCardSystem
     [System.Serializable]
     internal sealed class KnightDevelopmentCard : DevelopmentCardBase
     {
-        [SerializeField] private ThiefController thiefController;
+        [SerializeField] private ThiefControllerBase thiefController;
         [SerializeField] private LayerMask pieceLayerMask;
         [SerializeField] private InputActionReference clickButton;
 

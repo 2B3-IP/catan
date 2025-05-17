@@ -21,12 +21,13 @@ namespace B3.PlayerSystem
         
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private LayerMask pieceLayerMask;
-        
+        [SerializeField] private int hitDistance = 200;
         
         private readonly RaycastHit[] _hits = new RaycastHit[5];
         private RaycastHit _closestHit;
         
         private const float CornerDistanceThreshold = 0.4f;
+ 
         private void OnEnable() =>
             UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
         
@@ -48,7 +49,7 @@ namespace B3.PlayerSystem
             DiceThrowForce = throwForce;
         }
 
-        public override IEnumerator MoveThiefCoroutine(ThiefController thiefController)
+        public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
             yield return RayCastCoroutine();
             
@@ -67,18 +68,16 @@ namespace B3.PlayerSystem
         public override IEnumerator BuildHouseCoroutine()
         { 
             yield return RayCastCoroutine();
-            
             HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
             
-            var hexCenter=boardController.BoardGrid.ToWorldPosition(hexPosition);
-
-            this.ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
-            
+            var hexCenter= boardController.BoardGrid.ToWorldPosition(hexPosition);
+            ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
         }
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
             yield return RayCastCoroutine();
+            this.SelectedSettlement = null;
             HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
             var hexCenter=boardController.BoardGrid.ToWorldPosition(hexPosition);
             this.ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
@@ -90,7 +89,6 @@ namespace B3.PlayerSystem
             }
             
            
-           SettlementController settlement = null;
            // TODO: De implementat hexboard pt settlements
            
            var TempSettlements = GameObject.FindObjectsOfType<SettlementController>().ToList(); //Array temporar!
@@ -99,29 +97,10 @@ namespace B3.PlayerSystem
                Vector2 sPosition2D = new Vector2(s.transform.position.x, s.transform.position.z);
                if (Vector2.Distance(sPosition2D, ClosestCorner.Value) < 0.1f)
                {
-                   settlement = s;
+                   this.SelectedSettlement = s;
                    break;
                }
            }
-
-            if (settlement == null)
-            {
-                Debug.Log("No settlement found.");
-                yield break;
-            }
-
-            if (settlement.Owner != this)
-            {
-                Debug.Log("Not your house.");
-                yield break;
-            }
-
-            if (settlement.IsCity)
-            {
-                Debug.Log("Already a city.");
-                yield break;
-            }
-            settlement.UpgradeToCity();
           
 
         }
@@ -133,11 +112,15 @@ namespace B3.PlayerSystem
             int hitCount = 0;
             while(hitCount == 0)
             {
-                while(!action.WasPressedThisFrame())
+                while (!action.WasPressedThisFrame())
+                {
+                    Debug.Log("wait");
                     yield return null;
+                }
                 
                 var ray = Camera.main.ScreenPointToRay(Mouse.current.position.value);
-                hitCount = Physics.RaycastNonAlloc(ray, _hits, float.MaxValue, pieceLayerMask);
+                hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask);
+                Debug.Log("aaa: " + hitCount);
             }
 
             _closestHit = _hits[0];

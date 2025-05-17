@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6309600667444251542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2969164075359656873}
+  - component: {fileID: 1246586736062280716}
+  m_Layer: 0
+  m_Name: Board Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2969164075359656873
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6309600667444251542}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1246586736062280716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6309600667444251542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990353fab9b31954c9d1f728eb788967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pieces:
+  - maxSpawnCount: 1
+    piecePrefab: {fileID: 6804270505196933575, guid: 60c316e1cf6ac1840a622c566e3d8a1b, type: 3}
+  - maxSpawnCount: 3
+    piecePrefab: {fileID: 6228735871759174981, guid: 11061b352a2065a4d8f4d5b7d1ea9963, type: 3}
+  - maxSpawnCount: 4
+    piecePrefab: {fileID: 1605173056533672302, guid: 53ad920a16ec7cd46be84a6d9dbf43d2, type: 3}
+  - maxSpawnCount: 4
+    piecePrefab: {fileID: 828057063188074085, guid: 816d408d65a576a4792dd60864cd6155, type: 3}
+  - maxSpawnCount: 4
+    piecePrefab: {fileID: 324893357964220849, guid: ec7d85c05da854741a9b0dbf578fb47a, type: 3}
+  - maxSpawnCount: 4
+    piecePrefab: {fileID: 3372193713595277341, guid: 7d523eed3ef69d3458f3d687bf43bc48, type: 3}
+  ports:
+  - maxSpawnCount: 4
+    piecePrefab: {fileID: 3977322443648384451, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
+  - maxSpawnCount: 5
+    piecePrefab: {fileID: 6986705220417915101, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
+  debugTextPrefab: {fileID: 6137507380118235479, guid: 1273f5402440e294db9751d9882d25ec, type: 3}

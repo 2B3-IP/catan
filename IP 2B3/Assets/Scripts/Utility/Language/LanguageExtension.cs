@@ -19,3 +19,8 @@ namespace Utility.Language
         }
     }
 }
+
+namespace System.Runtime.CompilerServices
+{
+    internal static class IsExternalInit { }
+}

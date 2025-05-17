@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
 namespace B3.BoardSystem
 {
     public readonly struct HexPosition
@@ -17,6 +21,28 @@ namespace B3.BoardSystem
             X = x;
             Y = y;
         }
-    };
+        
+        public IEnumerable<HexPosition> GetNeighbours()
+        {
+            yield return Top;
+            yield return TopRight;
+            yield return BottomRight;
+            yield return Bottom;
+            yield return BottomLeft;
+            yield return TopLeft;
+        }
+
+        public HexPosition GetNeighbour(HexEdgeDir dir) =>
+            dir switch
+            {
+                HexEdgeDir.Top => Top,
+                HexEdgeDir.TopRight => TopRight,
+                HexEdgeDir.BottomRight => BottomRight,
+                HexEdgeDir.Bottom => Bottom,
+                HexEdgeDir.BottomLeft => BottomLeft,
+                HexEdgeDir.TopLeft => TopLeft,
+                _ => throw new InvalidEnumArgumentException()
+            };
+    }
 
 }

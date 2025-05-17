@@ -9,7 +9,7 @@ namespace B3.BoardSystem
         private readonly int _width;
         private readonly int _height;
 
-        public float DistanceFromCenter { get;private set; }
+        public float DistanceFromCenter { get; init; }
 
         private int CenterX => _width / 2;
         private int CenterY => _height / 2;

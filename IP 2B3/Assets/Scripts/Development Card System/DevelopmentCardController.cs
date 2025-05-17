@@ -18,6 +18,7 @@ namespace B3.DevelopmentCardSystem
         [Button]
         void AddClasses()
         {
+            cards.Clear();
             cards.Add(new KnightDevelopmentCard());
             cards.Add(new RoadBuildingDevelopmentCard());
             cards.Add(new MonopolyDevelopmentCard());

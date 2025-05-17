@@ -13,18 +13,16 @@ namespace B3.GameStateSystem
         [SerializeField] private GameSettings gameSettings;
         [SerializeField] private BoardController boardController;
         [SerializeField] private PlayersManager playersManager;
+        
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {  
-
             if (gameSettings.autoGenerateBoard)
-            {
                 boardController.Generate();
-            }
+            
             playersManager.Initialize(gameSettings.numberOfPlayers);
             
-            stateMachine.ChangeState<PlayerDiceGameState>();
+            stateMachine.ChangeState<AddHouseState>();
             yield break;
-
         }
     }
 }

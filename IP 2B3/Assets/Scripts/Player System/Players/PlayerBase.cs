@@ -36,7 +36,7 @@ namespace B3.PlayerSystem
             PlayerBuffs = GetComponent<PlayerBuffs>();
 
         public abstract IEnumerator DiceThrowForceCoroutine();
-        public abstract IEnumerator MoveThiefCoroutine(ThiefController thiefController);
+        public abstract IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController);
         public abstract void OnTradeAndBuildUpdate();
 
         public abstract IEnumerator BuildHouseCoroutine();

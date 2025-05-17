@@ -7,7 +7,7 @@ namespace B3.GameStateSystem
     [System.Serializable]
     internal sealed class ThiefGameState : GameStateBase
     {
-        [SerializeField] private ThiefController thief;
+        [SerializeField] private ThiefControllerBase thief;
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {

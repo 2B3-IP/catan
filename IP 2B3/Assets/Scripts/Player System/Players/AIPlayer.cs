@@ -12,7 +12,7 @@ namespace B3.PlayerSystem
             yield break;
         }
 
-        public override IEnumerator MoveThiefCoroutine(ThiefController thiefController)
+        public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
             yield break; // cea mai buna pozitie pt thief
         }

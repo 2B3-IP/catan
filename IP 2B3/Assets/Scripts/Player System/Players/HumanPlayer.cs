@@ -21,7 +21,7 @@ namespace B3.PlayerSystem
         
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private LayerMask pieceLayerMask;
-        
+        [SerializeField] private int hitDistance = 200;
         
         private readonly RaycastHit[] _hits = new RaycastHit[5];
         private RaycastHit _closestHit;
@@ -48,7 +48,7 @@ namespace B3.PlayerSystem
             DiceThrowForce = throwForce;
         }
 
-        public override IEnumerator MoveThiefCoroutine(ThiefController thiefController)
+        public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
             yield return RayCastCoroutine();
             
@@ -67,13 +67,10 @@ namespace B3.PlayerSystem
         public override IEnumerator BuildHouseCoroutine()
         { 
             yield return RayCastCoroutine();
-            
             HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
             
-            var hexCenter=boardController.BoardGrid.ToWorldPosition(hexPosition);
-
-            this.ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
-            
+            var hexCenter= boardController.BoardGrid.ToWorldPosition(hexPosition);
+            ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
         }
         
         public override IEnumerator UpgradeToCityCoroutine()
@@ -133,11 +130,15 @@ namespace B3.PlayerSystem
             int hitCount = 0;
             while(hitCount == 0)
             {
-                while(!action.WasPressedThisFrame())
+                while (!action.WasPressedThisFrame())
+                {
+                    Debug.Log("wait");
                     yield return null;
+                }
                 
                 var ray = Camera.main.ScreenPointToRay(Mouse.current.position.value);
-                hitCount = Physics.RaycastNonAlloc(ray, _hits, float.MaxValue, pieceLayerMask);
+                hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask);
+                Debug.Log("aaa: " + hitCount);
             }
 
             _closestHit = _hits[0];

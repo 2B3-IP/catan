@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using B3.GameStateSystem;
 using UnityEngine;
 using System.Linq;
 using B3.SettlementSystem;
@@ -14,20 +13,18 @@ namespace B3.BuildingSystem
     internal sealed class BuildingController : BuildingControllerBase
     {  
         [SerializeField] private InputActionReference clickButton;
-        [SerializeField] private LayerMask settlementLayerMask;
-        [SerializeField] private SettlementController settlementController;
+        [SerializeField] private SettlementController settlementPrefab;
         
-        private readonly Camera _playerCamera = Camera.main;
+        private Camera _playerCamera;
         private readonly RaycastHit[] _hits = new RaycastHit[5];
-        
-        private bool _housePlaced = false;
-        private SettlementController _selectedSettlement;
         
         private SettlementController[] _settlements;
         private Path[] _allPaths;
 
         private void Awake()
         {
+            _playerCamera = Camera.main;
+                
             _settlements = FindObjectsByType<SettlementController>(FindObjectsSortMode.None);
             _allPaths = FindObjectsByType<Path>(FindObjectsSortMode.None);
         }
@@ -42,7 +39,7 @@ namespace B3.BuildingSystem
             {
                 Vector3 position = new Vector3(closestCorner.Value.x, 0f, closestCorner.Value.y);
         
-                var house = Instantiate(settlementController, position, Quaternion.identity);
+                var house = Instantiate(settlementPrefab, position, Quaternion.identity);
 
                 house.SetOwner(player);
                 player.Settlements.Add(house);
@@ -66,15 +63,7 @@ namespace B3.BuildingSystem
 
         private void OnSettlementSelected(SettlementController settlement)
         {
-            if (_housePlaced)
-                return;
-            _selectedSettlement = settlement;
-            _housePlaced = true;
-            foreach (var s in _settlements)
-            {
-                s.Highlight(false);
-                s.AllowSelection(false);
-            }
+            
         }
 
         protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player, Path[] allPaths)
@@ -197,6 +186,7 @@ namespace B3.BuildingSystem
         }
         public override IEnumerator BuildRoad(PlayerBase player)
         {
+            yield break;
             if (!CanBuildRoad(player))
                 yield break;
 
@@ -286,7 +276,7 @@ namespace B3.BuildingSystem
                 while(hitCount == 0)
                 {
                     var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
-                    hitCount = Physics.RaycastNonAlloc(ray, _hits, float.MaxValue, settlementLayerMask);
+                    hitCount = 5; //Physics.RaycastNonAlloc(ray, _hits, float.MaxValue, settlementLayerMask);
                 }
                 var closestHit = _hits[0];
                 for (int i = 1; i < hitCount; i++)

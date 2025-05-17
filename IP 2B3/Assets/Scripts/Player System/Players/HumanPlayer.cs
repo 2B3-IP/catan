@@ -27,6 +27,7 @@ namespace B3.PlayerSystem
         private RaycastHit _closestHit;
         
         private const float CornerDistanceThreshold = 0.4f;
+ 
         private void OnEnable() =>
             UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
         
@@ -76,6 +77,7 @@ namespace B3.PlayerSystem
         public override IEnumerator UpgradeToCityCoroutine()
         { 
             yield return RayCastCoroutine();
+            this.SelectedSettlement = null;
             HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
             var hexCenter=boardController.BoardGrid.ToWorldPosition(hexPosition);
             this.ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
@@ -87,7 +89,6 @@ namespace B3.PlayerSystem
             }
             
            
-           SettlementController settlement = null;
            // TODO: De implementat hexboard pt settlements
            
            var TempSettlements = GameObject.FindObjectsOfType<SettlementController>().ToList(); //Array temporar!
@@ -96,29 +97,10 @@ namespace B3.PlayerSystem
                Vector2 sPosition2D = new Vector2(s.transform.position.x, s.transform.position.z);
                if (Vector2.Distance(sPosition2D, ClosestCorner.Value) < 0.1f)
                {
-                   settlement = s;
+                   this.SelectedSettlement = s;
                    break;
                }
            }
-
-            if (settlement == null)
-            {
-                Debug.Log("No settlement found.");
-                yield break;
-            }
-
-            if (settlement.Owner != this)
-            {
-                Debug.Log("Not your house.");
-                yield break;
-            }
-
-            if (settlement.IsCity)
-            {
-                Debug.Log("Already a city.");
-                yield break;
-            }
-            settlement.UpgradeToCity();
           
 
         }

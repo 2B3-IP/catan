@@ -266,36 +266,21 @@ namespace B3.BuildingSystem
             if (!CanBuildCity(player))
                 yield break;
             
-            var action = clickButton.action;
-            while(!action.WasPressedThisFrame())
-                yield return null;
+         
             bool cityDone = false;
-            while (!cityDone)
-            {
-                int hitCount = 0;
-                while(hitCount == 0)
-                {
-                    var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
-                    hitCount = 5; //Physics.RaycastNonAlloc(ray, _hits, float.MaxValue, settlementLayerMask);
-                }
-                var closestHit = _hits[0];
-                for (int i = 1; i < hitCount; i++)
-                {
-                    var hit = _hits[i];
-                
-                    if(closestHit.distance > hit.distance)
-                        closestHit = hit;
-                }
-                var settlement = closestHit.transform.GetComponent<SettlementController>();
-                if (settlement == null)
-                    continue;
+            yield return player.UpgradeToCityCoroutine();
+            var settlement=player.SelectedSettlement;
+            
                 if(!settlement.HasOwner || settlement.Owner!= player)
-                    continue;
-                if (settlement.IsCity)
-                    continue;
-                settlement.UpgradeToCity();
-                cityDone = true;
-            }
+                    Debug.Log("Not your settlement");
+                else if (settlement.IsCity)
+                    Debug.Log("Already a city.");
+                else
+                {
+                    settlement.UpgradeToCity();
+                    cityDone = true;
+                }
+        
         }
     }
 }

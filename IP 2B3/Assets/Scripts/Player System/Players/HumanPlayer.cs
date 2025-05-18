@@ -234,28 +234,32 @@ namespace B3.PlayerSystem
         private Path GetClosestEdge(HexPosition hexPosition, Vector3 hitPoint)
         {
             Path closestEdge = null;
-            /*
-            var boardGrid = boardController.BoardGrid;
-            var edges = boardGrid.GetHexEdges(hexPosition);
 
+            var boardGrid = boardController.BoardGrid;
             float minDistance = float.MaxValue;
 
-            foreach (var edge in edges)
+            for (int dir = 0; dir < 6; dir++)
             {
-                var cornerA = boardGrid.GetHexCorner(edge.Item2.StartCorner, hexPosition);
-                var cornerB = boardGrid.GetHexCorner(edge.Item2.EndCorner, hexPosition);
+                var edgeDir = (HexEdgeDir)dir;
+                var edge = boardGrid.GetEdge(hexPosition, edgeDir);
+                if (edge == null) continue;
 
-                var edgeCenter = (new Vector3(cornerA.x, 0, cornerA.y) + new Vector3(cornerB.x, 0, cornerB.y)) / 2f;
+                int cornerAIndex = (dir + 5) % 6;
+                int cornerBIndex = (dir + 1) % 6;
 
+                var cornerA = boardGrid.GetHexCorner((HexVertexDir)cornerAIndex, hexPosition);
+                var cornerB = boardGrid.GetHexCorner((HexVertexDir)cornerBIndex, hexPosition);
+
+                Vector3 edgeCenter = (new Vector3(cornerA.x, 0, cornerA.y) + new Vector3(cornerB.x, 0, cornerB.y)) / 2f;
                 float distance = Vector3.Distance(hitPoint, edgeCenter);
+
                 if (distance <= EdgeDistanceThreshold && distance < minDistance)
                 {
                     minDistance = distance;
-                    closestEdge = edge.Item1;
+                    closestEdge = edge;
                 }
             }
 
-            */
             return closestEdge;
         }
 

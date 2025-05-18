@@ -43,8 +43,8 @@ namespace B3.BuildingSystem
                 yield return player.BuildHouseCoroutine();
                 selectedHouse = player.SelectedHouse;
                 
-                if (!_isFirstStates && !CanBuildHouse(selectedHouse, player))
-                    selectedHouse = null;
+                //if (!_isFirstStates && !CanBuildHouse(selectedHouse, player))
+                //    selectedHouse = null;
             }
             
             selectedHouse.SetOwner(player);

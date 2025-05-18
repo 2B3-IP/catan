@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ore Piece Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 5022685486829936994, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: <ResourceType>k__BackingField
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5380163187218900059, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 

@@ -8,23 +8,28 @@ namespace B3.GameStateSystem
     public class AddRoadState : GameStateBase
     {
         [SerializeField] private BuildingControllerBase buildingController;
-        [SerializeField] private int repeatTimes = 2;
-        
+
+        private bool _isInverseOrder;
+
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
             var currentPlayer = stateMachine.CurrentPlayer;
             yield return buildingController.BuildRoad(currentPlayer);
-       
-            bool isFirstPlayer = stateMachine.ChangePlayer();
 
-            if (!isFirstPlayer)
+            if (stateMachine.IsLastPlayer && !_isInverseOrder)
+            {
+                _isInverseOrder = true;
+                stateMachine.ChangeState<AddHouseState>();
                 yield break;
+            }
+            if (stateMachine.IsFirstPlayer && _isInverseOrder)
+            {
+                stateMachine.ChangeState<PlayerDiceGameState>();
+                yield break;
+            }
 
-            repeatTimes--;
-
-            if (repeatTimes == 0) stateMachine.ChangeState<PlayerDiceGameState>();
-            else stateMachine.ChangeState<AddHouseState>();
+            stateMachine.ChangePlayer(_isInverseOrder);
+            stateMachine.ChangeState<AddHouseState>();
         }
     }
 }
-

@@ -33,7 +33,8 @@ namespace B3.BoardSystem
             8, 8, 9, 9, 10, 10, 11, 11, 12
         };
 
-        private int _currentPieceIndex, _currentPortIndex;
+        private int _currentPieceIndex, _currentPortIndex, _currentNumberIndex;
+
         public FullHexGrid<PieceController, SettlementController, Path> BoardGrid { get; private set; }
 
         private void Awake()
@@ -67,6 +68,7 @@ namespace B3.BoardSystem
 
             _currentPieceIndex = 0;
             _currentPortIndex = 0;
+            _currentNumberIndex = 0;
 
             SpawnLine(0, 2, -2, false);
             SpawnLine(-1, 2, -1, false);
@@ -127,7 +129,7 @@ namespace B3.BoardSystem
             {
                 bool isDesertPiece = pieceController.IsDesert;
 
-                int number = isDesertPiece ? -1 : _numberPoll[_currentPieceIndex];
+                int number = isDesertPiece ? -1 : _numberPoll[_currentNumberIndex++];
                 pieceController.Number = number;
 
                 _piecesNumber[_currentPieceIndex] = number;

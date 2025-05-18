@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sheep Port Piece Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 6986705220417915101, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
+      propertyPath: <ResourceType>k__BackingField
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7056143320071312550, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
       propertyPath: resourceType
       value: 3

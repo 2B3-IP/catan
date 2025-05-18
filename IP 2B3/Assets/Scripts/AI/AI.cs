@@ -23,8 +23,13 @@ public static class AI
     {
         return (new HexPosition(0, 0), HexVertexDir.Left);
     }
+    
+    public static (HexPosition, HexEdgeDir) GetRoadPosition()
+    {
+        return (new HexPosition(0, 0), HexEdgeDir.TopLeft);
+    }
 
-    public static void SendMessage(string message)
+    public static void SendMove(string message)
     {
 
     }

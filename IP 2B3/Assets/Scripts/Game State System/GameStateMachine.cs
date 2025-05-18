@@ -11,7 +11,7 @@ namespace B3.GameStateSystem
 
         private GameStateBase _currentState;
 
-        public int _currentPlayerIndex;
+        private int _currentPlayerIndex;
 
         internal PlayerBase CurrentPlayer => playersManager.players[_currentPlayerIndex];
         internal int PlayerCount => playersManager.players.Count;

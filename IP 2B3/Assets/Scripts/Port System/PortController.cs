@@ -13,31 +13,14 @@ namespace B3.PortSystem
 {
     public abstract class PortController : MovingPieceController
     {
-        [SerializeField] private HousePivot[] portTransform;
         [SerializeField] private BoardController boardController;
-
-        //TO DO
-        //ar trebui sa setam x si y ul cand cream portul doar ca nu stiu cum sa iau acele coord (vb cu alex)
-        [SerializeField]
-        private int idX;
         
-        [SerializeField]
-        private int idY;
+        private PieceController _pieceController;
 
-        protected PlayerBuffs OwnerBuffs
+        protected override void Awake()
         {
-            get
-            {
-                foreach (var housePivot in portTransform)
-                {
-                    var owner = housePivot.Owner;
-
-                    if (owner != null)
-                        return owner.GetComponent<PlayerBuffs>();
-                }
-
-                return null;
-            }
+            base.Awake();
+            _pieceController = GetComponent<PieceController>();
         }
 
         public abstract ResourceType? ResourceType { get; }
@@ -50,8 +33,9 @@ namespace B3.PortSystem
             //locul portului de pe hexul de port este in oglinda cu locul hexului
             //de pe hexul tile
             HexVertexDir settlementHexDir = settlement.VertexDir.Opposite();
-            
-            switch (idX, idY)
+
+            var hexPosition = _pieceController.HexPosition;
+            switch (hexPosition.X, hexPosition.Y)
             {
                 case (-1, 3):
                 {

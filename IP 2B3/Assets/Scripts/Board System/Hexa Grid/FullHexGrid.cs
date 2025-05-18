@@ -25,8 +25,7 @@ namespace B3.BoardSystem
             internal Vertex[] Vertices { init; get; }
             internal Edge[] Edges { init; get; }
         }
-
-
+        
         // DO NOT modify innerGrid
         private HexGrid<InnerCell> InnerGrid { get; init; }
         public float DistanceFromCenter { get; init; }

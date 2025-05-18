@@ -8,7 +8,7 @@ namespace B3.PieceSystem
         [SerializeField] private float spawnDuration = 1f;
         
         private Transform _transform;
-        private void Awake() =>
+        protected virtual void Awake() =>
             _transform = transform;
         
         public void OnSpawn(Vector3 endPosition)

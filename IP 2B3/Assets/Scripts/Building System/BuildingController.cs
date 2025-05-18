@@ -15,6 +15,7 @@ namespace B3.BuildingSystem
     {
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private SettlementController settlementPrefab;
+        [SerializeField] private BoardController boardController;
 
         private PathController[] _allPaths;
         private bool _isFirstStates = true;
@@ -36,7 +37,7 @@ namespace B3.BuildingSystem
                 yield break;
             
             SettlementController selectedHouse = null;
-            
+           
             while (selectedHouse == null)
             {
                 yield return player.BuildHouseCoroutine();
@@ -45,15 +46,18 @@ namespace B3.BuildingSystem
                 if (!_isFirstStates && !CanBuildHouse(selectedHouse, player))
                     selectedHouse = null;
             }
-
+            
             selectedHouse.SetOwner(player);
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
             
-            var message = $"House built at {selectedHouse.transform.position} by {player.name}";
+            TryAddPortBuffForSettlement(selectedHouse, player);
             
+            var message = $"House built at {selectedHouse.HexPosition}, {selectedHouse.VertexDir} by {player.name}";
             Debug.Log(message);
-            AI.SendMessage(message);
+            
+            if(player is HumanPlayer)
+                AI.SendMove(message);
         }
 
         public override IEnumerator BuildRoad(PlayerBase player)
@@ -68,8 +72,9 @@ namespace B3.BuildingSystem
                 yield return player.BuildRoadCoroutine();
                 selectedPath = player.SelectedPath;
                 
-                if (!CanBuildRoad(player, selectedPath))
-                    selectedPath = null;
+                // pusca daca apesi pe un road care nu e bun ( lipit de o casa)
+                //if (!CanBuildRoad(player, selectedPath))
+                //    selectedPath = null;
             }
             
             selectedPath.Owner = player;
@@ -231,33 +236,35 @@ namespace B3.BuildingSystem
 
         private void TryAddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
         {
+            var boardGrid = boardController.BoardGrid;
+            
             //verific daca settlementul este pe o piesa valida
-            var piece = settlement.GetComponentInParent<PieceController>();
+            var piece = boardGrid[settlement.HexPosition];
             if (piece == null) return;
 
             //iau vecinii hexului pe care se afla settlementul
             var neighbors = piece.HexPosition.GetNeighbours();
 
-            //iau boardul
-            BoardController board = FindObjectOfType<BoardController>();
-            if (board == null) return;
-
             //iteram prin vecini (HexPosition)
             foreach (var neighborPos in neighbors)
             {
+                var hexPiece = boardGrid[neighborPos];
+                if(hexPiece == null)
+                    continue;
+                
                 //verificam daca exista un vecin al hexului cu settlmentul care este port
-                PortController portPiece = board.GetComponentAt<PortController>(neighborPos);
-                if (portPiece == null) continue;
+                if (!hexPiece.TryGetComponent<PortController>(out var portPiece)) 
+                    continue;
 
                 //daca avem vecin port o sa luam vertexul hexului pe care a fost asezat settlementul
                 // transmitem intr o functie de la PortController pozitia opusa
                 // (pe idee ca dreapta jos de la tile e stanga sus de la port)
                 // VertexDir al settlementului
-                if (portPiece.IsSettlementPosition(settlement))
-                {
-                    portPiece.AddPlayerBuff(player);
-                    return;
-                }
+                if (!portPiece.IsSettlementPosition(settlement)) 
+                    continue;
+                
+                portPiece.AddPlayerBuff(player);
+                return;
             }
         }
 

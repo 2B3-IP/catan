@@ -99,18 +99,6 @@ namespace B3.BoardSystem
             AI.PassPiecesNumber(_piecesNumber);
             AI.PassPortsResources(_portsResources);
         }
-        
-        public Vector3 GetClosestEdgeMidpoint(PieceController piece, Vector3 clickPosition)
-        {
-            Vector3[] edgeMidpoints = piece.GetEdgeMidpoints();
-            return edgeMidpoints.OrderBy(p => Vector3.Distance(p, clickPosition)).First();
-        }
-        
-        public T GetComponentAt<T>(HexPosition position) where T : Component
-        {
-            var piece = BoardGrid[position];
-            return piece?.GetComponent<T>(); 
-        }
 
         private void SpawnLine(int iMin, int iMax, int j, bool arePortPieces)
         {

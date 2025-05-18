@@ -32,8 +32,11 @@ namespace B3.PlayerSystem
         private const float CornerDistanceThreshold = 0.5f;
         private const float EdgeDistanceThreshold = 0.5f;
 
-        protected override void Awake() =>
+        protected override void Awake()
+        {
+            base.Awake();
             _playerCamera = Camera.main;
+        }
 
         private void OnEnable() =>
             UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
@@ -132,12 +135,12 @@ namespace B3.PlayerSystem
             while(hitCount == 0)
             {
                 Debug.Log("aaa");
-                while (Mouse.current.leftButton.wasPressedThisFrame)
+                while (!action.WasPressedThisFrame())
                 {
                     Debug.Log("wait");
                     yield return null;
                 }
-                
+
                 var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
                 hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask);
                 Debug.Log("aaa: " + hitCount);

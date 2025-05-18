@@ -39,12 +39,12 @@ namespace B3.PlayerSystem
 
         public override IEnumerator UpgradeToCityCoroutine()
         {
-            throw new System.NotImplementedException();
+            yield break;
         }
 
         public override IEnumerator BuildRoadCoroutine()
         {
-            throw new System.NotImplementedException();
+            yield break;
         }
     }
 }

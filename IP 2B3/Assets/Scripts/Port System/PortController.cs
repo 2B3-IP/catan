@@ -5,6 +5,7 @@ using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.PlayerBuffSystem;
 using B3.PlayerSystem;
+using B3.ResourcesSystem;
 using B3.SettlementSystem;
 using UnityEngine;
 
@@ -30,6 +31,8 @@ namespace B3.PortSystem
                 return null;
             }
         }
+
+        public abstract ResourceType? ResourceType { get; }
 
         public abstract void AddPlayerBuff(PlayerBase player);
         

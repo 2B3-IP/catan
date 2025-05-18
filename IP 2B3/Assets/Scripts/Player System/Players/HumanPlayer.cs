@@ -210,7 +210,7 @@ namespace B3.PlayerSystem
         private SettlementController GetClosestCorner(HexPosition position, Vector3 hitPoint)
         {
             var boardGrid = boardController.BoardGrid;
-            var corners = boardGrid.GetHexEdges(position);
+            var corners = boardGrid.GetHexVertices(position);
             
             SettlementController closestCorner = null;
             float minDistance = float.MaxValue;
@@ -233,10 +233,11 @@ namespace B3.PlayerSystem
 
         private Path GetClosestEdge(HexPosition hexPosition, Vector3 hitPoint)
         {
+            Path closestEdge = null;
+            /*
             var boardGrid = boardController.BoardGrid;
             var edges = boardGrid.GetHexEdges(hexPosition);
 
-            Path closestEdge = null;
             float minDistance = float.MaxValue;
 
             foreach (var edge in edges)
@@ -254,6 +255,7 @@ namespace B3.PlayerSystem
                 }
             }
 
+            */
             return closestEdge;
         }
 

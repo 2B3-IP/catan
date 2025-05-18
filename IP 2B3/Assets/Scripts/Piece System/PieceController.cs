@@ -10,6 +10,8 @@ namespace B3.PieceSystem
     {
         [field:SerializeField] public ResourceType ResourceType { get; private set; }
         [field:SerializeField] public bool IsBlocked { get; set; }
+        [field: SerializeField] public bool IsDesert { get; set; }
+
         [field:SerializeField] public Transform ThiefPivot { get; private set; }
         public List<SettlementController> Settlements { get; } = new();
         public int Number { get; set; }

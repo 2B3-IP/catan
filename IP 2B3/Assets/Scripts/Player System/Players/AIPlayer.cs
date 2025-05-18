@@ -31,5 +31,10 @@ namespace B3.PlayerSystem
         {
             throw new System.NotImplementedException();
         }
+
+        public override IEnumerator BuildRoadCoroutine()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

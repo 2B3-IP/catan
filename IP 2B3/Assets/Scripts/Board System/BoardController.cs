@@ -6,6 +6,8 @@ using System.Linq;
 using B3.BuildingSystem;
 using B3.SettlementSystem;
 using Random = UnityEngine.Random;
+using B3.ResourcesSystem;
+using B3.PortSystem;
 
 namespace B3.BoardSystem
 {
@@ -19,9 +21,19 @@ namespace B3.BoardSystem
         
         [SerializeField] private SettlementController settlementPrefab;
         
-        [SerializeField] private GameObject debugTextPrefab;
+        [SerializeField] private GameObject pieceTextPrefab;
 
-        private int _currentIndex;
+        private ResourceType?[] _piecesResources = new ResourceType?[19];
+        private int[] _piecesNumber = new int[19];
+        private ResourceType?[] _portsResources = new ResourceType?[9];
+
+        private readonly int[] _numberPoll = new int[]
+        {
+            2, 3, 3, 4, 4, 5, 5, 6, 6,
+            8, 8, 9, 9, 10, 10, 11, 11, 12
+        };
+
+        private int _currentPieceIndex, _currentPortIndex;
         public FullHexGrid<PieceController, SettlementController, Path> BoardGrid { get; private set; }
 
         private void Awake()
@@ -51,12 +63,17 @@ namespace B3.BoardSystem
         [Button]
         public void Generate()
         {
+            ShuffleNumberPoll();
+
+            _currentPieceIndex = 0;
+            _currentPortIndex = 0;
+
             SpawnLine(0, 2, -2, false);
             SpawnLine(-1, 2, -1, false);
             SpawnLine(-2, 2, 0, false);
             SpawnLine(-2, 1, 1, false);
             SpawnLine(-2,0, 2, false);
-            
+
             SpawnPiece(0, -3, true);
             SpawnPiece(2, -3, true);
             SpawnPiece(3, -2, true);
@@ -66,6 +83,10 @@ namespace B3.BoardSystem
             SpawnPiece(-3, 3, true);
             SpawnPiece(-3, 1, true);
             SpawnPiece(-2, -1, true);
+
+            AI.PassPiecesResources(_piecesResources);
+            AI.PassPiecesNumber(_piecesNumber);
+            AI.PassPortsResources(_portsResources);
         }
         
         public Vector3 GetClosestEdgeMidpoint(PieceController piece, Vector3 clickPosition)
@@ -101,15 +122,33 @@ namespace B3.BoardSystem
 
             pieceController.HexPosition = position;
             BoardGrid[position] = pieceController;
-                
-            var debugText = Instantiate(
-                debugTextPrefab, 
-                new Vector3(worldPosition.x, 2, worldPosition.y), 
+
+            if (!arePortPieces)
+            {
+                bool isDesertPiece = pieceController.IsDesert;
+
+                int number = isDesertPiece ? -1 : _numberPoll[_currentPieceIndex];
+                pieceController.Number = number;
+
+                _piecesNumber[_currentPieceIndex] = number;
+                _piecesResources[_currentPieceIndex++] = isDesertPiece ? null : pieceController.ResourceType;
+            }
+            else
+            {
+                var portController = pieceController.GetComponent<PortController>();
+                _portsResources[_currentPortIndex++] = portController.ResourceType;
+            }
+
+            var debugText = Instantiate
+            (
+                pieceTextPrefab, 
+                new Vector3(worldPosition.x, 0.2f, worldPosition.y), 
                 Quaternion.identity, 
-                transform);
+                transform
+            );
                 
             debugText.GetComponentInChildren<TMP_Text>()
-                .SetText(i + " " + j);
+                .SetText(i + " " + j + " number: " + pieceController.Number);
         }
         
         private BoardPiece GetRandomPiece(bool isPortPiece)
@@ -127,7 +166,16 @@ namespace B3.BoardSystem
             
             return piece;
         }
-        
+
+        private void ShuffleNumberPoll()
+        {
+            for (int i = _numberPoll.Length - 1; i > 0; i--)
+            {
+                int j = Random.Range(0, i + 1);
+                (_numberPoll[i], _numberPoll[j]) = (_numberPoll[j], _numberPoll[i]);
+            }
+        }
+
         // private void Start()
         // {
         //     if (gameSettings == null)

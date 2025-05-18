@@ -44,6 +44,8 @@ namespace B3.BuildingSystem
         
         public override IEnumerator BuildRoad(PlayerBase player)
         {
+            yield break;
+            /*
             if (!CanBuildRoad(player))
                 yield break;
 
@@ -101,7 +103,7 @@ namespace B3.BuildingSystem
                 yield return null;
             }
 
-            HighlightPaths(availablePaths, false);
+            HighlightPaths(availablePaths, false);*/
         }
 
         protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player, Path[] allPaths)

@@ -86,7 +86,20 @@ namespace B3.PlayerSystem
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
-            yield return RayCastCoroutine();
+            ClosestCorner = null;
+            
+            while (ClosestCorner == null)
+            {
+                yield return RayCastCoroutine();
+                var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
+
+                var hexPosition = pieceController.HexPosition;
+                ClosestCorner = GetClosestCorner(hexPosition, _closestHit.point);
+                if (ClosestCorner.IsCity) ClosestCorner = null;
+              
+            }
+      
+       
             /*
             HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
             var hexCenter=boardController.BoardGrid.ToWorldPosition(hexPosition);

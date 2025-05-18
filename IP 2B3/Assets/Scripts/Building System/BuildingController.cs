@@ -272,19 +272,16 @@ namespace B3.BuildingSystem
             if (!CanBuildCity(player))
                 yield break;
             
-         
-            bool cityDone = false;
             yield return player.UpgradeToCityCoroutine();
-            var settlement=player.SelectedSettlement;
             
-                if(!settlement.HasOwner || settlement.Owner!= player)
+            var closestCorner = player.ClosestCorner;
+            
+                if(!closestCorner.HasOwner || closestCorner.Owner!= player)
                     Debug.Log("Not your settlement");
-                else if (settlement.IsCity)
-                    Debug.Log("Already a city.");
                 else
                 {
-                    settlement.UpgradeToCity();
-                    cityDone = true;
+                    closestCorner.UpgradeToCity();
+               
                 }
         
         }

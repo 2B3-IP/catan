@@ -60,8 +60,32 @@ PrefabInstance:
       propertyPath: m_Name
       value: Resource Port Piece Variant Variant
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2630949246756681381, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4957276279471344277, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7056143320071312550}
   m_SourcePrefab: {fileID: 100100000, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
+--- !u!1 &1372544910773010315 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4957276279471344277, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
+  m_PrefabInstance: {fileID: 6325176835939841310}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7056143320071312550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372544910773010315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 370a23d3120948eda38609bc5a61302a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnDuration: 1
+  boardController: {fileID: 0}
+  resourceType: 0

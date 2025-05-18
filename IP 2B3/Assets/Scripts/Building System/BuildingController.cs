@@ -33,13 +33,16 @@ namespace B3.BuildingSystem
         {
             yield return player.BuildHouseCoroutine();
             
-            var closestCorner = player.ClosestCorner;
+            var selectedHouse = player.SelectedHouse;
 
-            closestCorner.SetOwner(player);
-            closestCorner.BuildHouse();
-            player.Settlements.Add(closestCorner);
-    
-            Debug.Log($"House built at {closestCorner.transform.position} by {player.name}");
+            selectedHouse.SetOwner(player);
+            selectedHouse.BuildHouse();
+            player.Settlements.Add(selectedHouse);
+
+            var message = $"House built at {selectedHouse.transform.position} by {player.name}";
+            Debug.Log(message);
+
+            AI.SendMessage(message);
         }
         
         public override IEnumerator BuildRoad(PlayerBase player)
@@ -277,7 +280,7 @@ namespace B3.BuildingSystem
             
             yield return player.UpgradeToCityCoroutine();
             
-            var closestCorner = player.ClosestCorner;
+            var closestCorner = player.SelectedHouse;
             
                 if(!closestCorner.HasOwner || closestCorner.Owner!= player)
                     Debug.Log("Not your settlement");

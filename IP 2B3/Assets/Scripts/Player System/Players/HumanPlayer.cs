@@ -73,15 +73,18 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildHouseCoroutine()
         {
-            ClosestCorner = null;
+            SelectedHouse = null;
             
-            while (ClosestCorner == null)
+            while (SelectedHouse == null)
             {
                 yield return RayCastCoroutine();
                 var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 var hexPosition = pieceController.HexPosition;
-                ClosestCorner = GetClosestCorner(hexPosition, _closestHit.point);
+                SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
+
+                if (SelectedHouse != null && SelectedHouse.Owner != null)
+                    SelectedHouse = null;
             }
         }
         
@@ -103,16 +106,16 @@ namespace B3.PlayerSystem
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
-            ClosestCorner = null;
+            SelectedHouse = null;
             
-            while (ClosestCorner == null)
+            while (SelectedHouse == null)
             {
                 yield return RayCastCoroutine();
                 var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 var hexPosition = pieceController.HexPosition;
-                ClosestCorner = GetClosestCorner(hexPosition, _closestHit.point);
-                if (ClosestCorner.IsCity) ClosestCorner = null;
+                SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
+                if (SelectedHouse.IsCity) SelectedHouse = null;
               
             }
       

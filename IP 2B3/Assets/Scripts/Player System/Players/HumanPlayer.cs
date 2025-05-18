@@ -29,6 +29,7 @@ namespace B3.PlayerSystem
         private Camera _playerCamera;
         
         private const float CornerDistanceThreshold = 0.5f;
+        private const float EdgeDistanceThreshold = 0.5f;
 
         private void Start() =>
             _playerCamera = Camera.main;
@@ -81,6 +82,22 @@ namespace B3.PlayerSystem
 
                 var hexPosition = pieceController.HexPosition;
                 ClosestCorner = GetClosestCorner(hexPosition, _closestHit.point);
+            }
+        }
+        
+        public override IEnumerator BuildRoadCoroutine()
+        {
+            ClosestEdge = null;
+
+            while (ClosestEdge == null)
+            {
+                yield return RayCastCoroutine();
+
+                var pieceController = _closestHit.transform?.GetComponentInParent<PieceController>();
+                if (pieceController == null) yield break;
+
+                var hexPosition = pieceController.HexPosition;
+                ClosestEdge = GetClosestEdge(hexPosition, _closestHit.point);
             }
         }
         
@@ -193,7 +210,7 @@ namespace B3.PlayerSystem
         private SettlementController GetClosestCorner(HexPosition position, Vector3 hitPoint)
         {
             var boardGrid = boardController.BoardGrid;
-            var corners = boardGrid.GetHexVertices(position);
+            var corners = boardGrid.GetHexEdges(position);
             
             SettlementController closestCorner = null;
             float minDistance = float.MaxValue;
@@ -213,6 +230,33 @@ namespace B3.PlayerSystem
 
             return closestCorner;
         }
+
+        private Path GetClosestEdge(HexPosition hexPosition, Vector3 hitPoint)
+        {
+            var boardGrid = boardController.BoardGrid;
+            var edges = boardGrid.GetHexEdges(hexPosition);
+
+            Path closestEdge = null;
+            float minDistance = float.MaxValue;
+
+            foreach (var edge in edges)
+            {
+                var cornerA = boardGrid.GetHexCorner(edge.Item2.StartCorner, hexPosition);
+                var cornerB = boardGrid.GetHexCorner(edge.Item2.EndCorner, hexPosition);
+
+                var edgeCenter = (new Vector3(cornerA.x, 0, cornerA.y) + new Vector3(cornerB.x, 0, cornerB.y)) / 2f;
+
+                float distance = Vector3.Distance(hitPoint, edgeCenter);
+                if (distance <= EdgeDistanceThreshold && distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestEdge = edge.Item1;
+                }
+            }
+
+            return closestEdge;
+        }
+
         private void OnPlayerEndButtonPress() =>
             IsTurnEnded = true;
         

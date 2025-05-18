@@ -47,6 +47,7 @@ namespace B3.BuildingSystem
             if (!CanBuildRoad(player))
                 yield break;
 
+            yield return player.BuildRoadCoroutine();
             
             var availablePaths = _allPaths
                 .Where(p => p.Owner == null && (

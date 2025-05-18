@@ -24,6 +24,8 @@ namespace B3.PlayerSystem
         public int VictoryPoints { get; private set; }
         public float DiceThrowForce { get; protected set; }
         public SettlementController ClosestCorner { get; protected set; }
+        
+        public Path ClosestEdge { get; protected set; }
         public bool IsTurnEnded { get; set; }
         
         public PlayerBuffs PlayerBuffs { get; private set; }
@@ -43,6 +45,7 @@ namespace B3.PlayerSystem
 
         public abstract IEnumerator BuildHouseCoroutine();
         
+        public abstract IEnumerator BuildRoadCoroutine();
         public abstract IEnumerator UpgradeToCityCoroutine();
         
         public IEnumerator EndTurnCoroutine()

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using B3.BoardSystem;
 using B3.ThiefSystem;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace B3.PlayerSystem
 {
     public sealed class AIPlayer : PlayerBase
     {
+        [SerializeField] private BoardController boardController;
+
         public override IEnumerator DiceThrowForceCoroutine()
         {
             DiceThrowForce = Random.Range(MIN_DICE_THROW_FORCE, MAX_DICE_THROW_FORCE); //TODO: TEMP
@@ -25,9 +28,21 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildHouseCoroutine()
         {
+            var housePosition = AI.GetHousePosition();
+            var boardGrid = boardController.BoardGrid;
+
+            yield return new WaitForSeconds(1f);
+
+            var settlementController = boardGrid.GetVertex(housePosition.Item1, housePosition.Item2);
+            SelectedHouse = settlementController;
+        }
+
+        public override IEnumerator UpgradeToCityCoroutine()
+        {
             throw new System.NotImplementedException();
         }
-        public override IEnumerator UpgradeToCityCoroutine()
+
+        public override IEnumerator BuildRoadCoroutine()
         {
             throw new System.NotImplementedException();
         }

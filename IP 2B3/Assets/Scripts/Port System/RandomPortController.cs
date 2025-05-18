@@ -6,6 +6,8 @@ namespace B3.PortSystem
 {
     public sealed class RandomPortController : PortController
     {
+        public override ResourceType? ResourceType => null;
+
         public override void AddPlayerBuff(PlayerBase player)
         {
             var ownerBuffs = player.GetComponent<PlayerBuffs>();

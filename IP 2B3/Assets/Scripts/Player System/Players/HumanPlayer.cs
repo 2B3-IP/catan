@@ -29,6 +29,7 @@ namespace B3.PlayerSystem
         private Camera _playerCamera;
         
         private const float CornerDistanceThreshold = 0.5f;
+        private const float EdgeDistanceThreshold = 0.5f;
 
         private void Start() =>
             _playerCamera = Camera.main;
@@ -72,21 +73,53 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildHouseCoroutine()
         {
-            ClosestCorner = null;
+            SelectedHouse = null;
             
-            while (ClosestCorner == null)
+            while (SelectedHouse == null)
             {
                 yield return RayCastCoroutine();
                 var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 var hexPosition = pieceController.HexPosition;
-                ClosestCorner = GetClosestCorner(hexPosition, _closestHit.point);
+                SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
+
+                if (SelectedHouse != null && SelectedHouse.Owner != null)
+                    SelectedHouse = null;
+            }
+        }
+        
+        public override IEnumerator BuildRoadCoroutine()
+        {
+            ClosestEdge = null;
+
+            while (ClosestEdge == null)
+            {
+                yield return RayCastCoroutine();
+
+                var pieceController = _closestHit.transform?.GetComponentInParent<PieceController>();
+                if (pieceController == null) yield break;
+
+                var hexPosition = pieceController.HexPosition;
+                ClosestEdge = GetClosestEdge(hexPosition, _closestHit.point);
             }
         }
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
-            yield return RayCastCoroutine();
+            SelectedHouse = null;
+            
+            while (SelectedHouse == null)
+            {
+                yield return RayCastCoroutine();
+                var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
+
+                var hexPosition = pieceController.HexPosition;
+                SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
+                if (SelectedHouse.IsCity) SelectedHouse = null;
+              
+            }
+      
+       
             /*
             HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
             var hexCenter=boardController.BoardGrid.ToWorldPosition(hexPosition);
@@ -200,6 +233,39 @@ namespace B3.PlayerSystem
 
             return closestCorner;
         }
+
+        private Path GetClosestEdge(HexPosition hexPosition, Vector3 hitPoint)
+        {
+            Path closestEdge = null;
+
+            var boardGrid = boardController.BoardGrid;
+            float minDistance = float.MaxValue;
+
+            for (int dir = 0; dir < 6; dir++)
+            {
+                var edgeDir = (HexEdgeDir)dir;
+                var edge = boardGrid.GetEdge(hexPosition, edgeDir);
+                if (edge == null) continue;
+
+                int cornerAIndex = (dir + 5) % 6;
+                int cornerBIndex = (dir + 1) % 6;
+
+                var cornerA = boardGrid.GetHexCorner((HexVertexDir)cornerAIndex, hexPosition);
+                var cornerB = boardGrid.GetHexCorner((HexVertexDir)cornerBIndex, hexPosition);
+
+                Vector3 edgeCenter = (new Vector3(cornerA.x, 0, cornerA.y) + new Vector3(cornerB.x, 0, cornerB.y)) / 2f;
+                float distance = Vector3.Distance(hitPoint, edgeCenter);
+
+                if (distance <= EdgeDistanceThreshold && distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestEdge = edge;
+                }
+            }
+
+            return closestEdge;
+        }
+
         private void OnPlayerEndButtonPress() =>
             IsTurnEnded = true;
         

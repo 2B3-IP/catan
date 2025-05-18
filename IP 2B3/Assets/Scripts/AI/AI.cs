@@ -23,7 +23,12 @@ public static class AI
     {
         return (new HexPosition(0, 0), HexVertexDir.Left);
     }
-    
+
+    public static (HexPosition, HexVertexDir) GetCityPosition()
+    {
+        return (new HexPosition(0, 0), HexVertexDir.Left);
+    }
+
     public static (HexPosition, HexEdgeDir) GetRoadPosition()
     {
         return (new HexPosition(0, 0), HexEdgeDir.TopLeft);

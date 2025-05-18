@@ -39,12 +39,24 @@ namespace B3.PlayerSystem
 
         public override IEnumerator UpgradeToCityCoroutine()
         {
-            yield break;
+            var housePosition = AI.GetCityPosition();
+            var boardGrid = boardController.BoardGrid;
+
+            yield return new WaitForSeconds(1f);
+
+            var settlementController = boardGrid.GetVertex(housePosition.Item1, housePosition.Item2);
+            SelectedHouse = settlementController;
         }
 
         public override IEnumerator BuildRoadCoroutine()
         {
-            yield break;
+            var housePosition = AI.GetRoadPosition();
+            var boardGrid = boardController.BoardGrid;
+
+            yield return new WaitForSeconds(1f);
+
+            var pathController = boardGrid.GetEdge(housePosition.Item1, housePosition.Item2);
+            SelectedPath = pathController;
         }
     }
 }

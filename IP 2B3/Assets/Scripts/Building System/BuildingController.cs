@@ -6,6 +6,7 @@ using B3.SettlementSystem;
 using B3.PlayerSystem;
 using B3.BoardSystem;
 using B3.PieceSystem;
+using B3.PortSystem;
 using UnityEngine.InputSystem;
 
 namespace B3.BuildingSystem
@@ -220,6 +221,25 @@ namespace B3.BuildingSystem
             }
 
             return hasOwnedSettlement || isConnectedToOwnedRoad;
+        }
+        
+        private void AddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
+        {
+            var piece = settlement.GetComponentInParent<PieceController>();
+            if (piece == null) return;
+            
+            var neighbors = piece.HexPosition.GetNeighbours();
+            
+            BoardController board = FindObjectOfType<BoardController>();
+            if (board == null) return;
+
+            foreach (var neighborPos in neighbors)
+            {
+                PortController portPiece = board.GetComponentAt<PortController>(neighborPos);
+                if (portPiece == null) continue;
+                
+                portPiece.AddPlayerBuff(player);
+            }
         }
 
         private void HighlightPaths(List<Path> paths, bool highlight)

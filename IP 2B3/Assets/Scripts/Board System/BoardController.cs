@@ -81,6 +81,12 @@ namespace B3.BoardSystem
             //return piece;
             return null;
         }
+        
+        public T GetComponentAt<T>(HexPosition position) where T : Component
+        {
+            var piece = BoardGrid[position];
+            return piece?.GetComponent<T>(); 
+        }
 
         private void SpawnLine(int iMin, int iMax, int j, bool arePortPieces)
         {

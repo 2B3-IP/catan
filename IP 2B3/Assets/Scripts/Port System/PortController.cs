@@ -16,6 +16,14 @@ namespace B3.PortSystem
         [SerializeField] private HousePivot[] portTransform;
         [SerializeField] private BoardController boardController;
 
+        //TO DO
+        //ar trebui sa setam x si y ul cand cream portul doar ca nu stiu cum sa iau acele coord (vb cu alex)
+        [SerializeField]
+        private int idX;
+        
+        [SerializeField]
+        private int idY;
+
         protected PlayerBuffs OwnerBuffs
         {
             get
@@ -35,7 +43,28 @@ namespace B3.PortSystem
         public abstract ResourceType? ResourceType { get; }
 
         public abstract void AddPlayerBuff(PlayerBase player);
-        
+
+        public bool IsSettlementPosition(SettlementController settlement)
+        {
+            // luam vertexul de pe partea opusa pe ideea ca 
+            HexVertexDir settlementHexDir = settlement.VertexDir.Opposite();
+            
+            ////TO DO
+            //trebuie completata switch ul asta ca nu stiu  exact coord de la port
+            //asta este stric un exemplu ca idee cum ar trebui sa functioneze
+            switch (idX, idY)
+            {
+                case (-3, -1):
+                    if( settlementHexDir.Equals(HexVertexDir.BottomLeft) || settlementHexDir.Equals(HexVertexDir.BottomRight) )
+                        return true;
+                    break;
+                default:
+                    return false;
+            }
+            return false;
+        }
+
+        //nu cred ca mai trebuie asta
         private HashSet<SettlementController> GetNearbyCornerSettlements()
         {
             var hexGrid = boardController.BoardGrid;

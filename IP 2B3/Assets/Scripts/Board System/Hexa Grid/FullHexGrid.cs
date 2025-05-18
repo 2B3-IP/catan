@@ -215,5 +215,11 @@ namespace B3.BoardSystem
             var hexCenter = ToWorldPosition(position);
             return hexCenter + dir.OffsetFromCenter() * DistanceFromCenter;
         }
+        
+        public Vector2 GetHexEdge(HexEdgeDir dir, HexPosition position)
+        {
+            var hexCenter = ToWorldPosition(position);
+            return hexCenter + dir.OffsetFromCenterOfHex() * DistanceFromCenter;
+        }
     }
 }

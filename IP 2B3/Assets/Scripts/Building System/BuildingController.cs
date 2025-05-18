@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using B3.SettlementSystem;
 using B3.PlayerSystem;
 using B3.BoardSystem;
+using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.PortSystem;
 using UnityEngine.InputSystem;
@@ -16,106 +16,70 @@ namespace B3.BuildingSystem
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private SettlementController settlementPrefab;
 
-        private Camera _playerCamera;
-        private readonly RaycastHit[] _hits = new RaycastHit[5];
-
-        private SettlementController[] _settlements;
-        private Path[] _allPaths;
+        private PathController[] _allPaths;
+        private bool _isFirstStates = true;
 
         private void Awake()
         {
-            _playerCamera = Camera.main;
-
-            _settlements = FindObjectsByType<SettlementController>(FindObjectsSortMode.None);
-            _allPaths = FindObjectsByType<Path>(FindObjectsSortMode.None);
+            _allPaths = FindObjectsByType<PathController>(FindObjectsSortMode.None);
         }
+
+        private void OnEnable() =>
+            PlayerDiceGameState.OnDiceGameState += OnDiceGameState;
+        
+        private void OnDisable() =>
+            PlayerDiceGameState.OnDiceGameState -= OnDiceGameState;
 
         public override IEnumerator BuildHouse(PlayerBase player)
         {
-            yield return player.BuildHouseCoroutine();
-
-            var selectedHouse = player.SelectedHouse;
+            if (!CanBuildHouse(player))
+                yield break;
+            
+            SettlementController selectedHouse = null;
+            
+            while (selectedHouse == null)
+            {
+                yield return player.BuildHouseCoroutine();
+                selectedHouse = player.SelectedHouse;
+                
+                if (!_isFirstStates && !CanBuildHouse(selectedHouse, player))
+                    selectedHouse = null;
+            }
 
             selectedHouse.SetOwner(player);
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
-
+            
             var message = $"House built at {selectedHouse.transform.position} by {player.name}";
+            
             Debug.Log(message);
-
             AI.SendMessage(message);
         }
 
         public override IEnumerator BuildRoad(PlayerBase player)
         {
-            yield break;
-            /*
             if (!CanBuildRoad(player))
                 yield break;
-
-            yield return player.BuildRoadCoroutine();
-
-            var availablePaths = _allPaths
-                .Where(p => p.Owner == null && (
-                    (p.SettlementA != null && p.SettlementA.HasOwner && p.SettlementA.Owner == player) ||
-                    (p.SettlementB != null && p.SettlementB.HasOwner && p.SettlementB.Owner == player) ||
-                    IsConnectedToOwnedRoad(p, player)
-                )).ToList();
-
-            if (availablePaths.Count == 0)
+            
+            PathController selectedPath = null;
+            
+            while (selectedPath == null)
             {
-                Debug.Log("No available paths to build a road.");
-                yield break;
+                yield return player.BuildRoadCoroutine();
+                selectedPath = player.SelectedPath;
+                
+                if (!CanBuildRoad(player, selectedPath))
+                    selectedPath = null;
             }
-
-            HighlightPaths(availablePaths, true);
-            bool roadPlaced = false;
-
-            clickButton.action.Enable();
-
-            BoardController board = FindObjectOfType<BoardController>();
-
-            while (!roadPlaced)
-            {
-                if (clickButton.action.WasPressedThisFrame())
-                {
-                    var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
-                    if (Physics.Raycast(ray, out RaycastHit hit, 100f))
-                    {
-                        Vector3 hitPoint = hit.point;
-
-                        PieceController piece = board.GetPieceAt(hitPoint);
-                        if (piece == null)
-                            continue;
-
-                        Vector3 edgeMidpoint = board.GetClosestEdgeMidpoint(piece, hitPoint);
-
-                        foreach (var path in availablePaths)
-                        {
-                            if (path.IsNearEdge(edgeMidpoint))
-                            {
-                                path.Owner = player;
-                                player.Paths.Add(path);
-                                Debug.Log($"Road built along edge near {edgeMidpoint} by {player.name}");
-                                roadPlaced = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                yield return null;
-            }
-
-            HighlightPaths(availablePaths, false);*/
+            
+            selectedPath.Owner = player;
+            selectedPath.BuildRoad();
+            
+            player.Paths.Add(selectedPath);
         }
 
-        protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player, Path[] allPaths)
+        protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player)
         {
-            // jucatorul mai are case disponibile?
-            if (!CanBuildHouse(player))
-                return false;
-
             // este asezarea ocupata?
             if (targetSettlement.HasOwner)
                 return false;
@@ -134,7 +98,7 @@ namespace B3.BuildingSystem
             // vf dacă exista un drum construit de player care este conectat la aceasta asezare
             foreach (var (neighbourVertex, neighbourPos, neighbourDir) in neighbouringVertices)
             {
-                foreach (var path in allPaths)
+                foreach (var path in _allPaths)
                 {
                     if (path.IsBuilt && path.Owner == player)
                     {
@@ -188,9 +152,8 @@ namespace B3.BuildingSystem
 
             return true;
         }
-
-
-        protected override bool CanBuildRoad(PlayerBase player, Path targetPath, Path[] allPaths)
+        
+        protected override bool CanBuildRoad(PlayerBase player, PathController targetPath)
         {
             // mai are playerul roaduri disponibile?
             if (!base.CanBuildRoad(player))
@@ -227,7 +190,7 @@ namespace B3.BuildingSystem
 
                     foreach (var (otherVertex, otherPos, otherDir) in connectedEdges)
                     {
-                        foreach (var path in allPaths)
+                        foreach (var path in _allPaths)
                         {
                             if (path != targetPath && path.IsBuilt && path.Owner == player)
                             {
@@ -298,15 +261,6 @@ namespace B3.BuildingSystem
             }
         }
 
-        private void HighlightPaths(List<Path> paths, bool highlight)
-        {
-            foreach (var path in paths)
-            {
-                //to do front: de schimbat culoare, scale, etc
-                path.gameObject.GetComponent<Renderer>().material.color = highlight ? Color.green : Color.white;
-            }
-        }
-
         /*private bool IsConnectedToOwnedRoad(Path path, PlayerBase player)
         {
             return _allPaths.Any(p => p.Owner == player &&
@@ -329,5 +283,8 @@ namespace B3.BuildingSystem
                 closestCorner.UpgradeToCity();
             }
         }
+        
+        private void OnDiceGameState() =>
+            _isFirstStates = false;
     }
 }

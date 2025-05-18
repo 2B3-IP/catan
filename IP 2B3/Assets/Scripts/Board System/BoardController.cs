@@ -20,7 +20,8 @@ namespace B3.BoardSystem
         [SerializeField] private BoardPiece[] ports;
         
         [SerializeField] private SettlementController settlementPrefab;
-        
+        [SerializeField] private PathController pathPrefab;
+
         [SerializeField] private GameObject pieceTextPrefab;
 
         private ResourceType?[] _piecesResources = new ResourceType?[19];
@@ -35,17 +36,25 @@ namespace B3.BoardSystem
 
         private int _currentPieceIndex, _currentPortIndex, _currentNumberIndex;
 
-        public FullHexGrid<PieceController, SettlementController, Path> BoardGrid { get; private set; }
+        public FullHexGrid<PieceController, SettlementController, PathController> BoardGrid { get; private set; }
 
         private void Awake()
         {
-            BoardGrid = new FullHexGrid<PieceController, SettlementController, Path>
+            BoardGrid = new FullHexGrid<PieceController, SettlementController, PathController>
                 (GRID_WIDTH, GRID_HEIGHT, VertexFactory, EdgeFactory);
         }
 
-        private Path EdgeFactory(PieceController cell, HexPosition hex, HexEdgeDir dir)
+        private PathController EdgeFactory(PieceController cell, HexPosition hex, HexEdgeDir dir)
         {
-            return null;
+            var edgePosition = BoardGrid.GetHexEdge(dir, hex);
+            
+            var pathPosition = new Vector3(edgePosition.x, 0, edgePosition.y);
+            var instance = Instantiate(pathPrefab, pathPosition, Quaternion.identity);
+            
+            instance.HexPosition = hex;
+            instance.EdgeDir = dir;
+            
+            return instance;
         }
 
         private SettlementController VertexFactory(PieceController cell, HexPosition hex, HexVertexDir dir)
@@ -95,14 +104,6 @@ namespace B3.BoardSystem
         {
             Vector3[] edgeMidpoints = piece.GetEdgeMidpoints();
             return edgeMidpoints.OrderBy(p => Vector3.Distance(p, clickPosition)).First();
-        }
-        
-        public PieceController GetPieceAt(Vector3 position)
-        {
-            //Vector2 axialCoords = BoardGrid.WorldToAxial(position);
-            //PieceController piece = BoardGrid.GetCellAtAxial(axialCoords);
-            //return piece;
-            return null;
         }
         
         public T GetComponentAt<T>(HexPosition position) where T : Component
@@ -183,19 +184,5 @@ namespace B3.BoardSystem
                 (_numberPoll[i], _numberPoll[j]) = (_numberPoll[j], _numberPoll[i]);
             }
         }
-
-        // private void Start()
-        // {
-        //     if (gameSettings == null)
-        //     {
-        //         Debug.LogError("gameSettings is not assigned!");
-        //         return;
-        //     }
-        //
-        //     if (gameSettings.autoGenerateBoard)
-        //     {
-        //         Generate();
-        //     }
-        // }
     }
 }

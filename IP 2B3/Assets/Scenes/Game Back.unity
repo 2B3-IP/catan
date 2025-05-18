@@ -8522,6 +8522,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1246586736062280716, guid: da8fa586852415d438f2b23fe74058f8, type: 3}
+      propertyPath: pathPrefab
+      value: 
+      objectReference: {fileID: 6626397863268277113, guid: 08dd3561ebdb1414d82cd699175b1013, type: 3}
+    - target: {fileID: 1246586736062280716, guid: da8fa586852415d438f2b23fe74058f8, type: 3}
       propertyPath: pieceTextPrefab
       value: 
       objectReference: {fileID: 6137507380118235479, guid: 1273f5402440e294db9751d9882d25ec, type: 3}

@@ -47,17 +47,75 @@ namespace B3.PortSystem
         public bool IsSettlementPosition(SettlementController settlement)
         {
             // luam vertexul de pe partea opusa pe ideea ca 
+            //locul portului de pe hexul de port este in oglinda cu locul hexului
+            //de pe hexul tile
             HexVertexDir settlementHexDir = settlement.VertexDir.Opposite();
             
-            ////TO DO
-            //trebuie completata switch ul asta ca nu stiu  exact coord de la port
-            //asta este stric un exemplu ca idee cum ar trebui sa functioneze
             switch (idX, idY)
             {
-                case (-3, -1):
-                    if( settlementHexDir.Equals(HexVertexDir.BottomLeft) || settlementHexDir.Equals(HexVertexDir.BottomRight) )
+                case (-1, 3):
+                {
+                    if (settlementHexDir.Equals(HexVertexDir.BottomLeft) ||
+                        settlementHexDir.Equals(HexVertexDir.BottomRight))
                         return true;
                     break;
+                }
+                case (1, 2):
+                {
+                    if (settlementHexDir.Equals(HexVertexDir.BottomLeft) ||
+                        settlementHexDir.Equals(HexVertexDir.BottomRight))
+                        return true;
+                    break;
+                }
+                case (3, 0):
+                {
+                    if (settlementHexDir.Equals(HexVertexDir.BottomLeft) ||
+                        settlementHexDir.Equals(HexVertexDir.Left))
+                        return true;
+                    break;
+                }
+                case (3, -2):
+                {
+                    if (settlementHexDir.Equals(HexVertexDir.TopLeft) ||
+                        settlementHexDir.Equals(HexVertexDir.Left))
+                        return true;
+                    break;
+                }
+                case (2, -3):
+                {
+                    if (settlementHexDir.Equals(HexVertexDir.TopLeft) ||
+                        settlementHexDir.Equals(HexVertexDir.Left))
+                        return true;
+                    break;
+                }
+                case (0, -3):
+                {
+                    if (settlementHexDir.Equals(HexVertexDir.TopLeft) ||
+                        settlementHexDir.Equals(HexVertexDir.TopRight))
+                        return true;
+                    break;
+                }
+                case (-2, -1):
+                {
+                    if (settlementHexDir.Equals(HexVertexDir.TopRight) ||
+                        settlementHexDir.Equals(HexVertexDir.Right))
+                        return true;
+                    break;
+                }
+                case (-3, 1):
+                {
+                    if (settlementHexDir.Equals(HexVertexDir.TopRight) ||
+                        settlementHexDir.Equals(HexVertexDir.Right))
+                        return true;
+                    break;
+                }
+                case (-3, 3):
+                {
+                    if (settlementHexDir.Equals(HexVertexDir.BottomRight) ||
+                        settlementHexDir.Equals(HexVertexDir.Right))
+                        return true;
+                    break;
+                }
                 default:
                     return false;
             }

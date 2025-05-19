@@ -134,16 +134,16 @@ namespace B3.PlayerSystem
             int hitCount = 0;
             while(hitCount == 0)
             {
-                Debug.Log("aaa");
+                // Debug.Log("aaa");
                 while (!action.WasPressedThisFrame())
                 {
-                    Debug.Log("wait");
+                    // Debug.Log("wait");
                     yield return null;
                 }
 
                 var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
                 hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask);
-                Debug.Log("aaa: " + hitCount);
+                // Debug.Log("aaa: " + hitCount);
             }
 
             _closestHit = _hits[0];

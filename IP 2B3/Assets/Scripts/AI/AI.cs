@@ -77,6 +77,31 @@ public static class AI
 
     public static void SendMove(string message)
     {
-        Debug.Log("Sending move: " + message);
+
+        try
+        {
+            TcpListener server = new TcpListener(IPAddress.Any, 6969);
+            server.Start();
+            Debug.Log("Server is running on port 6969...");
+
+            TcpClient client = server.AcceptTcpClient();
+            Debug.Log("Client connected!");
+
+            using (StreamWriter writer = new StreamWriter(client.GetStream()))
+            {
+                // Send move
+                writer.Write("MOVE");
+                writer.Write(" " + message);
+                writer.WriteLine();
+
+                Debug.Log("Data sent to client.");
+            }
+            client.Close();
+            server.Stop();
+        }
+        catch (Exception ex)
+        {
+             Debug.Log(ex.ToString());
+        }   
     }
 }

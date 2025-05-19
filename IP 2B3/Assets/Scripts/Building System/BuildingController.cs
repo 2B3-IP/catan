@@ -53,7 +53,7 @@ namespace B3.BuildingSystem
             
             TryAddPortBuffForSettlement(selectedHouse, player);
             
-            var message = $"House built at {selectedHouse.HexPosition}, {selectedHouse.VertexDir} by {player.name}";
+            var message = $"House built at {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y}, {selectedHouse.VertexDir} by {player.name}";
             Debug.Log(message);
             
             if(player is HumanPlayer)

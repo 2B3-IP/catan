@@ -29,13 +29,26 @@ namespace B3.PlayerSystem
         private RaycastHit _closestHit;
         private Camera _playerCamera;
         
-        private const float CornerDistanceThreshold = 0.5f;
+        private const float CornerDistanceThreshold = 2f;
         private const float EdgeDistanceThreshold = 0.5f;
 
         protected override void Awake()
         {
             base.Awake();
             _playerCamera = Camera.main;
+            clickButton.action.performed += ActionOnperformed;
+            clickButton.action.canceled += ActionOncanceled;
+        }
+
+        private void ActionOncanceled(InputAction.CallbackContext obj)
+        {
+            //a = false;
+        }
+
+        private void ActionOnperformed(InputAction.CallbackContext obj)
+        {
+            a = obj.ReadValueAsButton();
+            Debug.Log(a);
         }
 
         private void OnEnable() =>
@@ -127,6 +140,7 @@ namespace B3.PlayerSystem
             }
         }
 
+        private bool a;
         private IEnumerator RayCastCoroutine()
         {
             var action = clickButton.action;
@@ -135,15 +149,16 @@ namespace B3.PlayerSystem
             while(hitCount == 0)
             {
                 // Debug.Log("aaa");
-                while (!action.WasPressedThisFrame())
+                while (!a)//!action.WasPerformedThisFrame())
                 {
-                    // Debug.Log("wait");
+                    Debug.Log("wait");
                     yield return null;
                 }
 
+                a = false;
                 var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
-                hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask);
-                // Debug.Log("aaa: " + hitCount);
+                hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask); 
+                Debug.Log("aaa: " + hitCount);
             }
 
             _closestHit = _hits[0];

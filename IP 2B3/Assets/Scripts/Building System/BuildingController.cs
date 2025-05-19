@@ -97,7 +97,7 @@ namespace B3.BuildingSystem
             bool isConnectedToPlayerRoad = false;
 
             //vecinii vertexului curent
-            var neighbouringVertices = FindObjectOfType<BoardController>().BoardGrid
+            var neighbouringVertices = boardController.BoardGrid
                 .GetNeighbouringVertices(hexPosition, vertexDir);
 
             // vf dacă exista un drum construit de player care este conectat la aceasta asezare
@@ -141,7 +141,7 @@ namespace B3.BuildingSystem
                 HexPosition currentPos = currentSettlement.HexPosition;
                 HexVertexDir currentDir = currentSettlement.VertexDir;
 
-                var currentNeighbours = FindObjectOfType<BoardController>().BoardGrid
+                var currentNeighbours = boardController.BoardGrid
                     .GetNeighbouringVertices(currentPos, currentDir);
 
                 foreach (var (neighbourVertex, neighbourPos, neighbourDir) in currentNeighbours)
@@ -172,7 +172,7 @@ namespace B3.BuildingSystem
             HexEdgeDir edgeDir = targetPath.EdgeDir;
 
             var neighbouringEdges =
-                FindObjectOfType<BoardController>().BoardGrid.GetNeighbouringEdges(hexPosition, edgeDir);
+                boardController.BoardGrid.GetNeighbouringEdges(hexPosition, edgeDir);
 
             bool hasOwnedSettlement = false;
 
@@ -190,7 +190,7 @@ namespace B3.BuildingSystem
             {
                 if (vertex is SettlementController settlement)
                 {
-                    var connectedEdges = FindObjectOfType<BoardController>().BoardGrid
+                    var connectedEdges = boardController.BoardGrid
                         .GetNeighbouringEdges(vertexPos, VertexDirToEdgeDir(vertexDir));
 
                     foreach (var (otherVertex, otherPos, otherDir) in connectedEdges)

@@ -19,6 +19,10 @@ namespace B3.DevelopmentCardSystem
         
         public override IEnumerator UseCard(PlayerBase player)
         {
+            // de schimbat cu sistemu nou de board ( hex)
+            // trb sa faci o coroutina in playerbase abstracta si in human trb implementata
+            // yield return player.MoveThief(); 
+            
             _playerCamera ??= Camera.main;
             
             var action = clickButton.action;

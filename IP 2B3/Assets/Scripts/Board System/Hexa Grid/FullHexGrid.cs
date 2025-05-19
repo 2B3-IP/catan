@@ -25,8 +25,7 @@ namespace B3.BoardSystem
             internal Vertex[] Vertices { init; get; }
             internal Edge[] Edges { init; get; }
         }
-
-
+        
         // DO NOT modify innerGrid
         private HexGrid<InnerCell> InnerGrid { get; init; }
         public float DistanceFromCenter { get; init; }
@@ -214,6 +213,12 @@ namespace B3.BoardSystem
         {
             var hexCenter = ToWorldPosition(position);
             return hexCenter + dir.OffsetFromCenter() * DistanceFromCenter;
+        }
+        
+        public Vector2 GetHexEdge(HexEdgeDir dir, HexPosition position)
+        {
+            var hexCenter = ToWorldPosition(position);
+            return hexCenter + dir.OffsetFromCenterOfHex() * DistanceFromCenter;
         }
     }
 }

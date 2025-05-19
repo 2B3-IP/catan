@@ -12,6 +12,8 @@ namespace B3.GameStateSystem
         {
             OnPlayerEnd?.Invoke();
             stateMachine.StartMachineWithOtherPlayer();
+            
+            AI.SendMove("end round");
             yield break;
         }
     }

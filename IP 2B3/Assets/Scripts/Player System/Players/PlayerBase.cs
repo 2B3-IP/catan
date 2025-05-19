@@ -23,18 +23,20 @@ namespace B3.PlayerSystem
 
         public int VictoryPoints { get; private set; }
         public float DiceThrowForce { get; protected set; }
-        public SettlementController ClosestCorner { get; protected set; }
+        public SettlementController SelectedHouse { get; protected set; }
+        
+        public PathController SelectedPath { get; protected set; }
         public bool IsTurnEnded { get; set; }
         
         public PlayerBuffs PlayerBuffs { get; private set; }
         
         public List<SettlementController> Settlements { get; private set; } = new();
-        public List<Path> Paths { get; private set; } = new();
+        public List<PathController> Paths { get; private set; } = new();
         
         public PieceController SelectedThiefPiece { get; protected set; }
         public SettlementController SelectedSettlement { get; protected set; }
         
-        private void Awake() =>
+        protected virtual void Awake() =>
             PlayerBuffs = GetComponent<PlayerBuffs>();
 
         public abstract IEnumerator DiceThrowForceCoroutine();
@@ -43,6 +45,7 @@ namespace B3.PlayerSystem
 
         public abstract IEnumerator BuildHouseCoroutine();
         
+        public abstract IEnumerator BuildRoadCoroutine();
         public abstract IEnumerator UpgradeToCityCoroutine();
         
         public IEnumerator EndTurnCoroutine()

@@ -18,9 +18,8 @@ namespace B3.BuildingSystem
         public abstract IEnumerator BuildRoad(PlayerBase player);
         public abstract IEnumerator BuildCity(PlayerBase player);
 
-        protected abstract bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player,
-            Path[] allPaths);
-        protected abstract bool CanBuildRoad(PlayerBase player, Path targetPath, Path[] allPaths);
+        protected abstract bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player);
+        protected abstract bool CanBuildRoad(PlayerBase player, PathController targetPath);
         
 
         protected bool CanBuildHouse(PlayerBase player)

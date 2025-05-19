@@ -95,7 +95,7 @@ namespace B3.BoardSystem
             SpawnPiece(-3, 1, true);
             SpawnPiece(-2, -1, true);
 
-            AI.SendBoard(_piecesResources, _piecesNumber, _portsResources);
+            //AI.SendBoard(_piecesResources, _piecesNumber, _portsResources);
         }
 
         private void SpawnLine(int iMin, int iMax, int j, bool arePortPieces)

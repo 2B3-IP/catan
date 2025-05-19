@@ -12,7 +12,6 @@ public static class AI
 
     public static void SendBoard(ResourceType?[] resources, int[] numbers,ResourceType?[] ports)
     {
-
         int []indexSwap = { 6,5,4,3,2,1,0,8,7 };
         // swap the port with the new index
         var swappedPorts = ports.ToArray();

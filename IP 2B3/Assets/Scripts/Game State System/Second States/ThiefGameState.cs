@@ -11,9 +11,9 @@ namespace B3.GameStateSystem
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
-            
             var currentPlayer = stateMachine.CurrentPlayer;
             yield return currentPlayer.MoveThiefCoroutine(thief);
+            
             var currentPiece = currentPlayer.SelectedThiefPiece;
             thief.BlockPiece(currentPiece);
             thief.StealFromRandomPlayer(currentPlayer);

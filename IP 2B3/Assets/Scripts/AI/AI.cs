@@ -76,7 +76,7 @@ public static class AI
 
     public static void SendMove(string message)
     {
-
+        return;
         try
         {
             TcpListener server = new TcpListener(IPAddress.Any, 6969);

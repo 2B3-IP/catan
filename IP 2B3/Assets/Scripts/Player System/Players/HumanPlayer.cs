@@ -7,7 +7,6 @@ using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.SettlementSystem;
 using B3.ThiefSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,6 +14,9 @@ namespace B3.PlayerSystem
 {
     public sealed class HumanPlayer : PlayerBase
     {
+        private const float CORNER_DISTANCE_THRESHOLD = 2f;
+        private const float EDGE_DISTANCE_THRESHOLD = 1f;
+        
         [SerializeField] private InputActionReference throwForceButton;
         [SerializeField] private BoardController boardController;
         [SerializeField] private BuildingController buildingController;
@@ -24,41 +26,31 @@ namespace B3.PlayerSystem
         [SerializeField] private int hitDistance = 200;
         
         private readonly RaycastHit[] _hits = new RaycastHit[5];
-        private readonly WaitForEndOfFrame _waitForEndFrame = new();
         
         private RaycastHit _closestHit;
         private Camera _playerCamera;
-        
-        private const float CornerDistanceThreshold = 2f;
-        private const float EdgeDistanceThreshold = 0.5f;
 
         protected override void Awake()
         {
             base.Awake();
             _playerCamera = Camera.main;
-            clickButton.action.performed += ActionOnperformed;
-            clickButton.action.canceled += ActionOncanceled;
         }
 
-        private void ActionOncanceled(InputAction.CallbackContext obj)
+        private void OnEnable()
         {
-            //a = false;
-        }
-
-        private void ActionOnperformed(InputAction.CallbackContext obj)
-        {
-            a = obj.ReadValueAsButton();
-            Debug.Log(a);
-        }
-
-        private void OnEnable() =>
             UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
-        
-        private void OnDisable() =>
+            clickButton.action.performed += OnClickPerformed;
+        }
+
+        private void OnDisable()
+        {
             UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
+            clickButton.action.performed -= OnClickPerformed;
+        }
         
         public override IEnumerator DiceThrowForceCoroutine()
         {
+            // de schimbat cu ui button
             var action = throwForceButton.action;
             
             while(!action.WasPressedThisFrame())
@@ -112,7 +104,6 @@ namespace B3.PlayerSystem
             while (SelectedPath == null)
             {
                 yield return RayCastCoroutine();
-
                 var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 var hexPosition = pieceController.HexPosition;
@@ -140,29 +131,23 @@ namespace B3.PlayerSystem
             }
         }
 
-        private bool a;
+        private bool _hasClicked;
         private IEnumerator RayCastCoroutine()
         {
-            var action = clickButton.action;
-            
             int hitCount = 0;
             while(hitCount == 0)
             {
-                // Debug.Log("aaa");
-                while (!a)//!action.WasPerformedThisFrame())
-                {
-                    Debug.Log("wait");
+                while (!_hasClicked)
                     yield return null;
-                }
 
-                a = false;
+                _hasClicked = false;
+                
                 var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
                 hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask); 
-                Debug.Log("aaa: " + hitCount);
             }
 
             _closestHit = _hits[0];
-            for (int i = 0; i < hitCount; i++)
+            for (int i = 1; i < hitCount; i++)
             {
                 var hit = _hits[i];
                 if(_closestHit.distance > hit.distance)
@@ -177,14 +162,14 @@ namespace B3.PlayerSystem
             
             SettlementController closestCorner = null;
             float minDistance = float.MaxValue;
-
+            
             foreach (var corner in corners)
             {
                 var cornerPosition = boardGrid.GetHexCorner(corner.Item2, hexPosition);
                 var settlementPosition = new Vector3(cornerPosition.x, 0, cornerPosition.y);
                 
                 float distance = Vector3.Distance(hitPoint, settlementPosition);
-                if (distance <= CornerDistanceThreshold && distance < minDistance)
+                if (distance <= CORNER_DISTANCE_THRESHOLD && distance < minDistance)
                 {
                     minDistance = distance;
                     closestCorner = corner.Item1;
@@ -208,7 +193,7 @@ namespace B3.PlayerSystem
                 var pathPosition = new Vector3(edgePosition.x, 0, edgePosition.y);
                 
                 float distance = Vector3.Distance(hitPoint, pathPosition);
-                if (distance <= EdgeDistanceThreshold && distance < minDistance)
+                if (distance <= EDGE_DISTANCE_THRESHOLD && distance < minDistance)
                 {
                     minDistance = distance;
                     closestEdge = edge.Item1;
@@ -221,6 +206,7 @@ namespace B3.PlayerSystem
         private void OnPlayerEndButtonPress() =>
             IsTurnEnded = true;
         
-        
+        private void OnClickPerformed(InputAction.CallbackContext context) =>
+            _hasClicked = context.ReadValueAsButton();
     }
 }

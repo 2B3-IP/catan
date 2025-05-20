@@ -74,9 +74,13 @@ public static class AI
         return (new HexPosition(0, 0), HexEdgeDir.TopLeft);
     }
 
+    public static HexPosition GetThiefPostion()
+    {
+        return new HexPosition(0, 0);
+    }
+
     public static void SendMove(string message)
     {
-
         try
         {
             TcpListener server = new TcpListener(IPAddress.Any, 6969);

@@ -17,7 +17,15 @@ namespace B3.PlayerSystem
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
-            yield break; // cea mai buna pozitie pt thief
+            var thiefPosition = AI.GetThiefPostion();
+            var pieceController = boardController.BoardGrid[thiefPosition];
+            
+            yield return new WaitForSeconds(1f);
+
+            SelectedThiefPiece = pieceController;
+            
+            var thiefPivot = pieceController.ThiefPivot;
+            yield return thiefController.MoveThief(thiefPivot.position);
         }
 
         public override void OnTradeAndBuildUpdate()

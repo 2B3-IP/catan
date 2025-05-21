@@ -5,6 +5,7 @@ using B3.BoardSystem;
 using B3.BuildingSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
+using B3.PlayerSystem.UI;
 using B3.SettlementSystem;
 using B3.ThiefSystem;
 using UnityEngine;
@@ -29,6 +30,7 @@ namespace B3.PlayerSystem
         
         private RaycastHit _closestHit;
         private Camera _playerCamera;
+        private bool _hasClicked;
 
         protected override void Awake()
         {
@@ -46,22 +48,20 @@ namespace B3.PlayerSystem
         {
             UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
             clickButton.action.performed -= OnClickPerformed;
+            UIDiceButton.OnButtonClick += OnDiceButtonClick;
+            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
         }
         
-        public override IEnumerator DiceThrowForceCoroutine()
+        public override IEnumerator ThrowDiceCoroutine()
         {
-            // de schimbat cu ui button
-            var action = throwForceButton.action;
-            
-            while(!action.WasPressedThisFrame())
+            _hasClicked = false;
+
+            while (!_hasClicked)
                 yield return null;
 
-            float throwForce = 0f;
-            
-            while (action.WasPressedThisFrame())
-                throwForce += Mathf.Clamp(Time.fixedDeltaTime, MIN_DICE_THROW_FORCE, MAX_DICE_THROW_FORCE);
-            
-            DiceThrowForce = throwForce;
+            DiceSum = Random.Range(1,7)+Random.Range(1,7); 
+
+            _hasClicked = false;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
@@ -78,6 +78,11 @@ namespace B3.PlayerSystem
 
         public override void OnTradeAndBuildUpdate()
         {
+            if(!_hasClicked)
+                return;
+            
+            IsTurnEnded = true;
+            _hasClicked = false;
         }
 
         public override IEnumerator BuildHouseCoroutine()
@@ -130,10 +135,9 @@ namespace B3.PlayerSystem
                     SelectedHouse = null;
             }
         }
-
-        private bool _hasClicked;
         private IEnumerator RayCastCoroutine()
         {
+            _hasClicked = false;
             int hitCount = 0;
             while(hitCount == 0)
             {
@@ -208,5 +212,11 @@ namespace B3.PlayerSystem
         
         private void OnClickPerformed(InputAction.CallbackContext context) =>
             _hasClicked = context.ReadValueAsButton();
+        
+        private void OnDiceButtonClick() =>
+            _hasClicked = true;
+
+        private void OnEndPlayerButtonPress() =>
+            _hasClicked = true;
     }
 }

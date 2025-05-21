@@ -26,15 +26,17 @@ namespace B3.GameStateSystem
 
             var currentPlayer = stateMachine.CurrentPlayer;
             
-            yield return currentPlayer.DiceThrowForceCoroutine();
-            float throwForce = currentPlayer.DiceThrowForce;
+            yield return currentPlayer.ThrowDiceCoroutine();
+            
+            
+            //float throwForce = currentPlayer.DiceSum;
             // player - de la input
             // ai - random
 
-            var startPosition = _cameraTransform.forward;
-            yield return diceThrower.ThrowCoroutine(startPosition, throwForce);
-
-            int diceRolls = diceThrower.DiceRolls;
+            //var startPosition = _cameraTransform.forward;
+            //yield return diceThrower.ThrowCoroutine(startPosition, throwForce);
+            
+            int diceRolls = currentPlayer.DiceSum;
             
             if(diceRolls == THIEF_ROLL) stateMachine.ChangeState<ThiefGameState>();
             else stateMachine.ChangeState<ResourceGameState>();

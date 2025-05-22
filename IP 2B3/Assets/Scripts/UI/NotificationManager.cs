@@ -38,7 +38,7 @@ namespace B3.UI
         [SerializeField] private float animDuration;
         
         // btw: https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/RichText.html
-        public void AddNotification(string message, float durationSeconds)
+        public void AddNotification(string message, float durationSeconds = 4)
         {
             if (durationSeconds < 2f)
                 Debug.LogWarning("Notification duration should be at least 2 seconds so the animation displays properly");

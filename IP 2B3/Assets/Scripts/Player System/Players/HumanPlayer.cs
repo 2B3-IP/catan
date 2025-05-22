@@ -5,9 +5,9 @@ using B3.BoardSystem;
 using B3.BuildingSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
+using B3.PlayerSystem.UI;
 using B3.SettlementSystem;
 using B3.ThiefSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,6 +15,9 @@ namespace B3.PlayerSystem
 {
     public sealed class HumanPlayer : PlayerBase
     {
+        private const float CORNER_DISTANCE_THRESHOLD = 2f;
+        private const float EDGE_DISTANCE_THRESHOLD = 1f;
+        
         [SerializeField] private InputActionReference throwForceButton;
         [SerializeField] private BoardController boardController;
         [SerializeField] private BuildingController buildingController;
@@ -24,29 +27,41 @@ namespace B3.PlayerSystem
         [SerializeField] private int hitDistance = 200;
         
         private readonly RaycastHit[] _hits = new RaycastHit[5];
+        
         private RaycastHit _closestHit;
-        
-        private const float CornerDistanceThreshold = 0.4f;
- 
-        private void OnEnable() =>
-            UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
-        
-        private void OnDisable() =>
-            UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
-        
-        public override IEnumerator DiceThrowForceCoroutine()
+        private Camera _playerCamera;
+        private bool _hasClicked;
+
+        protected override void Awake()
         {
-            var action = throwForceButton.action;
-            
-            while(!action.WasPressedThisFrame())
+            base.Awake();
+            _playerCamera = Camera.main;
+        }
+
+        private void OnEnable()
+        {
+            UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
+            clickButton.action.performed += OnClickPerformed;
+        }
+
+        private void OnDisable()
+        {
+            UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
+            clickButton.action.performed -= OnClickPerformed;
+            UIDiceButton.OnButtonClick += OnDiceButtonClick;
+            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
+        }
+        
+        public override IEnumerator ThrowDiceCoroutine()
+        {
+            _hasClicked = false;
+
+            while (!_hasClicked)
                 yield return null;
 
-            float throwForce = 0f;
-            
-            while (action.WasPressedThisFrame())
-                throwForce += Mathf.Clamp(Time.fixedDeltaTime, MIN_DICE_THROW_FORCE, MAX_DICE_THROW_FORCE);
-            
-            DiceThrowForce = throwForce;
+            DiceSum = Random.Range(1,7)+Random.Range(1,7); 
+
+            _hasClicked = false;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
@@ -63,68 +78,80 @@ namespace B3.PlayerSystem
 
         public override void OnTradeAndBuildUpdate()
         {
+            if(!_hasClicked)
+                return;
+            
+            IsTurnEnded = true;
+            _hasClicked = false;
         }
 
         public override IEnumerator BuildHouseCoroutine()
-        { 
-            yield return RayCastCoroutine();
-            HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
+        {
+            SelectedHouse = null;
             
-            var hexCenter= boardController.BoardGrid.ToWorldPosition(hexPosition);
-            ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
+            while (SelectedHouse == null)
+            {
+                yield return RayCastCoroutine();
+                var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
+
+                var hexPosition = pieceController.HexPosition;
+                SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
+
+                if (SelectedHouse != null && SelectedHouse.Owner != null)
+                    SelectedHouse = null;
+            }
+        }
+        
+        public override IEnumerator BuildRoadCoroutine()
+        {
+            SelectedPath = null;
+
+            while (SelectedPath == null)
+            {
+                yield return RayCastCoroutine();
+                var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
+
+                var hexPosition = pieceController.HexPosition;
+                SelectedPath = GetClosestEdge(hexPosition, _closestHit.point);
+
+                if (SelectedPath != null && SelectedPath.IsBuilt)
+                    SelectedPath = null;
+            }
         }
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
-            yield return RayCastCoroutine();
-            this.SelectedSettlement = null;
-            HexPosition hexPosition = boardController.BoardGrid.FromWorldPosition(_closestHit.point);
-            var hexCenter=boardController.BoardGrid.ToWorldPosition(hexPosition);
-            this.ClosestCorner = GetClosestCorner(hexCenter, _closestHit.point, boardController.BoardGrid.DistanceFromCenter);
-         
-            if (!ClosestCorner.HasValue)
-            {
-                Debug.Log("No corner detected.");
-                yield break;
-            }
+            SelectedHouse = null;
             
-           
-           // TODO: De implementat hexboard pt settlements
-           
-           var TempSettlements = GameObject.FindObjectsOfType<SettlementController>().ToList(); //Array temporar!
-           foreach (var s in TempSettlements)
-           {
-               Vector2 sPosition2D = new Vector2(s.transform.position.x, s.transform.position.z);
-               if (Vector2.Distance(sPosition2D, ClosestCorner.Value) < 0.1f)
-               {
-                   this.SelectedSettlement = s;
-                   break;
-               }
-           }
-          
+            while (SelectedHouse == null)
+            {
+                yield return RayCastCoroutine();
+                var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
 
+                var hexPosition = pieceController.HexPosition;
+                SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
+                
+                if (SelectedHouse != null && SelectedHouse.IsCity) 
+                    SelectedHouse = null;
+            }
         }
-
         private IEnumerator RayCastCoroutine()
         {
-            var action = clickButton.action;
-            
+            _hasClicked = false;
             int hitCount = 0;
             while(hitCount == 0)
             {
-                while (!action.WasPressedThisFrame())
-                {
-                    Debug.Log("wait");
+                while (!_hasClicked)
                     yield return null;
-                }
+
+                _hasClicked = false;
                 
-                var ray = Camera.main.ScreenPointToRay(Mouse.current.position.value);
-                hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask);
-                Debug.Log("aaa: " + hitCount);
+                var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
+                hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask); 
             }
 
             _closestHit = _hits[0];
-            for (int i = 0; i < hitCount; i++)
+            for (int i = 1; i < hitCount; i++)
             {
                 var hit = _hits[i];
                 if(_closestHit.distance > hit.distance)
@@ -132,42 +159,64 @@ namespace B3.PlayerSystem
             }
         }
         
-        private Vector2[] GetHexCorners(Vector2 center, float radius)
+        private SettlementController GetClosestCorner(HexPosition hexPosition, Vector3 hitPoint)
         {
-            Vector2[] corners = new Vector2[6];
-
-            for (int i = 0; i < 6; i++)
-            {
-                float angleRad = Mathf.PI / 3 * i; 
-                float x = center.x + radius * Mathf.Cos(angleRad);
-                float y = center.y + radius * Mathf.Sin(angleRad);
-                corners[i] = new Vector2(x, y);
-            }
-
-            return corners;
-        }
-
-        private Vector2? GetClosestCorner(Vector2 center, Vector2 hitPoint, float radius)
-        {
-            var corners = GetHexCorners(center, radius);
-            Vector2? closestCorner = null;
+            var boardGrid = boardController.BoardGrid;
+            var corners = boardGrid.GetHexVertices(hexPosition);
+            
+            SettlementController closestCorner = null;
             float minDistance = float.MaxValue;
-
+            
             foreach (var corner in corners)
             {
-                float distance = Vector2.Distance(hitPoint, corner);
-                if (distance <= CornerDistanceThreshold && distance < minDistance)
+                var cornerPosition = boardGrid.GetHexCorner(corner.Item2, hexPosition);
+                var settlementPosition = new Vector3(cornerPosition.x, 0, cornerPosition.y);
+                
+                float distance = Vector3.Distance(hitPoint, settlementPosition);
+                if (distance <= CORNER_DISTANCE_THRESHOLD && distance < minDistance)
                 {
                     minDistance = distance;
-                    closestCorner = corner;
+                    closestCorner = corner.Item1;
                 }
             }
 
             return closestCorner;
         }
+
+        private PathController GetClosestEdge(HexPosition hexPosition, Vector3 hitPoint)
+        {
+            var boardGrid = boardController.BoardGrid;
+            var edges = boardGrid.GetHexEdges(hexPosition);
+            
+            PathController closestEdge = null;
+            float minDistance = float.MaxValue;
+            
+            foreach (var edge in edges)
+            {
+                var edgePosition = boardGrid.GetHexEdge(edge.Item2, hexPosition);
+                var pathPosition = new Vector3(edgePosition.x, 0, edgePosition.y);
+                
+                float distance = Vector3.Distance(hitPoint, pathPosition);
+                if (distance <= EDGE_DISTANCE_THRESHOLD && distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestEdge = edge.Item1;
+                }
+            }
+            
+            return closestEdge;
+        }
+
         private void OnPlayerEndButtonPress() =>
             IsTurnEnded = true;
         
+        private void OnClickPerformed(InputAction.CallbackContext context) =>
+            _hasClicked = context.ReadValueAsButton();
         
+        private void OnDiceButtonClick() =>
+            _hasClicked = true;
+
+        private void OnEndPlayerButtonPress() =>
+            _hasClicked = true;
     }
 }

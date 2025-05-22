@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using B3.BuildingSystem;
 using B3.PieceSystem;
@@ -14,6 +15,9 @@ namespace B3.PlayerSystem
     {
         protected const float MIN_DICE_THROW_FORCE = 1f;
         protected const float MAX_DICE_THROW_FORCE = 2f;
+
+        public string playerName;
+        public string colorTag = "<color=red>";
         
         /// <summary>
         /// Mapat cu ResourceType (Resources[0] = Ore, Resources[1] = Wheat, Resources[2] = Wood, Resources[3] = Brick, Resources[4] = Sheep)
@@ -22,27 +26,30 @@ namespace B3.PlayerSystem
         public int[] Resources { get; private set; }  = new int[5];
 
         public int VictoryPoints { get; private set; }
-        public float DiceThrowForce { get; protected set; }
-        public Vector2? ClosestCorner { get; protected set; }
+        public int DiceSum { get; protected set; }
+        public SettlementController SelectedHouse { get; protected set; }
+        
+        public PathController SelectedPath { get; protected set; }
         public bool IsTurnEnded { get; set; }
         
         public PlayerBuffs PlayerBuffs { get; private set; }
         
         public List<SettlementController> Settlements { get; private set; } = new();
-        public List<Path> Paths { get; private set; } = new();
+        public List<PathController> Paths { get; private set; } = new();
         
         public PieceController SelectedThiefPiece { get; protected set; }
         public SettlementController SelectedSettlement { get; protected set; }
         
-        private void Awake() =>
+        protected virtual void Awake() =>
             PlayerBuffs = GetComponent<PlayerBuffs>();
 
-        public abstract IEnumerator DiceThrowForceCoroutine();
+        public abstract IEnumerator ThrowDiceCoroutine();
         public abstract IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController);
         public abstract void OnTradeAndBuildUpdate();
 
         public abstract IEnumerator BuildHouseCoroutine();
         
+        public abstract IEnumerator BuildRoadCoroutine();
         public abstract IEnumerator UpgradeToCityCoroutine();
         
         public IEnumerator EndTurnCoroutine()

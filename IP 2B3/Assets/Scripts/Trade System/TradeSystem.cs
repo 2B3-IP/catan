@@ -17,7 +17,7 @@ namespace B3.TradeSystem
             for (int i = 0; i < resourcesToTrade.Length; i++)
             {
                 int value = resourcesToTrade[i];
-                var resource = (ResourceType)Mathf.Abs(i);
+                var resource = (ResourceType)i;
 
                 if (value > 0)
                 {

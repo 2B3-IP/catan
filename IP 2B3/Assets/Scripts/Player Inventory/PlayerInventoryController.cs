@@ -34,10 +34,15 @@ namespace B3.PlayerInventorySystem
             _playerItems.Add(playerItem);
         }
 
-        public void UseItem(DevelopmentCardType cardType)
+        public bool UseItem(DevelopmentCardType cardType)
         {
             if (HasCard(cardType))
+            {
                 developmentCardController.UseCard(_player, cardType);
+                return true;
+            }
+            
+            return false;
         }
 
         private bool HasCard(DevelopmentCardType cardType)

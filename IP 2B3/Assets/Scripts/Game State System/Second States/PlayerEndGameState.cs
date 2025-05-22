@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEngine;
 
 namespace B3.GameStateSystem
 {
@@ -10,6 +11,7 @@ namespace B3.GameStateSystem
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
+            Debug.Log("PlayerEndGameState OnEnter");
             OnPlayerEnd?.Invoke();
             stateMachine.StartMachineWithOtherPlayer();
             

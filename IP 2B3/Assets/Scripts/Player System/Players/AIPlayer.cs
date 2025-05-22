@@ -9,9 +9,9 @@ namespace B3.PlayerSystem
     {
         [SerializeField] private BoardController boardController;
 
-        public override IEnumerator DiceThrowForceCoroutine()
+        public override IEnumerator ThrowDiceCoroutine()
         {
-            DiceThrowForce = Random.Range(MIN_DICE_THROW_FORCE, MAX_DICE_THROW_FORCE); //TODO: TEMP
+            //DiceSum = Random.Range(MIN_DICE_THROW_FORCE, MAX_DICE_THROW_FORCE); //TODO: TEMP
             yield break;
         }
 

@@ -26,7 +26,7 @@ namespace B3.PlayerSystem
         public int[] Resources { get; private set; }  = new int[5];
 
         public int VictoryPoints { get; private set; }
-        public float DiceThrowForce { get; protected set; }
+        public int DiceSum { get; protected set; }
         public SettlementController SelectedHouse { get; protected set; }
         
         public PathController SelectedPath { get; protected set; }
@@ -43,7 +43,7 @@ namespace B3.PlayerSystem
         protected virtual void Awake() =>
             PlayerBuffs = GetComponent<PlayerBuffs>();
 
-        public abstract IEnumerator DiceThrowForceCoroutine();
+        public abstract IEnumerator ThrowDiceCoroutine();
         public abstract IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController);
         public abstract void OnTradeAndBuildUpdate();
 

@@ -5,9 +5,9 @@ using B3.BoardSystem;
 using B3.BuildingSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
+using B3.PlayerSystem.UI;
 using B3.SettlementSystem;
 using B3.ThiefSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,6 +15,9 @@ namespace B3.PlayerSystem
 {
     public sealed class HumanPlayer : PlayerBase
     {
+        private const float CORNER_DISTANCE_THRESHOLD = 2f;
+        private const float EDGE_DISTANCE_THRESHOLD = 1f;
+        
         [SerializeField] private InputActionReference throwForceButton;
         [SerializeField] private BoardController boardController;
         [SerializeField] private BuildingController buildingController;
@@ -24,52 +27,41 @@ namespace B3.PlayerSystem
         [SerializeField] private int hitDistance = 200;
         
         private readonly RaycastHit[] _hits = new RaycastHit[5];
-        private readonly WaitForEndOfFrame _waitForEndFrame = new();
         
         private RaycastHit _closestHit;
         private Camera _playerCamera;
-        
-        private const float CornerDistanceThreshold = 2f;
-        private const float EdgeDistanceThreshold = 0.5f;
+        private bool _hasClicked;
 
         protected override void Awake()
         {
             base.Awake();
             _playerCamera = Camera.main;
-            clickButton.action.performed += ActionOnperformed;
-            clickButton.action.canceled += ActionOncanceled;
         }
 
-        private void ActionOncanceled(InputAction.CallbackContext obj)
+        private void OnEnable()
         {
-            //a = false;
-        }
-
-        private void ActionOnperformed(InputAction.CallbackContext obj)
-        {
-            a = obj.ReadValueAsButton();
-            Debug.Log(a);
-        }
-
-        private void OnEnable() =>
             UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
-        
-        private void OnDisable() =>
-            UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
-        
-        public override IEnumerator DiceThrowForceCoroutine()
+            clickButton.action.performed += OnClickPerformed;
+        }
+
+        private void OnDisable()
         {
-            var action = throwForceButton.action;
-            
-            while(!action.WasPressedThisFrame())
+            UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
+            clickButton.action.performed -= OnClickPerformed;
+            UIDiceButton.OnButtonClick += OnDiceButtonClick;
+            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
+        }
+        
+        public override IEnumerator ThrowDiceCoroutine()
+        {
+            _hasClicked = false;
+
+            while (!_hasClicked)
                 yield return null;
 
-            float throwForce = 0f;
-            
-            while (action.WasPressedThisFrame())
-                throwForce += Mathf.Clamp(Time.fixedDeltaTime, MIN_DICE_THROW_FORCE, MAX_DICE_THROW_FORCE);
-            
-            DiceThrowForce = throwForce;
+            DiceSum = Random.Range(1,7)+Random.Range(1,7); 
+
+            _hasClicked = false;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
@@ -86,6 +78,11 @@ namespace B3.PlayerSystem
 
         public override void OnTradeAndBuildUpdate()
         {
+            if(!_hasClicked)
+                return;
+            
+            IsTurnEnded = true;
+            _hasClicked = false;
         }
 
         public override IEnumerator BuildHouseCoroutine()
@@ -112,7 +109,6 @@ namespace B3.PlayerSystem
             while (SelectedPath == null)
             {
                 yield return RayCastCoroutine();
-
                 var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 var hexPosition = pieceController.HexPosition;
@@ -139,30 +135,23 @@ namespace B3.PlayerSystem
                     SelectedHouse = null;
             }
         }
-
-        private bool a;
         private IEnumerator RayCastCoroutine()
         {
-            var action = clickButton.action;
-            
+            _hasClicked = false;
             int hitCount = 0;
             while(hitCount == 0)
             {
-                // Debug.Log("aaa");
-                while (!a)//!action.WasPerformedThisFrame())
-                {
-                    Debug.Log("wait");
+                while (!_hasClicked)
                     yield return null;
-                }
 
-                a = false;
+                _hasClicked = false;
+                
                 var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
                 hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask); 
-                Debug.Log("aaa: " + hitCount);
             }
 
             _closestHit = _hits[0];
-            for (int i = 0; i < hitCount; i++)
+            for (int i = 1; i < hitCount; i++)
             {
                 var hit = _hits[i];
                 if(_closestHit.distance > hit.distance)
@@ -177,14 +166,14 @@ namespace B3.PlayerSystem
             
             SettlementController closestCorner = null;
             float minDistance = float.MaxValue;
-
+            
             foreach (var corner in corners)
             {
                 var cornerPosition = boardGrid.GetHexCorner(corner.Item2, hexPosition);
                 var settlementPosition = new Vector3(cornerPosition.x, 0, cornerPosition.y);
                 
                 float distance = Vector3.Distance(hitPoint, settlementPosition);
-                if (distance <= CornerDistanceThreshold && distance < minDistance)
+                if (distance <= CORNER_DISTANCE_THRESHOLD && distance < minDistance)
                 {
                     minDistance = distance;
                     closestCorner = corner.Item1;
@@ -208,7 +197,7 @@ namespace B3.PlayerSystem
                 var pathPosition = new Vector3(edgePosition.x, 0, edgePosition.y);
                 
                 float distance = Vector3.Distance(hitPoint, pathPosition);
-                if (distance <= EdgeDistanceThreshold && distance < minDistance)
+                if (distance <= EDGE_DISTANCE_THRESHOLD && distance < minDistance)
                 {
                     minDistance = distance;
                     closestEdge = edge.Item1;
@@ -221,6 +210,13 @@ namespace B3.PlayerSystem
         private void OnPlayerEndButtonPress() =>
             IsTurnEnded = true;
         
+        private void OnClickPerformed(InputAction.CallbackContext context) =>
+            _hasClicked = context.ReadValueAsButton();
         
+        private void OnDiceButtonClick() =>
+            _hasClicked = true;
+
+        private void OnEndPlayerButtonPress() =>
+            _hasClicked = true;
     }
 }

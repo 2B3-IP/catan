@@ -2677,7 +2677,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1012282399}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[6434893590810853526].bankController
+      value: 
+      objectReference: {fileID: 372445769}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: managedReferences[1461691153215914052].boardController
+      value: 
+      objectReference: {fileID: 181466517}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[6434893590810853526].boardController
       value: 
       objectReference: {fileID: 181466517}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
@@ -2825,6 +2833,7 @@ GameObject:
   - component: {fileID: 993105640}
   - component: {fileID: 993105639}
   - component: {fileID: 993105638}
+  - component: {fileID: 993105641}
   m_Layer: 5
   m_Name: End turn
   m_TagString: Untagged
@@ -2934,6 +2943,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 993105636}
   m_CullTransparentMesh: 1
+--- !u!114 &993105641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993105636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27fbd77c88a34048bb815fbd3abb1cab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1012282399 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 105831096138984837, guid: 947e18f52accac94daf9ef3ad708303f, type: 3}
@@ -4134,6 +4155,7 @@ GameObject:
   - component: {fileID: 1329318353}
   - component: {fileID: 1329318352}
   - component: {fileID: 1329318351}
+  - component: {fileID: 1329318354}
   m_Layer: 5
   m_Name: Dice
   m_TagString: Untagged
@@ -4242,6 +4264,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1329318349}
   m_CullTransparentMesh: 1
+--- !u!114 &1329318354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329318349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7534d9d73dbd411fb78e110293aa9197, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1335413639
 GameObject:
   m_ObjectHideFlags: 0
@@ -5805,7 +5839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6013632388104371080, guid: 6e0965b76baec374d9a8e0c82f9033cb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 15
+      value: -0.9
       objectReference: {fileID: 0}
     - target: {fileID: 6013632388104371080, guid: 6e0965b76baec374d9a8e0c82f9033cb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5841,9 +5875,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6013632388104371084, guid: 6e0965b76baec374d9a8e0c82f9033cb, type: 3}
       propertyPath: m_Name
-      value: Water_Plane
+      value: Water
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 6013632388104371084, guid: 6e0965b76baec374d9a8e0c82f9033cb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6013632388104371087, guid: 6e0965b76baec374d9a8e0c82f9033cb, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

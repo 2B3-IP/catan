@@ -8,54 +8,62 @@ namespace B3.GameStateSystem
         [SerializeField] private int startStateIndex;
         [SerializeReference] private GameStateBase[] gameStates;
         [SerializeField] private PlayersManager playersManager;
-        
+
         private GameStateBase _currentState;
 
         private int _currentPlayerIndex;
-        
+
         internal PlayerBase CurrentPlayer => playersManager.players[_currentPlayerIndex];
         internal int PlayerCount => playersManager.players.Count;
+        internal bool IsLastPlayer => _currentPlayerIndex == PlayerCount - 1;
+        internal bool IsFirstPlayer => _currentPlayerIndex == 0;
+
+        private void Start() =>
+            StartMachine();
 
         public void StartMachine()
         {
             var gameState = gameStates[startStateIndex];
             ChangeState(gameState);
         }
-        public GameStateBase CurrentGameState => _currentState;
+
         internal void ChangeState<T>()
         {
             foreach (var state in gameStates)
             {
                 if (state is not T)
                     continue;
-                
+
                 ChangeState(state);
                 break;
             }
         }
-        
+
         internal void StartMachineWithOtherPlayer()
         {
             ChangePlayer();
             StartMachine();
         }
 
-        internal bool ChangePlayer()
+        internal bool ChangePlayer(bool inversedOrder = false)
         {
             CurrentPlayer.IsTurnEnded = true;
-            _currentPlayerIndex = (_currentPlayerIndex + 1) % PlayerCount;
+
+            int amount = inversedOrder ? -1 : 1;
+            _currentPlayerIndex = (_currentPlayerIndex + amount) % PlayerCount;
 
             CurrentPlayer.IsTurnEnded = false;
             return _currentPlayerIndex == 0;
         }
-        
+
         private void ChangeState(GameStateBase state)
         {
-            Debug.Log($" [ChangeState] Change State to {state.GetType().Name}");
             if (_currentState == state)
                 return;
-            
+
             _currentState = state;
+
+            StopAllCoroutines();
             StartCoroutine(_currentState.OnEnter(this));
         }
     }

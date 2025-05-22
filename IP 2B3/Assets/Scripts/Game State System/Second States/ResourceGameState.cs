@@ -5,6 +5,8 @@ using UnityEngine;
 using B3.PieceSystem;
 using System.Collections.Generic;
 using System.Linq;
+using B3.BankSystem;
+using B3.BoardSystem;
 
 namespace B3.GameStateSystem
 {
@@ -12,28 +14,38 @@ namespace B3.GameStateSystem
     public sealed class ResourceGameState : GameStateBase
     {
         [SerializeField] private DiceThrower diceThrower;
+        [SerializeField] private BankController bankController;
+        [SerializeField] private BoardController boardController;
         
         private PieceController[] allPieces;
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
+            Debug.Log("Resource");
+            
             allPieces ??= Object.FindObjectsByType<PieceController>(FindObjectsSortMode.None);
             
-            float diceRolls = diceThrower.DiceRolls;
+            int diceRolls = stateMachine.CurrentPlayer.DiceSum;
+            Debug.Log(diceRolls);
+            var matchedPieces = allPieces.Where(piece => piece.Number == diceRolls && 
+                                                         !piece.IsBlocked && !piece.IsDesert);
 
-            var matchedPieces = allPieces.Where(piece => piece.Number == (int)diceRolls && !piece.IsBlocked);
-
+            var boardGrid = boardController.BoardGrid;
             foreach (var piece in matchedPieces)
             {
-                foreach (var settlement in piece.Settlements)
+                foreach (var vertex in boardGrid.GetHexVertices(piece.HexPosition))
                 {
-                    if (!settlement.HasOwner)
-                        continue;
+                    var settlement = vertex.Item1;
                     var owner = settlement.Owner;
+                    if(owner == null)
+                        continue;
                     var resourceType = piece.ResourceType;
                     int amount = settlement.ResourceAmount;
         
                     owner.AddResource(resourceType, amount);
+                    Debug.Log($"Resource Added {resourceType} with {amount}");
+                    Debug.Log($"Resource Amount: {owner.name}");
+                    bankController.GetResources(resourceType, amount);
                 }
             }
             

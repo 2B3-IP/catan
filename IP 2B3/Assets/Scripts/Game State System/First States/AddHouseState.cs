@@ -8,16 +8,13 @@ namespace B3.GameStateSystem
     public class AddHouseState : GameStateBase
     {
         [SerializeField] private BuildingControllerBase buildingController;
-        
+
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
             var currentPlayer = stateMachine.CurrentPlayer;
-            yield return buildingController.BuildCity(currentPlayer);
-            
-            bool isFirstPlayer = stateMachine.ChangePlayer();
-            
-            if (isFirstPlayer)
-                stateMachine.ChangeState<AddRoadState>();
+            yield return buildingController.BuildHouse(currentPlayer);
+
+            stateMachine.ChangeState<AddRoadState>();
         }
     }
 }

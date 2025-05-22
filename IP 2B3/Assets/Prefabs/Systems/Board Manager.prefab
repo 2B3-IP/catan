@@ -60,6 +60,16 @@ MonoBehaviour:
   ports:
   - maxSpawnCount: 4
     piecePrefab: {fileID: 3977322443648384451, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
-  - maxSpawnCount: 5
-    piecePrefab: {fileID: 6986705220417915101, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
-  debugTextPrefab: {fileID: 6137507380118235479, guid: 1273f5402440e294db9751d9882d25ec, type: 3}
+  - maxSpawnCount: 1
+    piecePrefab: {fileID: 5988036572127849328, guid: ab1c36049873b734898c7a6ce5ad49c0, type: 3}
+  - maxSpawnCount: 1
+    piecePrefab: {fileID: 3549425227394967199, guid: bc18a0f8bd1484f4c8280329d72297ea, type: 3}
+  - maxSpawnCount: 1
+    piecePrefab: {fileID: 7706057651222559801, guid: 232b701c80eff1743b5e7af4f4f5dfdb, type: 3}
+  - maxSpawnCount: 1
+    piecePrefab: {fileID: 3619223508753924475, guid: 91423e0d4e92a9c4fa60574d0751258a, type: 3}
+  - maxSpawnCount: 1
+    piecePrefab: {fileID: 6617505872389035500, guid: 123aad5878b466141800c28f1e6fd5a9, type: 3}
+  settlementPrefab: {fileID: 5200040358732198354, guid: 6cd7e780901bac74a8182dd61c3a8ff8, type: 3}
+  pathPrefab: {fileID: 6626397863268277113, guid: 08dd3561ebdb1414d82cd699175b1013, type: 3}
+  pieceTextPrefab: {fileID: 6137507380118235479, guid: 1273f5402440e294db9751d9882d25ec, type: 3}

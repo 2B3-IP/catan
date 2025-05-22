@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using UnityEngine;
 
 namespace B3.BoardSystem
 {
@@ -25,5 +26,21 @@ namespace B3.BoardSystem
                 HexEdgeDir.TopLeft => HexEdgeDir.BottomRight,
                 _ => throw new InvalidEnumArgumentException()
             };
+        
+        public static Vector2 OffsetFromCenterOfHex(this HexEdgeDir dir)
+        {
+            float h = Mathf.Sqrt(3) / 2;
+
+            return dir switch
+            {
+                HexEdgeDir.Top         => new (0, h),
+                HexEdgeDir.TopRight    => new (0.75f, h / 2),
+                HexEdgeDir.BottomRight => new (0.75f, -h / 2),
+                HexEdgeDir.Bottom      => new (0, -h),
+                HexEdgeDir.BottomLeft  => new (-0.75f, -h / 2),
+                HexEdgeDir.TopLeft     => new (-0.75f, h / 2),
+                _ => throw new InvalidEnumArgumentException()
+            };
+        }
     }
 }

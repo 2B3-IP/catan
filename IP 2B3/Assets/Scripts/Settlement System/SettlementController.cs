@@ -1,4 +1,5 @@
-﻿using B3.GameStateSystem;
+﻿using B3.BoardSystem;
+using B3.GameStateSystem;
 using B3.PlayerSystem;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ namespace B3.SettlementSystem
         [SerializeField] private GameObject houseObject;
         [SerializeField] private GameObject cityObject;
         [SerializeField] private Material highlightMaterial;
+        
+        public HexPosition HexPosition { get; set; }
+        public HexVertexDir VertexDir { get; set; }
         
         public static event System.Action<SettlementController> OnSettlementSelected;
         
@@ -25,7 +29,7 @@ namespace B3.SettlementSystem
         
         private void Awake()
         {
-            houseObject.SetActive(true);
+            houseObject.SetActive(false);
             cityObject.SetActive(false);
             
             _renderer = houseObject.GetComponent<Renderer>();
@@ -48,7 +52,7 @@ namespace B3.SettlementSystem
             _selectable = value;
         }
         
-        /*public void BuildHouse()
+        public void BuildHouse()
         {
             if (IsCity)
                 return;
@@ -56,7 +60,7 @@ namespace B3.SettlementSystem
             houseObject.SetActive(true);
             cityObject.SetActive(false);
             IsCity = true;
-        }*/
+        }
         
         public void SetOwner(PlayerBase player)
         {

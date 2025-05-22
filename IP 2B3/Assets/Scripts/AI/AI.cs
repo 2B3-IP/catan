@@ -103,4 +103,31 @@ public static class AI
              Debug.Log(ex.ToString());
         }   
     }
+   public static void SendDice(int dice)
+{
+    try
+    {
+        TcpListener server = new TcpListener(IPAddress.Any, 6969);
+        server.Start();
+        Debug.Log("Server is running on port 6969...");
+
+        TcpClient client = server.AcceptTcpClient();
+        Debug.Log("Client connected!");
+
+        using (StreamWriter writer = new StreamWriter(client.GetStream()))
+        {
+            writer.WriteLine("DICE_NUMBER " + dice);
+            Debug.Log("Sent single dice number to client: " + dice);
+        }
+
+        client.Close();
+        server.Stop();
+    }
+    catch (Exception ex)
+    {
+        Debug.Log(ex.ToString());
+    }
+}
+
+
 }

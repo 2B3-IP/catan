@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 80eb4f006a381820cbd6250f27e5986d
+timeCreated: 1460893840
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Scenes/PathSplinePerformance.unity
+  uploadId: 469983

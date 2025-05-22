@@ -1,4 +1,5 @@
-﻿using B3.DevelopmentCardSystem;
+﻿using System.Linq;
+using B3.DevelopmentCardSystem;
 using UnityEngine;
 using B3.ResourcesSystem;
 
@@ -8,6 +9,9 @@ namespace B3.BankSystem
     {
         private readonly int[] _currentResources = {19, 19, 19, 19, 19};
         private readonly int[] _currentDevelopmentCards = {14, 2, 2, 2, 5};
+        
+        public int[] CurrentResources => _currentResources;
+        public int DevCardsCount => _currentDevelopmentCards.Sum();
         
         public bool HasResources(ResourceType resource, int amount) =>
             _currentResources[(int)resource] >= amount;

@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 5b082b763cda6cfdebb403bc145344eb
+timeCreated: 1460209336
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Scripts/PathSplineTrack.cs
+  uploadId: 469983

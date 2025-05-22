@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 29038e8d7059f918aae006cea15d307f
+timeCreated: 1493586162
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Scripts/PathBezier2d.cs
+  uploadId: 469983

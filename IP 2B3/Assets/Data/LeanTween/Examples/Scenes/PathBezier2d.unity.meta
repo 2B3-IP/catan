@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 431ab3d9a63cdee80a320e2cddcd62ab
+timeCreated: 1493585933
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Scenes/PathBezier2d.unity
+  uploadId: 469983

@@ -21,5 +21,10 @@ namespace B3.BuildingSystem
             if (SettlementB == from) return SettlementA;
             return null;
         }
+        
+        public bool IsNearEdge(Vector3 edgeMidpoint)
+        {
+            return Vector3.Distance(this.transform.position, edgeMidpoint) <= 0.3f;
+        }
     }
 }

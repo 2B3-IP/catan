@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 310e3d926dd6ab0eabe48b7e2ffa1abd
+timeCreated: 1488749437
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Prefabs/DustCloud.prefab
+  uploadId: 469983

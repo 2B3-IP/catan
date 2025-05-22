@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2deac589d5b7440139abedbed3f8bb15
+timeCreated: 1460231732
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Material/TrackCar.mat
+  uploadId: 469983

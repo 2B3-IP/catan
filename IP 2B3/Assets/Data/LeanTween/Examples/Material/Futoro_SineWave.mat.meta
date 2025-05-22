@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: eaba3776abb48fe108b6d7e6eb0d38a7
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Material/Futoro_SineWave.mat
+  uploadId: 469983

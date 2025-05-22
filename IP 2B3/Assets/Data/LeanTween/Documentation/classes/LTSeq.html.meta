@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 10a228b247cdb1c52b1c77efc71ded54
+timeCreated: 1488755637
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Documentation/classes/LTSeq.html
+  uploadId: 469983

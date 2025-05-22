@@ -7,7 +7,8 @@ using UnityEngine;
 
 namespace B3.DevelopmentCardSystem
 {
-    internal sealed class YearOfPlentyDevelopmentCard : DevelopmentCardBase
+    [System.Serializable]
+    public sealed class YearOfPlentyDevelopmentCard : DevelopmentCardBase
     {
         [SerializeField] private BankController bankController;
         private bool resourceWasSelected = false;

@@ -12,10 +12,13 @@ namespace B3.GameStateSystem
     public sealed class ResourceGameState : GameStateBase
     {
         [SerializeField] private DiceThrower diceThrower;
-        [SerializeField] private List<PieceController> allPieces;
+        
+        private PieceController[] allPieces;
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
+            allPieces ??= Object.FindObjectsByType<PieceController>(FindObjectsSortMode.None);
+            
             float diceRolls = diceThrower.DiceRolls;
 
             var matchedPieces = allPieces.Where(piece => piece.Number == (int)diceRolls && !piece.IsBlocked);

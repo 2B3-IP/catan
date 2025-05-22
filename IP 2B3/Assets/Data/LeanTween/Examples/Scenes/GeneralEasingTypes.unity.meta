@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: aafae6595d75acc1b9e617d167a299c4
+timeCreated: 1471870210
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Scenes/GeneralEasingTypes.unity
+  uploadId: 469983

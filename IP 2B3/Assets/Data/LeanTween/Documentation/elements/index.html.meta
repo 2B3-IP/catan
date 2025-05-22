@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a3dd56424fb04d56f8fd507474af89e4
+timeCreated: 1479471015
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Documentation/elements/index.html
+  uploadId: 469983

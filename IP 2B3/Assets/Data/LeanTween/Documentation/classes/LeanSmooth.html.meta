@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ecc83817b09a0901db252b85c3f92669
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Documentation/classes/LeanSmooth.html
+  uploadId: 469983

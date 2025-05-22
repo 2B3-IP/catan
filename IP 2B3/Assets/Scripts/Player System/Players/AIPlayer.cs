@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace B3.PlayerSystem
 {
-    internal sealed class AIPlayer : PlayerBase
+    public sealed class AIPlayer : PlayerBase
     {
         public override IEnumerator DiceThrowForceCoroutine()
         {
@@ -12,7 +12,7 @@ namespace B3.PlayerSystem
             yield break;
         }
 
-        public override IEnumerator MoveThiefCoroutine(ThiefController thiefController)
+        public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
             yield break; // cea mai buna pozitie pt thief
         }
@@ -21,6 +21,15 @@ namespace B3.PlayerSystem
         {
             // verifica daca are de contruit + de dat trade
             // daca nu mai are IsTurnEnded = false;
+        }
+
+        public override IEnumerator BuildHouseCoroutine()
+        {
+            throw new System.NotImplementedException();
+        }
+        public override IEnumerator UpgradeToCityCoroutine()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

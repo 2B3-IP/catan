@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f706a83bf2d87f33b990da2d95a13e35
+timeCreated: 1488664946
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Testing/TestingSequencer.unity
+  uploadId: 469983

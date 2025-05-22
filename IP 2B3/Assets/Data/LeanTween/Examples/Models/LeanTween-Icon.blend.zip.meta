@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f0bf0466fc164484382fc87b85ad46c1
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Models/LeanTween-Icon.blend.zip
+  uploadId: 469983

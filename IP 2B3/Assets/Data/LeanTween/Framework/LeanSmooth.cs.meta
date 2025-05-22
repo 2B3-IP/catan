@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d4e8611aed73c63c3a314ed6bc997846
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Framework/LeanSmooth.cs
+  uploadId: 469983

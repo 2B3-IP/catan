@@ -1,28 +1,33 @@
 ﻿using System.Collections.Generic;
 using B3.DevelopmentCardSystem;
 using B3.PlayerInventorySystem;
+using Game_Settings;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace B3.PlayerSystem
 {
     public class PlayersManager : MonoBehaviour
     {
-        [SerializeField] private HumanPlayer humanPlayerPrefab;
-        [SerializeField] private AIPlayer aiPlayerPrefab;
+        public List<PlayerBase> players;
+        public static event System.Action<int> OnPlayersInitialized;
+
+        public HumanPlayer humanPlayer => (HumanPlayer) players[0];
         
-        [SerializeField] private DevelopmentCardController developmentCardController;
-
-        public List<PlayerBase> ActivePlayers { get; protected set; } = new();
-
-        public void SpawnPlayer(bool isHuman = true)
+        public void Initialize(int numberOfPlayers)
         {
-            PlayerBase playerPrefab = isHuman ? humanPlayerPrefab : aiPlayerPrefab;
-            var player = Instantiate(playerPrefab);
-            
-            var inventoryController = player.GetComponent<PlayerInventoryController>();
-            inventoryController.Initialize(developmentCardController);
-            
-            ActivePlayers.Add(player);
+            if (numberOfPlayers < 1 || numberOfPlayers > 4)
+            {
+                Debug.LogError("Number of players must be between 1 and 4");
+                numberOfPlayers = 4;
+            }
+
+            for (int i = 3; i >= numberOfPlayers; i++)
+            {
+                Destroy(players[i].gameObject);
+                players.RemoveAt(i);
+            }
+            OnPlayersInitialized?.Invoke(numberOfPlayers);
         }
     }
 }

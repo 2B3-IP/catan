@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 2b21dd9145b577ddfa7d915d2d9579aa
+timeCreated: 1533844515
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Scripts/TestingZLegacyExt.cs
+  uploadId: 469983

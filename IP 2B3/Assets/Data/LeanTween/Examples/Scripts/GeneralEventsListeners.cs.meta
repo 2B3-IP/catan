@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: e703dddf8272e691c8303b0466d5be2f
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Scripts/GeneralEventsListeners.cs
+  uploadId: 469983

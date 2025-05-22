@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6c7c82a5997f38934893dfde4ad29388
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Scripts/GeneralCameraShake.cs
+  uploadId: 469983

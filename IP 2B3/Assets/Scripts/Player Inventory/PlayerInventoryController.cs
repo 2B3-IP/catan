@@ -3,6 +3,7 @@ using B3.DevelopmentCardSystem;
 using B3.GameStateSystem;
 using B3.PlayerSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace B3.PlayerInventorySystem
 {
@@ -10,8 +11,10 @@ namespace B3.PlayerInventorySystem
     {
         private readonly List<PlayerItem> _playerItems = new();
         
-        private DevelopmentCardController _developmentCardController;
+        public DevelopmentCardController developmentCardController;
         private PlayerBase _player;
+        
+        public int ItemCount => _playerItems.Count;
         
         private void Awake() =>
             _player = GetComponent<PlayerBase>();
@@ -23,7 +26,7 @@ namespace B3.PlayerInventorySystem
             PlayerEndGameState.OnPlayerEnd -= OnPlayerEndGameState;
         
         public void Initialize(DevelopmentCardController developmentCardController) =>
-            _developmentCardController = developmentCardController;
+            this.developmentCardController = developmentCardController;
 
         public void AddItem(DevelopmentCardType cardType)
         {
@@ -34,7 +37,7 @@ namespace B3.PlayerInventorySystem
         public void UseItem(DevelopmentCardType cardType)
         {
             if (HasCard(cardType))
-                _developmentCardController.UseCard(_player, cardType);
+                developmentCardController.UseCard(_player, cardType);
         }
 
         private bool HasCard(DevelopmentCardType cardType)

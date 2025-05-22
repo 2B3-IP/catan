@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 597b75e9a8f4bd8adbf3e566e7813ba7
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Scripts/LogoCinematic.cs
+  uploadId: 469983

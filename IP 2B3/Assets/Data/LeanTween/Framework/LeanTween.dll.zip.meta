@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: da70d8e67c01d69c5aa377f91b59d213
+timeCreated: 1477948563
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Framework/LeanTween.dll.zip
+  uploadId: 469983

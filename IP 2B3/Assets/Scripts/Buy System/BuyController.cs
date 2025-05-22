@@ -10,7 +10,7 @@ namespace B3.BuySystem
         {
             if (!HasEnoughResources(player, BuyItemType.House))
                 return false;
-
+            
             RemoveResources(player, BuyItemType.House);
             return true;
         }

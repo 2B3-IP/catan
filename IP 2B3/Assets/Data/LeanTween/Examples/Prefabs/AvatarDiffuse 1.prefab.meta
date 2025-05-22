@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: ab98aaddd98bb2bf4927c1edf9376596
+timeCreated: 1539547676
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3595
+  packageName: LeanTween
+  packageVersion: 2.51
+  assetPath: Assets/LeanTween/Examples/Prefabs/AvatarDiffuse 1.prefab
+  uploadId: 469983

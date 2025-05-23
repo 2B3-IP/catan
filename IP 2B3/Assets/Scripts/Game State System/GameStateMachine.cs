@@ -17,6 +17,7 @@ namespace B3.GameStateSystem
         internal int PlayerCount => playersManager.players.Count;
         internal bool IsLastPlayer => _currentPlayerIndex == PlayerCount - 1;
         internal bool IsFirstPlayer => _currentPlayerIndex == 0;
+        internal PlayersManager PlayersManager => playersManager;
 
         private void Start() =>
             StartMachine();

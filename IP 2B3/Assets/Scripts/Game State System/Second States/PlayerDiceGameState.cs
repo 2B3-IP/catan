@@ -37,8 +37,11 @@ namespace B3.GameStateSystem
             //yield return diceThrower.ThrowCoroutine(startPosition, throwForce);
             
             int diceRolls = currentPlayer.DiceSum;
-            
-            if(diceRolls == THIEF_ROLL) stateMachine.ChangeState<ThiefGameState>();
+
+            if (diceRolls == THIEF_ROLL)
+            {
+                stateMachine.ChangeState<DiscardGameState>();
+            }
             else stateMachine.ChangeState<ResourceGameState>();
         }
     }

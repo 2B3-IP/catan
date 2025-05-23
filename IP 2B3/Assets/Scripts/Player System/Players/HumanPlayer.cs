@@ -135,6 +135,43 @@ namespace B3.PlayerSystem
                     SelectedHouse = null;
             }
         }
+        
+        public override IEnumerator DiscardResourcesCoroutine(float timeout)
+        {
+            int total = TotalResources();
+            if (total <= 7)
+                yield break;
+
+            int toDiscard = total / 2;
+            
+            bool playerChoseManually = false;
+            
+            float elapsed = 0f;
+            while (elapsed < timeout && !playerChoseManually)
+            {   // TODO: front - choose which resources to discard and set playerChoseManually truee
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            if (!playerChoseManually)
+            {
+                
+                for (int i = 0; i < toDiscard;)
+                {
+                    int index = UnityEngine.Random.Range(0, Resources.Length);
+                    if (Resources[index] > 0)
+                    {
+                        Resources[index]--;
+                        i++;
+                    }
+                }
+                
+            }
+           
+
+            yield break;
+        }
+        
         private IEnumerator RayCastCoroutine()
         {
             _hasClicked = false;

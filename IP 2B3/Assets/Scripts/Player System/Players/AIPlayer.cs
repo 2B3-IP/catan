@@ -58,5 +58,12 @@ namespace B3.PlayerSystem
             var pathController = boardGrid.GetEdge(housePosition.Item1, housePosition.Item2);
             SelectedPath = pathController;
         }
+
+        public override IEnumerator DiscardResourcesCoroutine(float timeout)
+        {
+            
+            //TODO: Implementation
+            yield break;
+        }
     }
 }

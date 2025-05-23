@@ -16,7 +16,7 @@ public class UpdateAIPlayersResources : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (chatGPT.gameObject.IsDestroyed())
+        if (chatGPT.gameObject!=null && chatGPT.gameObject.activeSelf == false)
             Destroy(gameObject);
         
         victoryPointsText.text = chatGPT.VictoryPoints.ToString();

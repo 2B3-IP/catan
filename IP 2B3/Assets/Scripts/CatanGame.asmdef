@@ -2,7 +2,15 @@
     "name": "CatanGame",
     "rootNamespace": "",
     "references": [
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "NaughtyAttributes.Core",
+        "NaughtyAttributes.Editor",
+        "NaughtyAttributes.Test",
+        "linkdin",
+        "Unity.RenderPipelines.Universal.2D.Runtime",
+        "Unity.RenderPipelines.Universal.Shaders",
+        "Unity.RenderPipeline.Universal.ShaderLibrary",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Desert Piece Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4910995570553014652, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 5022685486829936994, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
       propertyPath: <IsDesert>k__BackingField
       value: 1
@@ -53,7 +57,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6725650610803093364, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}

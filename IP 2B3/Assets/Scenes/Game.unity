@@ -2441,7 +2441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 181466516}
   distance: 60
-  xSpeed: 365
+  xSpeed: 250
   ySpeed: 200
   scrollSpeed: 30
   yLimits: {x: 10, y: 80}
@@ -3652,7 +3652,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1012282399}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[6434893590810853526].bankController
+      value: 
+      objectReference: {fileID: 372445769}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: managedReferences[1461691153215914052].boardController
+      value: 
+      objectReference: {fileID: 181466517}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[6434893590810853526].boardController
       value: 
       objectReference: {fileID: 181466517}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}

@@ -52,6 +52,8 @@ namespace B3.PlayerSystem
         public abstract IEnumerator BuildRoadCoroutine();
         public abstract IEnumerator UpgradeToCityCoroutine();
         
+        public abstract IEnumerator DiscardResourcesCoroutine(float timeout);
+        
         public IEnumerator EndTurnCoroutine()
         {
             while (!IsTurnEnded)
@@ -60,6 +62,9 @@ namespace B3.PlayerSystem
                 yield return null;
             }
         }
+
+    
+
         
         public void AddResource(ResourceType resource, int amount)//De modificat pe UI staturile corespunzatoare
         {
@@ -75,7 +80,16 @@ namespace B3.PlayerSystem
             
             Resources[resourceIndex] -= amount;
         }
-        
+
+        public int TotalResources()
+        {
+            int total = 0;
+            for(int i = 0; i < Resources.Length; i++)
+                total += Resources[i];
+            return total;
+        }
+
+       
         public void AddVictoryPoints(int amount)
         {
             VictoryPoints += amount;

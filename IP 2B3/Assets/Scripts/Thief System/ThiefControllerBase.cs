@@ -38,8 +38,19 @@ namespace B3.ThiefSystem
         {
             var resources = stealFrom.Resources;
             int index;
+            bool hasAnyResource = false;
             
-            // TODO: trb sa verifici daca stealFrom are macar o resursa > 0
+            foreach (var r in resources)
+            {
+                if (r > 0)
+                {
+                    hasAnyResource = true;
+                    break;
+                }
+            }
+
+            if (!hasAnyResource)
+                return;
             
             do
             {

@@ -2,6 +2,7 @@
 using B3.BoardSystem;
 using B3.ResourcesSystem;
 using B3.SettlementSystem;
+using TMPro;
 using UnityEngine;
 
 namespace B3.PieceSystem
@@ -14,11 +15,27 @@ namespace B3.PieceSystem
 
         [field:SerializeField] public Transform ThiefPivot { get; private set; }
         public List<SettlementController> Settlements { get; } = new();
-        public int Number { get; set; }
+
+        private int _number = 0;
+
         public HexPosition HexPosition { get; set; }
         
         public float radius = 1f;
+        [SerializeField] private TMP_Text numberText;
 
+        
+        public int Number
+        {
+            get => _number;
+            set
+            {
+                if (value < 2 || value > 12 || value == 7) return;
+                _number = value;
+                if (numberText != null)
+                    numberText.text = value.ToString();
+            }
+        }
+        
         public Vector3[] GetEdgeMidpoints()
         {
             Vector3 center = transform.position;

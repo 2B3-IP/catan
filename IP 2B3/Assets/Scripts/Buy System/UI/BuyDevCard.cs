@@ -32,7 +32,7 @@ public class BuyDevCard : MonoBehaviour
     class DisplayedCard
     {
         public int Count { get; set; }
-        public TMP_Text Text { get; init; }
+        public TMP_Text CountText { get; init; }
     }
     
     public void Start()
@@ -65,7 +65,7 @@ public class BuyDevCard : MonoBehaviour
         if (displayedCards.TryGetValue(cardType, out DisplayedCard entry))
         {
             entry.Count++;
-            entry.Text.text = entry.Count.ToString();
+            entry.CountText.text = entry.Count.ToString();
         }
         else
         {
@@ -86,15 +86,20 @@ public class BuyDevCard : MonoBehaviour
             var button = go.GetComponentInChildren<Button>();
             button.onClick.AddListener(() => UseCard(cardType));
             
-            // get text component
+            // set title and description
+            var hover = go.transform.GetChild(2);
+            hover.GetChild(0).GetComponent<TMP_Text>().text = cardType.Name();
+            hover.GetChild(1).GetComponent<TMP_Text>().text = cardType.Description();
+            
+            // get count text component
             var bubble = go.transform.GetChild(1);
-            var textComponent = bubble.GetComponentInChildren<TMP_Text>();
-            textComponent.text = "1";
+            var countText = bubble.GetComponentInChildren<TMP_Text>();
+            countText.text = "1";
             
             displayedCards.Add(cardType, new DisplayedCard
             {
                 Count = 1,
-                Text = textComponent
+                CountText = countText
             });
             
             buyCard.SetAsLastSibling();

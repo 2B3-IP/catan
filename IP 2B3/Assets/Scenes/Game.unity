@@ -2441,7 +2441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 181466516}
   distance: 60
-  xSpeed: 365
+  xSpeed: 250
   ySpeed: 200
   scrollSpeed: 30
   yLimits: {x: 10, y: 80}
@@ -3652,7 +3652,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1012282399}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[6434893590810853526].bankController
+      value: 
+      objectReference: {fileID: 372445769}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: managedReferences[1461691153215914052].boardController
+      value: 
+      objectReference: {fileID: 181466517}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[6434893590810853526].boardController
       value: 
       objectReference: {fileID: 181466517}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
@@ -6278,6 +6286,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1445150958}
   - component: {fileID: 1445150959}
+  - component: {fileID: 1445150960}
   m_Layer: 5
   m_Name: Build and Trade
   m_TagString: Untagged
@@ -6334,6 +6343,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1445150960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445150957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 241f427de9381e3439d0115699270e3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  humanPlayer: {fileID: 1858971809}
+  buyController: {fileID: 0}
 --- !u!1 &1450365388
 GameObject:
   m_ObjectHideFlags: 0
@@ -10554,46 +10577,6 @@ PrefabInstance:
     - target: {fileID: 3711905397452891719, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1352934805}
-    - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnTradeButtonClicked
-      objectReference: {fileID: 0}
-    - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FlipActive, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: TradeMenuButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

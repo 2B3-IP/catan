@@ -192,8 +192,9 @@ namespace B3.PlayerSystem
                 hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask); 
             }
 
-            Debug.Log("out of waiting");
             _closestHit = _hits[0];
+            Debug.Log("out of waiting " + _closestHit.transform.name);
+            
             for (int i = 1; i < hitCount; i++)
             {
                 var hit = _hits[i];

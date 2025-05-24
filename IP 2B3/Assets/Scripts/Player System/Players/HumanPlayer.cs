@@ -98,7 +98,8 @@ namespace B3.PlayerSystem
                 var hexPosition = pieceController.HexPosition;
                 SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
 
-                Debug.Log("selected " + SelectedHouse.Owner?.name + " " + SelectedHouse?.name);
+                if(SelectedHouse == null) Debug.Log("null house");
+                else Debug.Log("selected " + SelectedHouse.Owner?.name + " " + SelectedHouse?.name);
                 if (SelectedHouse != null && SelectedHouse.Owner != null)
                     SelectedHouse = null;
             }

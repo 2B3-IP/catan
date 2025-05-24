@@ -55,7 +55,7 @@ namespace B3.BuildingSystem
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
             
-            TryAddPortBuffForSettlement(selectedHouse, player);
+            AddPortBuffForSettlement(selectedHouse, player);
             
             var message = $"House built at {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y}, {selectedHouse.VertexDir} by {player.name}";
             Debug.Log(message);
@@ -277,10 +277,9 @@ namespace B3.BuildingSystem
             }
         }
 
-        private void TryAddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
+        private void AddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
         {
             if (settlement.ConnectedPortController != null) settlement.ConnectedPortController.AddPlayerBuff(player);
-            
         }
 
         /*private bool IsConnectedToOwnedRoad(Path path, PlayerBase player)

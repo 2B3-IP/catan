@@ -293,10 +293,12 @@ namespace B3.BuildingSystem
             if (!CanBuildCity(player))
                 yield break;
 
+            Debug.Log("Building city for:" + player.name);
             yield return player.UpgradeToCityCoroutine();
 
             var closestCorner = player.SelectedHouse;
 
+            Debug.Log(closestCorner.Owner.name + " vs " + player.name);
             if (!closestCorner.HasOwner || closestCorner.Owner != player)
                 Debug.Log("Not your settlement");
             else

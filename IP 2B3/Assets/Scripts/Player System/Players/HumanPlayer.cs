@@ -59,7 +59,7 @@ namespace B3.PlayerSystem
             while (!_hasClicked)
                 yield return null;
 
-            DiceSum = Random.Range(1,7)+Random.Range(1,7); 
+            DiceSum = Random.Range(1, 7) + Random.Range(1, 7);
 
             _hasClicked = false;
         }
@@ -97,6 +97,7 @@ namespace B3.PlayerSystem
                 var hexPosition = pieceController.HexPosition;
                 SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
 
+                Debug.Log("selected " + SelectedHouse.Owner?.name);
                 if (SelectedHouse != null && SelectedHouse.Owner != null)
                     SelectedHouse = null;
             }
@@ -131,7 +132,7 @@ namespace B3.PlayerSystem
                 var hexPosition = pieceController.HexPosition;
                 SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
                 
-                if (SelectedHouse != null && SelectedHouse.IsCity) 
+                if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this)) 
                     SelectedHouse = null;
             }
         }
@@ -176,10 +177,14 @@ namespace B3.PlayerSystem
         {
             _hasClicked = false;
             int hitCount = 0;
+            Debug.Log("raycasting");
             while(hitCount == 0)
             {
                 while (!_hasClicked)
+                {
+                    Debug.Log("waiting");
                     yield return null;
+                }
 
                 _hasClicked = false;
                 
@@ -187,6 +192,7 @@ namespace B3.PlayerSystem
                 hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask); 
             }
 
+            Debug.Log("out of waiting");
             _closestHit = _hits[0];
             for (int i = 1; i < hitCount; i++)
             {

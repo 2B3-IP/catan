@@ -51,7 +51,7 @@ namespace B3.BuildingSystem
                     selectedHouse = null;
             }
             
-            selectedHouse.SetOwner(player);
+            selectedHouse.Owner = player;
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
             

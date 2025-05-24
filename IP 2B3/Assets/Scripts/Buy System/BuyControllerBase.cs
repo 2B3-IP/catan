@@ -1,4 +1,5 @@
-﻿using B3.BankSystem;
+﻿using System.Collections;
+using B3.BankSystem;
 using B3.DevelopmentCardSystem;
 using UnityEngine;
 using B3.GameStateSystem;
@@ -19,15 +20,15 @@ namespace B3.BuySystem
             11222 // development card
         };
 
-        public abstract bool BuyHouse(PlayerBase player);
-        public abstract bool BuyRoad(PlayerBase player);
-        public abstract bool BuyCity(PlayerBase player);
+        public abstract IEnumerator BuyHouse(PlayerBase player);
+        public abstract IEnumerator BuyRoad(PlayerBase player);
+        public abstract IEnumerator BuyCity(PlayerBase player);
         public abstract DevelopmentCardType? BuyDevelopmentCard(PlayerBase player);
 
         protected bool HasEnoughResources(PlayerBase player, BuyItemType itemType)
         {
             int itemCost = _inversedItemsCosts[(int)itemType];
-
+            
             foreach (var resources in player.Resources)
             {
                 int resourceCost = itemCost % 10 - 1;
@@ -44,18 +45,18 @@ namespace B3.BuySystem
         {
             int itemCost = _inversedItemsCosts[(int)itemType];
 
-            foreach (var resource in player.Resources)
+            var resources = player.Resources;
+            for (int i = 0; i < resources.Length; i++)
             {
                 int resourceCost = itemCost % 10 - 1;
                 if (resourceCost == 0)
                     continue;
 
-                player.RemoveResource((ResourceType)resource, resourceCost);
-                bankController.GiveResources((ResourceType)resource, resourceCost);
+                player.RemoveResource((ResourceType)i, resourceCost);
+                bankController.GiveResources((ResourceType)i, resourceCost);
 
                 itemCost /= 10;
             }
-
         }
     }
 }

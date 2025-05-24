@@ -64,11 +64,6 @@ namespace B3.SettlementSystem
             IsCity = true;
         }
         
-        public void SetOwner(PlayerBase player)
-        {
-            Owner = player;
-        }
-        
         public void Highlight(bool value)
         {
             if (_renderer == null || highlightMaterial == null) return;

@@ -61,7 +61,6 @@ namespace B3.SettlementSystem
             
             houseObject.SetActive(true);
             cityObject.SetActive(false);
-            IsCity = true;
         }
         
         public void Highlight(bool value)

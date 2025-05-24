@@ -130,7 +130,8 @@ namespace B3.PlayerSystem
             {
                 yield return RayCastCoroutine(settlementLayerMask);
                 SelectedHouse = _closestHit.transform.GetComponentInParent<SettlementController>();
-
+                Debug.Log(SelectedHouse, SelectedHouse);
+                Debug.Log(SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this));
                 if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this)) 
                     SelectedHouse = null;
             }

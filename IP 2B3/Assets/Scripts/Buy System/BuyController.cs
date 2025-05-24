@@ -1,4 +1,5 @@
-﻿using B3.BankSystem;
+﻿using System.Collections;
+using B3.BankSystem;
 using B3.BuildingSystem;
 using B3.DevelopmentCardSystem;
 using B3.GameStateSystem;
@@ -11,32 +12,34 @@ namespace B3.BuySystem
     internal sealed class BuyController : BuyControllerBase
     {
         [SerializeField] private BuildingController buildingController;
-        public override bool BuyHouse(PlayerBase player)
+        
+        public override IEnumerator BuyHouse(PlayerBase player)
         {
             if (!HasEnoughResources(player, BuyItemType.House))
-                return false;
+                yield break;
             
-            buildingController.BuildHouse(player);
+            Debug.Log("Buying house for: " + player.name);
+            yield return buildingController.BuildHouse(player);
             RemoveResources(player, BuyItemType.House);
-            return true;
         }
 
-        public override bool BuyRoad(PlayerBase player)
+        public override IEnumerator BuyRoad(PlayerBase player)
         {
             if (!HasEnoughResources(player, BuyItemType.Road))
-                return false;
-            buildingController.BuildRoad(player);
+                yield break;
+            
+            yield return buildingController.BuildRoad(player);
             RemoveResources(player, BuyItemType.Road);
-            return true;
         }
 
-        public override bool BuyCity(PlayerBase player)
+        public override IEnumerator BuyCity(PlayerBase player)
         {
             if (!HasEnoughResources(player, BuyItemType.City))
-                return false;
-            buildingController.BuildCity(player);
+                yield break;
+            
+            Debug.Log("Buying city for: " + player.name);
+            yield return buildingController.BuildCity(player);
             RemoveResources(player, BuyItemType.City);
-            return true;
         }
 
         public override DevelopmentCardType? BuyDevelopmentCard(PlayerBase player)

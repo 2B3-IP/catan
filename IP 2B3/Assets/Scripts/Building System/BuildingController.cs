@@ -5,6 +5,7 @@ using UnityEngine;
 using B3.SettlementSystem;
 using B3.PlayerSystem;
 using B3.BoardSystem;
+using B3.DevelopmentCardSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.PortSystem;
@@ -17,6 +18,8 @@ namespace B3.BuildingSystem
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private SettlementController settlementPrefab;
         [SerializeField] private BoardController boardController;
+        [SerializeField] private LongestRoadController longestRoadController;
+
 
         private PathController[] _allPaths;
         private bool _isFirstStates = true;
@@ -82,6 +85,11 @@ namespace B3.BuildingSystem
             selectedPath.BuildRoad();
             
             player.Paths.Add(selectedPath);
+            
+            if (longestRoadController != null)
+            {
+                longestRoadController.CheckLongestRoadAfterBuild(player);
+            }
         }
 
         protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player)

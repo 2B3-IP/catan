@@ -28,8 +28,8 @@ namespace B3.BoardSystem
         {
             get
             {
-                int x = position.X + 2;
-                int y = position.Y + 2;
+                int x = position.X + 3;
+                int y = position.Y + 3;
                 
                 if (x < 0 || y < 0 || x >= _width || y >= _height) 
                     return null;
@@ -39,8 +39,8 @@ namespace B3.BoardSystem
             
             set
             {
-                int x = position.X + 2;
-                int y = position.Y + 2;
+                int x = position.X + 3;
+                int y = position.Y + 4;
                 
                 if (x < 0 || y < 0 || x >= _width || y >= _height) 
                     return;

@@ -236,36 +236,7 @@ namespace B3.BuildingSystem
 
         private void TryAddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
         {
-            var boardGrid = boardController.BoardGrid;
-            
-            //verific daca settlementul este pe o piesa valida
-            var piece = boardGrid[settlement.HexPosition];
-            if (piece == null) return;
-
-            //iau vecinii hexului pe care se afla settlementul
-            var neighbors = piece.HexPosition.GetNeighbours();
-
-            //iteram prin vecini (HexPosition)
-            foreach (var neighborPos in neighbors)
-            {
-                var hexPiece = boardGrid[neighborPos];
-                if(hexPiece == null)
-                    continue;
-                
-                //verificam daca exista un vecin al hexului cu settlmentul care este port
-                if (!hexPiece.TryGetComponent<PortController>(out var portPiece)) 
-                    continue;
-
-                //daca avem vecin port o sa luam vertexul hexului pe care a fost asezat settlementul
-                // transmitem intr o functie de la PortController pozitia opusa
-                // (pe idee ca dreapta jos de la tile e stanga sus de la port)
-                // VertexDir al settlementului
-                if (!portPiece.IsSettlementPosition(settlement)) 
-                    continue;
-                
-                portPiece.AddPlayerBuff(player);
-                return;
-            }
+            if(settlement.ConnectedPortController!=null) settlement.ConnectedPortController.AddPlayerBuff(player);
         }
 
         /*private bool IsConnectedToOwnedRoad(Path path, PlayerBase player)

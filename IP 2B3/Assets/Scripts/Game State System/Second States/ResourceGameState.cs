@@ -21,6 +21,7 @@ namespace B3.GameStateSystem
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
+            yield break;
             Debug.Log("Resource");
             
             allPieces ??= Object.FindObjectsByType<PieceController>(FindObjectsSortMode.None);

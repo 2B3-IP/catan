@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using B3.SettlementSystem;
 using B3.PlayerSystem;
@@ -43,8 +44,8 @@ namespace B3.BuildingSystem
                 yield return player.BuildHouseCoroutine();
                 selectedHouse = player.SelectedHouse;
                 
-                //if (!_isFirstStates && !CanBuildHouse(selectedHouse, player))
-                //    selectedHouse = null;
+                if (!_isFirstStates && !CanBuildHouse(selectedHouse, player))
+                    selectedHouse = null;
             }
             
             selectedHouse.SetOwner(player);
@@ -73,8 +74,8 @@ namespace B3.BuildingSystem
                 selectedPath = player.SelectedPath;
                 
                 // pusca daca apesi pe un road care nu e bun ( lipit de o casa)
-                //if (!CanBuildRoad(player, selectedPath))
-                //    selectedPath = null;
+                if (!CanBuildRoad(player, selectedPath))
+                    selectedPath = null;
             }
             
             selectedPath.Owner = player;
@@ -160,66 +161,100 @@ namespace B3.BuildingSystem
         
         protected override bool CanBuildRoad(PlayerBase player, PathController targetPath)
         {
-            // mai are playerul roaduri disponibile?
             if (!base.CanBuildRoad(player))
                 return false;
 
-            // este deja construit?
             if (targetPath.IsBuilt || targetPath.Owner != null)
                 return false;
 
-            HexPosition hexPosition = targetPath.HexPosition;
-            HexEdgeDir edgeDir = targetPath.EdgeDir;
-
-            var neighbouringEdges =
-                boardController.BoardGrid.GetNeighbouringEdges(hexPosition, edgeDir);
-
-            bool hasOwnedSettlement = false;
-
-            foreach (var (vertex, vertexPos, vertexDir) in neighbouringEdges)
-            {
-                if (vertex is SettlementController settlement && settlement.HasOwner && settlement.Owner == player)
-                {
-                    hasOwnedSettlement = true;
-                    break;
-                }
-            }
-
-            bool isConnectedToOwnedRoad = false;
-            foreach (var (vertex, vertexPos, vertexDir) in neighbouringEdges)
-            {
-                if (vertex is SettlementController settlement)
-                {
-                    var connectedEdges = boardController.BoardGrid
-                        .GetNeighbouringEdges(vertexPos, VertexDirToEdgeDir(vertexDir));
-
-                    foreach (var (otherVertex, otherPos, otherDir) in connectedEdges)
-                    {
-                        foreach (var path in _allPaths)
-                        {
-                            if (path != targetPath && path.IsBuilt && path.Owner == player)
-                            {
-                                if ((path.HexPosition.X == vertexPos.X && path.HexPosition.Y == vertexPos.Y) ||
-                                    (path.HexPosition.X == otherPos.X && path.HexPosition.Y == otherPos.Y))
-                                {
-                                    isConnectedToOwnedRoad = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (isConnectedToOwnedRoad)
-                            break;
-                    }
-                }
-
-                if (isConnectedToOwnedRoad)
-                    break;
-            }
-
-            return hasOwnedSettlement || isConnectedToOwnedRoad;
+            // un drum poate fi construit doar daca se conecteaza direct 
+            // prin unul din capetele sale la o asezare sau drum al playerului
+            return IsDirectlyConnectedToPlayerAssets(targetPath, player);
         }
 
+        private bool IsDirectlyConnectedToPlayerAssets(PathController targetPath, PlayerBase player)
+        {
+            // obtin cele 2 vertexuri exacte de la capetele drumului
+            var edgeEndpoints = GetExactEdgeEndpoints(targetPath.HexPosition, targetPath.EdgeDir);
+            
+            foreach (var (vertexPos, vertexDir) in edgeEndpoints)
+            {
+                // verific daca la acest vertex exista o asezare a playerului
+                var vertex = boardController.BoardGrid.GetVertex(vertexPos, vertexDir);
+                if (vertex is SettlementController settlement && 
+                    settlement.HasOwner && settlement.Owner == player)
+                {
+                    return true;
+                }
+                
+                // verific daca la acest vertex se conecteaza un alt drum al playerului
+                if (HasPlayerRoadAtVertex(vertexPos, vertexDir, player, targetPath))
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+
+        private bool HasPlayerRoadAtVertex(HexPosition vertexPos, HexVertexDir vertexDir, PlayerBase player, PathController excludePath)
+        {
+            // verific toate drumurile playerului pentru a vedea daca vreunul se conecteaza la acest vertex
+            foreach (var existingPath in _allPaths)
+            {
+                if (existingPath != excludePath && existingPath.IsBuilt && existingPath.Owner == player)
+                {
+                    var existingEndpoints = GetExactEdgeEndpoints(existingPath.HexPosition, existingPath.EdgeDir);
+                    
+                    foreach (var (existingVertexPos, existingVertexDir) in existingEndpoints)
+                    {
+                        if (existingVertexPos.X == vertexPos.X && 
+                            existingVertexPos.Y == vertexPos.Y && 
+                            existingVertexDir == vertexDir)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        //obtine exact cele 2 vertexuri de la capetele unui edge
+        private List<(HexPosition, HexVertexDir)> GetExactEdgeEndpoints(HexPosition hexPos, HexEdgeDir edgeDir)
+        {
+            var endpoints = new List<(HexPosition, HexVertexDir)>();
+            
+            switch (edgeDir)
+            {
+                case HexEdgeDir.Top:
+                    endpoints.Add((hexPos, HexVertexDir.TopLeft));
+                    endpoints.Add((hexPos, HexVertexDir.TopRight));
+                    break;
+                case HexEdgeDir.TopRight:
+                    endpoints.Add((hexPos, HexVertexDir.TopRight));
+                    endpoints.Add((hexPos, HexVertexDir.Right));
+                    break;
+                case HexEdgeDir.BottomRight:
+                    endpoints.Add((hexPos, HexVertexDir.Right));
+                    endpoints.Add((hexPos, HexVertexDir.BottomRight));
+                    break;
+                case HexEdgeDir.Bottom:
+                    endpoints.Add((hexPos, HexVertexDir.BottomRight));
+                    endpoints.Add((hexPos, HexVertexDir.BottomLeft));
+                    break;
+                case HexEdgeDir.BottomLeft:
+                    endpoints.Add((hexPos, HexVertexDir.BottomLeft));
+                    endpoints.Add((hexPos, HexVertexDir.Left));
+                    break;
+                case HexEdgeDir.TopLeft:
+                    endpoints.Add((hexPos, HexVertexDir.Left));
+                    endpoints.Add((hexPos, HexVertexDir.TopLeft));
+                    break;
+            }
+            
+            return endpoints;
+        }
         private HexEdgeDir VertexDirToEdgeDir(HexVertexDir vertexDir)
         {
             switch (vertexDir)

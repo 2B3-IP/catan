@@ -28,13 +28,14 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildHouseCoroutine()
         {
-            var housePosition = AI.GetHousePosition();
+            /*var housePosition = AI.GetHousePosition();
             var boardGrid = boardController.BoardGrid;
 
-            yield return new WaitForSeconds(1f);
+            //yield return new WaitForSeconds(1f);
 
             var settlementController = boardGrid.GetVertex(housePosition.Item1, housePosition.Item2);
-            SelectedHouse = settlementController;
+            SelectedHouse = settlementController;*/
+            yield break;
         }
 
         public override IEnumerator UpgradeToCityCoroutine()
@@ -50,13 +51,14 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildRoadCoroutine()
         {
-            var housePosition = AI.GetRoadPosition();
+            /*var housePosition = AI.GetRoadPosition();
             var boardGrid = boardController.BoardGrid;
 
-            yield return new WaitForSeconds(1f);
+            //yield return new WaitForSeconds(1f);
 
             var pathController = boardGrid.GetEdge(housePosition.Item1, housePosition.Item2);
-            SelectedPath = pathController;
+            SelectedPath = pathController;*/
+            yield break;
         }
 
         public override IEnumerator DiscardResourcesCoroutine(float timeout)

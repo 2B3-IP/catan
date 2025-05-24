@@ -18,12 +18,12 @@ namespace B3.PlayerSystem
 
         public string playerName;
         public string colorTag = "<color=red>";
-        
+
         /// <summary>
         /// Mapat cu ResourceType (Resources[0] = Ore, Resources[1] = Wheat, Resources[2] = Wood, Resources[3] = Brick, Resources[4] = Sheep)
         /// </summary>
         /// 
-        public int[] Resources { get; private set; }  = new int[5];
+        public int[] Resources { get; private set; } = { 99, 99, 99, 99, 99 };//new int[5];
 
         public int VictoryPoints { get; private set; }
         public int DiceSum { get; protected set; }

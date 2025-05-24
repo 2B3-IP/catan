@@ -10,6 +10,7 @@ namespace B3.GameStateSystem
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
+            yield break;
             // TODO(front/back): trade + build, yield return astepti doar dupa end turn button/trece timpu
             var currentPlayer = stateMachine.CurrentPlayer;
             var endTurnCoroutine = currentPlayer.StartCoroutine(currentPlayer.EndTurnCoroutine());

@@ -136,6 +136,7 @@ namespace B3.BoardSystem
             else
             {
                 var portController = pieceController.GetComponent<PortController>();
+                portController.boardController = this;
                 bool isPortSettedOk = portController.SetSettlementPosition();
                 if (!isPortSettedOk)
                 {

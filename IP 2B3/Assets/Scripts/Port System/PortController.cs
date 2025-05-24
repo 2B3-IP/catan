@@ -14,7 +14,7 @@ namespace B3.PortSystem
 {
     public abstract class PortController : MovingPieceController
     {
-        [SerializeField] private BoardController boardController;
+        [SerializeField] public BoardController boardController;
 
         private PieceController _pieceController;
 
@@ -35,16 +35,13 @@ namespace B3.PortSystem
             //de pe hexul tile
 
             var hexPosition = _pieceController.HexPosition;
-            SettlementController settlement1;
-            SettlementController settlement2;
-            SettlementController settlement3;
-
+            
             switch (hexPosition.X, hexPosition.Y)
             {
                 case (-1, 3):
                 {
-                    settlement1 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopLeft);
-                    settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopRight);
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopLeft);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopRight);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
                     return true;
@@ -52,9 +49,9 @@ namespace B3.PortSystem
                 }
                 case (1, 2):
                 {
-                    settlement1 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopLeft);
-                    settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopRight);
-                    settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopLeft);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopRight);
+                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
                     settlement3.ConnectedPortController = this;
@@ -63,8 +60,8 @@ namespace B3.PortSystem
                 }
                 case (3, 0):
                 {
-                    settlement1 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
-                    settlement2 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.TopRight);
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.TopRight);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
                     return true;
@@ -72,9 +69,9 @@ namespace B3.PortSystem
                 }
                 case (3, -2):
                 {
-                    settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.Right);
-                    settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.BottomRight);
-                    settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.Right);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.BottomRight);
+                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
                     settlement3.ConnectedPortController = this;
@@ -83,9 +80,9 @@ namespace B3.PortSystem
                 }
                 case (2, -3):
                 {
-                    settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.Right);
-                    settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.BottomRight);
-                    settlement3 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomLeft);
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.Right);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.BottomRight);
+                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomLeft);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
                     settlement3.ConnectedPortController = this;
@@ -94,8 +91,8 @@ namespace B3.PortSystem
                 }
                 case (0, -3):
                 {
-                    settlement1 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomLeft);
-                    settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomRight);
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomLeft);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomRight);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
                     return true;
@@ -103,9 +100,9 @@ namespace B3.PortSystem
                 }
                 case (-2, -1):
                 {
-                    settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.Left);
-                    settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.BottomLeft);
-                    settlement3 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomRight);
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.Left);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.BottomLeft);
+                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomRight);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
                     settlement3.ConnectedPortController = this;
@@ -114,9 +111,9 @@ namespace B3.PortSystem
                 }
                 case (-3, 1):
                 {
-                    settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.Left);
-                    settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.BottomLeft);
-                    settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomRight, HexVertexDir.BottomRight);
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.Left);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.BottomLeft);
+                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomRight, HexVertexDir.BottomRight);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
                     settlement3.ConnectedPortController = this;
@@ -125,8 +122,8 @@ namespace B3.PortSystem
                 }
                 case (-3, 3):
                 {
-                    settlement1 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Left);
-                    settlement2 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.TopLeft);
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.BottomRight, HexVertexDir.Left);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.BottomRight, HexVertexDir.TopLeft);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
                     return true;

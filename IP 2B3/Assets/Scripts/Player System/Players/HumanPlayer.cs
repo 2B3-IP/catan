@@ -24,6 +24,7 @@ namespace B3.PlayerSystem
         
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private LayerMask pieceLayerMask;
+        [SerializeField] private LayerMask settlementLayerMask;
         [SerializeField] private int hitDistance = 200;
         
         private readonly RaycastHit[] _hits = new RaycastHit[5];
@@ -66,7 +67,7 @@ namespace B3.PlayerSystem
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
-            yield return RayCastCoroutine();
+            yield return RayCastCoroutine(pieceLayerMask);
             
             var pieceController = _closestHit.transform.GetComponent<PieceController>();
             SelectedThiefPiece = pieceController;
@@ -91,13 +92,13 @@ namespace B3.PlayerSystem
             
             while (SelectedHouse == null)
             {
-                yield return RayCastCoroutine();
+                yield return RayCastCoroutine(pieceLayerMask);
                 var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 var hexPosition = pieceController.HexPosition;
                 SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
 
-                Debug.Log("selected " + SelectedHouse.Owner?.name);
+                Debug.Log("selected " + SelectedHouse.Owner?.name + " " + SelectedHouse?.name);
                 if (SelectedHouse != null && SelectedHouse.Owner != null)
                     SelectedHouse = null;
             }
@@ -109,7 +110,7 @@ namespace B3.PlayerSystem
 
             while (SelectedPath == null)
             {
-                yield return RayCastCoroutine();
+                yield return RayCastCoroutine(pieceLayerMask);
                 var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 var hexPosition = pieceController.HexPosition;
@@ -126,12 +127,9 @@ namespace B3.PlayerSystem
             
             while (SelectedHouse == null)
             {
-                yield return RayCastCoroutine();
-                var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
+                yield return RayCastCoroutine(settlementLayerMask);
+                SelectedHouse = _closestHit.transform.GetComponentInParent<SettlementController>();
 
-                var hexPosition = pieceController.HexPosition;
-                SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
-                
                 if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this)) 
                     SelectedHouse = null;
             }
@@ -173,7 +171,7 @@ namespace B3.PlayerSystem
             yield break;
         }
         
-        private IEnumerator RayCastCoroutine()
+        private IEnumerator RayCastCoroutine(LayerMask layerMask)
         {
             _hasClicked = false;
             int hitCount = 0;
@@ -189,11 +187,10 @@ namespace B3.PlayerSystem
                 _hasClicked = false;
                 
                 var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
-                hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask); 
+                hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, layerMask); 
             }
 
             _closestHit = _hits[0];
-            Debug.Log("out of waiting " + _closestHit.transform.name);
             
             for (int i = 1; i < hitCount; i++)
             {
@@ -201,6 +198,7 @@ namespace B3.PlayerSystem
                 if(_closestHit.distance > hit.distance)
                     _closestHit = hit;
             }
+            Debug.Log("out of waiting " + _closestHit.transform.name, _closestHit.transform);
         }
         
         private SettlementController GetClosestCorner(HexPosition hexPosition, Vector3 hitPoint)

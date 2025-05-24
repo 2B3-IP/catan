@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8794237943946722797}
   - component: {fileID: 1899837674747576098}
   - component: {fileID: 528907827042193423}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: House
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7226386631559766342}
   - component: {fileID: 5200040358732198354}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Settlement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 5621309927421569636}
   - component: {fileID: 4044450233563410953}
   - component: {fileID: 4804752425733537572}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: City
   m_TagString: Untagged
   m_Icon: {fileID: 0}

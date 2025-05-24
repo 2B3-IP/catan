@@ -279,7 +279,8 @@ namespace B3.BuildingSystem
 
         private void TryAddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
         {
-            if(settlement.ConnectedPortController!=null) settlement.ConnectedPortController.AddPlayerBuff(player);
+            if (settlement.ConnectedPortController != null) settlement.ConnectedPortController.AddPlayerBuff(player);
+            
         }
 
         /*private bool IsConnectedToOwnedRoad(Path path, PlayerBase player)

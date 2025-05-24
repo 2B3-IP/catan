@@ -1,6 +1,7 @@
 ﻿using B3.BoardSystem;
 using B3.GameStateSystem;
 using B3.PlayerSystem;
+using B3.PortSystem;
 using UnityEngine;
 
 namespace B3.SettlementSystem
@@ -10,7 +11,8 @@ namespace B3.SettlementSystem
         [SerializeField] private GameObject houseObject;
         [SerializeField] private GameObject cityObject;
         [SerializeField] private Material highlightMaterial;
-        
+
+        public PortController ConnectedPortController { get; set; }
         public HexPosition HexPosition { get; set; }
         public HexVertexDir VertexDir { get; set; }
         

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using B3.BoardSystem;
 using B3.BuildingSystem;
 using B3.GameStateSystem;
@@ -34,6 +35,7 @@ namespace B3.PortSystem
             //de pe hexul tile
             HexVertexDir settlementHexDir = settlement.VertexDir.Opposite();
 
+            Debug.Log(settlementHexDir.ToString());
             var hexPosition = _pieceController.HexPosition;
             switch (hexPosition.X, hexPosition.Y)
             {

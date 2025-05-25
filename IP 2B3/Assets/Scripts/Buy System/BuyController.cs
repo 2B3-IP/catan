@@ -20,7 +20,9 @@ namespace B3.BuySystem
             
             Debug.Log("Buying house for: " + player.name);
             yield return buildingController.BuildHouse(player);
-            RemoveResources(player, BuyItemType.House);
+            
+            if(buildingController.HasBuilt)
+                RemoveResources(player, BuyItemType.House);
         }
 
         public override IEnumerator BuyRoad(PlayerBase player)
@@ -29,7 +31,9 @@ namespace B3.BuySystem
                 yield break;
             
             yield return buildingController.BuildRoad(player);
-            RemoveResources(player, BuyItemType.Road);
+            
+            if(buildingController.HasBuilt)
+                RemoveResources(player, BuyItemType.Road);
         }
 
         public override IEnumerator BuyCity(PlayerBase player)
@@ -39,7 +43,9 @@ namespace B3.BuySystem
             
             Debug.Log("Buying city for: " + player.name);
             yield return buildingController.BuildCity(player);
-            RemoveResources(player, BuyItemType.City);
+            
+            if(buildingController.HasBuilt)
+                RemoveResources(player, BuyItemType.City);
         }
 
         public override DevelopmentCardType? BuyDevelopmentCard(PlayerBase player)

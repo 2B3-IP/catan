@@ -12,6 +12,7 @@ using B3.PlayerBuffSystem;
 using B3.PortSystem;
 using UnityEngine.InputSystem;
 using System;
+using NUnit.Framework;
 
 namespace B3.BuildingSystem
 {
@@ -22,9 +23,10 @@ namespace B3.BuildingSystem
         [SerializeField] private BoardController boardController;
         [SerializeField] private LongestRoadController longestRoadController;
 
-
         private PathController[] _allPaths;
         private bool _isFirstStates = true;
+        
+        public bool HasBuilt { get; private set; }
 
         private void Awake()
         {
@@ -83,7 +85,8 @@ namespace B3.BuildingSystem
                     if (!canBuild)
                     {
                         Debug.Log("Cannot build house here - resetting selection");
-                        selectedHouse = null;
+                        HasBuilt = false;
+                        yield break;
                     }
                 }
             }
@@ -95,6 +98,8 @@ namespace B3.BuildingSystem
             selectedHouse.Owner = player;
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
+            
+            HasBuilt = true;
             
             Debug.Log($"AFTER: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
             
@@ -139,7 +144,8 @@ namespace B3.BuildingSystem
                     if (!canBuild)
                     {
                         Debug.Log($"❌ Cannot build road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir} - resetting selection");
-                        selectedPath = null;
+                        HasBuilt = false;
+                        yield break;
                     }
                     else
                     {
@@ -154,6 +160,7 @@ namespace B3.BuildingSystem
     
             Debug.Log($"Building road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir}");
     
+            HasBuilt = true;
             selectedPath.Owner = player;
             selectedPath.BuildRoad();
     

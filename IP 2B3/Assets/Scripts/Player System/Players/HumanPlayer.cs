@@ -183,7 +183,7 @@ namespace B3.PlayerSystem
             {
                 while (!_hasClicked)
                 {
-                    Debug.Log("waiting");
+                    //Debug.Log("waiting");
                     yield return null;
                 }
 

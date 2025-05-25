@@ -10,10 +10,8 @@ namespace B3.PlayerBuffSystem
 
         private void Awake()
         {
-            Debug.Log("PlayerBuffs Awake");
             for (int i = 0; i < 5; i++)
             {
-                Debug.Log(i);
                 //nu mi ia bine cheia din dictionar
                 var resourceType = (ResourceType)i;
                 AddBuff(resourceType, PlayerBuff.Trade4_1);
@@ -27,7 +25,7 @@ namespace B3.PlayerBuffSystem
             if (buff < currentBuffIndex)
                 return;
             
-            _buffs.Add(resourceType, buff);
+            _buffs[resourceType] = buff;
         }
 
         public int GetResourceAmount(ResourceType resourceType)

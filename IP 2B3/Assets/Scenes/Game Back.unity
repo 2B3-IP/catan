@@ -3683,6 +3683,30 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: gameStates.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: 'gameStates.Array.data[5]'
+      value: 1461691333602705513
+      objectReference: {fileID: 0}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: 'gameStates.Array.data[6]'
+      value: 6434893590810853527
+      objectReference: {fileID: 0}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: 'gameStates.Array.data[7]'
+      value: 3160003638182543459
+      objectReference: {fileID: 0}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: 'gameStates.Array.data[8]'
+      value: 3160003638182543458
+      objectReference: {fileID: 0}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: 'managedReferences[1461691333602705513]'
+      value: Assembly-CSharp B3.GameStateSystem.DiscardGameState
+      objectReference: {fileID: 0}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: managedReferences[6434893590810853527].thief
       value: 
       objectReference: {fileID: 0}
@@ -3698,6 +3722,10 @@ PrefabInstance:
       propertyPath: managedReferences[1461691153215914052].playersManager
       value: 
       objectReference: {fileID: 1012282399}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[3160003638182543459]._waitTimeRound
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: managedReferences[6434893590810853526].bankController
       value: 

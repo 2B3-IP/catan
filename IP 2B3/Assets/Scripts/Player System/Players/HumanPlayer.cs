@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using B3.BankSystem;
 using B3.BoardSystem;
 using B3.BuildingSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.PlayerSystem.UI;
+using B3.ResourcesSystem;
 using B3.SettlementSystem;
 using B3.ThiefSystem;
 using UnityEngine;
@@ -157,10 +159,9 @@ namespace B3.PlayerSystem
 
             if (!playerChoseManually)
             {
-                
                 for (int i = 0; i < toDiscard;)
                 {
-                    int index = UnityEngine.Random.Range(0, Resources.Length);
+                    int index = Random.Range(0, Resources.Length);
                     if (Resources[index] > 0)
                     {
                         Resources[index]--;

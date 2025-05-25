@@ -73,6 +73,34 @@ public static class AI
     {
         return (new HexPosition(0, 0), HexEdgeDir.TopLeft);
     }
+    
+    public static HexPosition GetThiefPostion()
+    {
+        return new HexPosition(0, 0);
+    }
+
+    public static int[] GetDiscardedResources()
+    {
+        return new int[5];
+    }
+
+    //playerId si array-ul de resurse pentru trade
+    public static (int, int[]) GetPlayerTradeInfo()
+    {
+        return (0, new int[5]);
+    }
+
+    //resursele pe care le dai, resursele pe care le primesti
+    public static (int[], int[]) GetBankTradeInfo()
+    {
+        return (new int[5], new int[5]);
+    }
+
+    //check OnTradeAndBuildUpdate() din AIPlayer pentru toate comenzile
+    public static String GetFreeStateCommand()
+    {
+        return "end turn";
+    }
 
     public static void SendMove(string message)
     {

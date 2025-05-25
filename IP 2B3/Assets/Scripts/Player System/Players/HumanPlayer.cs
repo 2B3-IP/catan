@@ -60,7 +60,7 @@ namespace B3.PlayerSystem
             while (!_hasClicked)
                 yield return null;
 
-            DiceSum = Random.Range(1, 7) + Random.Range(1, 7);
+            DiceSum = 8;
 
             _hasClicked = false;
         }
@@ -79,9 +79,10 @@ namespace B3.PlayerSystem
 
         public override void OnTradeAndBuildUpdate()
         {
+            Debug.Log("waiting to end");
             if(!_hasClicked)
                 return;
-            
+            Debug.Log("buton apasat");
             IsTurnEnded = true;
             _hasClicked = false;
         }
@@ -260,7 +261,10 @@ namespace B3.PlayerSystem
         private void OnDiceButtonClick() =>
             _hasClicked = true;
 
-        private void OnEndPlayerButtonPress() =>
+        private void OnEndPlayerButtonPress() 
+        {
+            Debug.Log("Button pressed");
             _hasClicked = true;
+        }
     }
 }

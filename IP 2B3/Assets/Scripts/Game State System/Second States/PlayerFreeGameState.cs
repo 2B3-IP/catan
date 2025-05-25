@@ -10,23 +10,26 @@ namespace B3.GameStateSystem
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
-            yield break;
             // TODO(front/back): trade + build, yield return astepti doar dupa end turn button/trece timpu
+            Debug.Log("Free");
             var currentPlayer = stateMachine.CurrentPlayer;
-            var endTurnCoroutine = currentPlayer.StartCoroutine(currentPlayer.EndTurnCoroutine());
+            //var endTurnCoroutine = currentPlayer.StartCoroutine(currentPlayer.EndTurnCoroutine());
             float elapsedTime = 0f; 
-            while (elapsedTime < _waitTimeRound) 
+            /*while (elapsedTime < _waitTimeRound) 
             {
                 elapsedTime += Time.deltaTime;
                 if (currentPlayer.IsTurnEnded)
                     break;
                 yield return null;
-            }
+            }*/
+            
+            //yield return endTurnCoroutine;
 
             Debug.Log("aici");
             currentPlayer.StopAllCoroutines();
             
             stateMachine.ChangeState<PlayerEndGameState>();
+            yield break;
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using B3.BankSystem;
 using B3.BoardSystem;
+using UnityEngine.Rendering;
 
 namespace B3.GameStateSystem
 {
@@ -21,7 +22,6 @@ namespace B3.GameStateSystem
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
-            yield break;
             Debug.Log("Resource");
             
             allPieces ??= Object.FindObjectsByType<PieceController>(FindObjectsSortMode.None);
@@ -30,7 +30,7 @@ namespace B3.GameStateSystem
             Debug.Log(diceRolls);
             var matchedPieces = allPieces.Where(piece => piece.Number == diceRolls && 
                                                          !piece.IsBlocked && !piece.IsDesert);
-
+            
             var boardGrid = boardController.BoardGrid;
             foreach (var piece in matchedPieces)
             {

@@ -13,23 +13,23 @@ namespace B3.GameStateSystem
             // TODO(front/back): trade + build, yield return astepti doar dupa end turn button/trece timpu
             Debug.Log("Free");
             var currentPlayer = stateMachine.CurrentPlayer;
-            //var endTurnCoroutine = currentPlayer.StartCoroutine(currentPlayer.EndTurnCoroutine());
+            var endTurnCoroutine = currentPlayer.StartCoroutine(currentPlayer.EndTurnCoroutine());
+            
             float elapsedTime = 0f; 
-            /*while (elapsedTime < _waitTimeRound) 
+            while (elapsedTime < _waitTimeRound) 
             {
                 elapsedTime += Time.deltaTime;
                 if (currentPlayer.IsTurnEnded)
                     break;
+                
                 yield return null;
-            }*/
+            }
             
-            //yield return endTurnCoroutine;
-
             Debug.Log("aici");
-            currentPlayer.StopAllCoroutines();
+            if(!currentPlayer.IsTurnEnded)
+                currentPlayer.StopCoroutine(endTurnCoroutine);
             
             stateMachine.ChangeState<PlayerEndGameState>();
-            yield break;
         }
     }
 }

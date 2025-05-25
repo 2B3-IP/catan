@@ -5,7 +5,9 @@ namespace B3.GameStateSystem
 {
     public sealed class GameStateMachine : MonoBehaviour
     {
-        [SerializeField] private int startStateIndex;
+        [SerializeField] private int firstStateIndex;
+        [SerializeField] private int secondStateIndex;
+        
         [SerializeReference] private GameStateBase[] gameStates;
         [SerializeField] private PlayersManager playersManager;
 
@@ -20,11 +22,11 @@ namespace B3.GameStateSystem
         internal PlayersManager PlayersManager => playersManager;
 
         private void Start() =>
-            StartMachine();
+            StartMachine(firstStateIndex);
 
-        public void StartMachine()
+        public void StartMachine(int index)
         {
-            var gameState = gameStates[startStateIndex];
+            var gameState = gameStates[index];
             ChangeState(gameState);
         }
 
@@ -43,18 +45,15 @@ namespace B3.GameStateSystem
         internal void StartMachineWithOtherPlayer()
         {
             ChangePlayer();
-            StartMachine();
+            StartMachine(secondStateIndex);
         }
 
-        internal bool ChangePlayer(bool inversedOrder = false)
+        internal void ChangePlayer(bool inversedOrder = false)
         {
-            CurrentPlayer.IsTurnEnded = true;
+            CurrentPlayer.IsTurnEnded = false;
 
             int amount = inversedOrder ? -1 : 1;
             _currentPlayerIndex = (_currentPlayerIndex + amount) % PlayerCount;
-
-            CurrentPlayer.IsTurnEnded = false;
-            return _currentPlayerIndex == 0;
         }
 
         private void ChangeState(GameStateBase state)

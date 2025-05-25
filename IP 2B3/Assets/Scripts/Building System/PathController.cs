@@ -9,7 +9,7 @@ namespace B3.BuildingSystem
         [SerializeField] private Transform roadPrefab;
         
         public PlayerBase Owner { get; set; }
-        public bool IsBuilt { get; private set; }
+        public bool IsBuilt { get; set; } = false; // Schimbă din private set în set
         
         public HexPosition HexPosition { get; set; }
         public HexEdgeDir EdgeDir { get; set; }

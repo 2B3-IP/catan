@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using B3.BankSystem;
 using B3.BoardSystem;
 using B3.BuildingSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.PlayerSystem.UI;
+using B3.ResourcesSystem;
 using B3.SettlementSystem;
 using B3.ThiefSystem;
+using B3.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,19 +21,19 @@ namespace B3.PlayerSystem
         private const float CORNER_DISTANCE_THRESHOLD = 2f;
         private const float EDGE_DISTANCE_THRESHOLD = 1f;
         
-        [SerializeField] private InputActionReference throwForceButton;
         [SerializeField] private BoardController boardController;
         [SerializeField] private BuildingController buildingController;
-        
         [SerializeField] private InputActionReference clickButton;
+        
         [SerializeField] private LayerMask pieceLayerMask;
+        [SerializeField] private LayerMask settlementLayerMask;
         [SerializeField] private int hitDistance = 200;
         
         private readonly RaycastHit[] _hits = new RaycastHit[5];
         
         private RaycastHit _closestHit;
         private Camera _playerCamera;
-        private bool _hasClicked;
+        private bool _hasDiceClicked, _hasEndClicked, _hasClicked;
 
         protected override void Awake()
         {
@@ -40,75 +43,89 @@ namespace B3.PlayerSystem
 
         private void OnEnable()
         {
-            UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
             clickButton.action.performed += OnClickPerformed;
+            UIDiceButton.OnButtonClick += OnDiceButtonClick;
+            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
         }
 
         private void OnDisable()
         {
-            UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
             clickButton.action.performed -= OnClickPerformed;
-            UIDiceButton.OnButtonClick += OnDiceButtonClick;
-            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
+            UIDiceButton.OnButtonClick -= OnDiceButtonClick;
+            UIEndButton.OnButtonClick -= OnEndPlayerButtonPress;
         }
         
         public override IEnumerator ThrowDiceCoroutine()
         {
-            _hasClicked = false;
+            _hasDiceClicked = false;
 
-            while (!_hasClicked)
+            while (!_hasDiceClicked)
                 yield return null;
 
-            DiceSum = Random.Range(1,7)+Random.Range(1,7); 
+            DiceSum = Random.Range(1, 6) + Random.Range(1, 6);
 
-            _hasClicked = false;
+            _hasDiceClicked = false;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
-            yield return RayCastCoroutine();
-            
-            var pieceController = _closestHit.transform.GetComponent<PieceController>();
-            SelectedThiefPiece = pieceController;
-            
-            var thiefPivot = pieceController.ThiefPivot;
-            
-            yield return thiefController.MoveThief(thiefPivot.position);
+            SelectedThiefPiece = null;
+            var notification = NotificationManager.Instance
+                .AddNotification("Select a Tile to move the Thief", float.PositiveInfinity, false);
+            while (SelectedThiefPiece == null)
+            {
+                yield return RayCastCoroutine(pieceLayerMask);
+                SelectedThiefPiece = _closestHit.transform.GetComponentInParent<PieceController>();
+
+                if (SelectedThiefPiece.IsBlocked)
+                    SelectedThiefPiece = null;
+            }
+            notification.Destroy();
         }
 
         public override void OnTradeAndBuildUpdate()
         {
-            if(!_hasClicked)
+            Debug.Log("waiting to end");
+            if(!_hasEndClicked)
                 return;
-            
+            Debug.Log("buton apasat");
             IsTurnEnded = true;
-            _hasClicked = false;
+            _hasEndClicked = false;
         }
 
         public override IEnumerator BuildHouseCoroutine()
         {
             SelectedHouse = null;
+
+            var notification = NotificationManager.Instance
+                .AddNotification("Select a vertex to build a Settlement", float.PositiveInfinity, false);
             
             while (SelectedHouse == null)
             {
-                yield return RayCastCoroutine();
+                yield return RayCastCoroutine(pieceLayerMask);
                 var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 var hexPosition = pieceController.HexPosition;
                 SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
 
+                if(SelectedHouse == null) Debug.Log("null house");
+                else Debug.Log("selected " + SelectedHouse.Owner?.name + " " + SelectedHouse?.name);
                 if (SelectedHouse != null && SelectedHouse.Owner != null)
                     SelectedHouse = null;
             }
+            
+            notification.Destroy();
         }
         
         public override IEnumerator BuildRoadCoroutine()
         {
             SelectedPath = null;
-
+            var notification = NotificationManager.Instance
+                .AddNotification("Select an edge to build a Road", float.PositiveInfinity, false);
+            
             while (SelectedPath == null)
             {
-                yield return RayCastCoroutine();
+                yield return RayCastCoroutine(pieceLayerMask);
                 var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 var hexPosition = pieceController.HexPosition;
@@ -117,46 +134,64 @@ namespace B3.PlayerSystem
                 if (SelectedPath != null && SelectedPath.IsBuilt)
                     SelectedPath = null;
             }
+            
+            notification.Destroy();
         }
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
             SelectedHouse = null;
+            var notification = NotificationManager.Instance
+                .AddNotification("Select a Settlement to upgrade to a City", float.PositiveInfinity, false);
             
             while (SelectedHouse == null)
             {
-                yield return RayCastCoroutine();
-                var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
-
-                var hexPosition = pieceController.HexPosition;
-                SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
-                
-                if (SelectedHouse != null && SelectedHouse.IsCity) 
+                yield return RayCastCoroutine(settlementLayerMask);
+                SelectedHouse = _closestHit.transform.GetComponentInParent<SettlementController>();
+                Debug.Log(SelectedHouse, SelectedHouse);
+                Debug.Log(SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this));
+                if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this)) 
                     SelectedHouse = null;
             }
+            
+            notification.Destroy();
         }
-        private IEnumerator RayCastCoroutine()
+        
+        public override IEnumerator DiscardResourcesCoroutine(float timeout)
+        {
+           
+             // TODO: front - choose which resources to discard and set DiscardResources
+            yield break;
+        }
+        
+        private IEnumerator RayCastCoroutine(LayerMask layerMask)
         {
             _hasClicked = false;
             int hitCount = 0;
+            Debug.Log("raycasting");
             while(hitCount == 0)
             {
                 while (!_hasClicked)
+                {
+                    //Debug.Log("waiting");
                     yield return null;
+                }
 
                 _hasClicked = false;
                 
                 var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
-                hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, pieceLayerMask); 
+                hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, layerMask); 
             }
 
             _closestHit = _hits[0];
+            
             for (int i = 1; i < hitCount; i++)
             {
                 var hit = _hits[i];
                 if(_closestHit.distance > hit.distance)
                     _closestHit = hit;
             }
+            Debug.Log("out of waiting " + _closestHit.transform.name, _closestHit.transform);
         }
         
         private SettlementController GetClosestCorner(HexPosition hexPosition, Vector3 hitPoint)
@@ -206,17 +241,17 @@ namespace B3.PlayerSystem
             
             return closestEdge;
         }
-
-        private void OnPlayerEndButtonPress() =>
-            IsTurnEnded = true;
         
         private void OnClickPerformed(InputAction.CallbackContext context) =>
             _hasClicked = context.ReadValueAsButton();
         
         private void OnDiceButtonClick() =>
-            _hasClicked = true;
+            _hasDiceClicked = true;
 
-        private void OnEndPlayerButtonPress() =>
-            _hasClicked = true;
+        private void OnEndPlayerButtonPress() 
+        {
+            Debug.Log("Button pressed");
+            _hasEndClicked = true;
+        }
     }
 }

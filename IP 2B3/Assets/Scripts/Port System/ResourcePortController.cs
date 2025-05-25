@@ -13,12 +13,14 @@ namespace B3.PortSystem
         public override ResourceType? ResourceType => resourceType;
 
         public override void AddPlayerBuff(PlayerBase player)
-        {
+        { 
             var ownerBuffs = player.GetComponent<PlayerBuffs>();
-            
-            Debug.Log("add " + resourceType + " port buff");
+
             if (ownerBuffs != null)
+            {
+                Debug.Log("add " + resourceType + " port buff");
                 ownerBuffs.AddBuff(resourceType, PlayerBuff.Trade2_1);
+            }
         }
     }
 }

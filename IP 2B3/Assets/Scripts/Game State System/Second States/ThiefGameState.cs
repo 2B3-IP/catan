@@ -7,16 +7,22 @@ namespace B3.GameStateSystem
     [System.Serializable]
     internal sealed class ThiefGameState : GameStateBase
     {
-        [SerializeField] private ThiefControllerBase thief;
+        [SerializeField] private ThiefControllerBase thiefController;
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
-            var currentPlayer = stateMachine.CurrentPlayer;
-            yield return currentPlayer.MoveThiefCoroutine(thief);
+            Debug.Log("Thief state");
             
-            var currentPiece = currentPlayer.SelectedThiefPiece;
-            thief.BlockPiece(currentPiece);
-            thief.StealFromRandomPlayer(currentPlayer);
+            var currentPlayer = stateMachine.CurrentPlayer;
+            yield return currentPlayer.MoveThiefCoroutine(thiefController);
+
+            var pieceController = currentPlayer.SelectedThiefPiece;
+            var thiefPivot = pieceController.ThiefPivot;
+            
+            yield return thiefController.MoveThief(thiefPivot.position);
+            
+            thiefController.BlockPiece(pieceController);
+            thiefController.StealFromRandomPlayer(currentPlayer);
             
             stateMachine.ChangeState<PlayerFreeGameState>();
         }

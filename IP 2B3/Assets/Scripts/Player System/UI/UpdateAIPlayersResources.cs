@@ -1,12 +1,13 @@
+using System;
 using B3.PlayerInventorySystem;
 using B3.PlayerSystem;
+using Mono.Cecil;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-
 public class UpdateAIPlayersResources : MonoBehaviour
 {
-    [SerializeField] PlayerBase chatGPT;
+    public PlayerBase chatGPT;
     public PlayerInventoryController playerInventoryController;
     public TMP_Text victoryPointsText;
     public TMP_Text longestRoadText;
@@ -14,19 +15,21 @@ public class UpdateAIPlayersResources : MonoBehaviour
     public TMP_Text resourcesCountText;
     public TMP_Text developmentCardsCountText;
 
-    void FixedUpdate()
+
+    private void Start()
     {
-        if (chatGPT.gameObject.IsDestroyed())
-            Destroy(gameObject);
+        chatGPT.onResourcesChanged.AddListener(UpdateResources);
+        chatGPT.onUsedKnightsChanged.AddListener(() => largestArmyText.text = chatGPT.UsedKnightCards.ToString());
+        chatGPT.onVPChanged.AddListener(() => victoryPointsText.text =  chatGPT.VictoryPoints.ToString());
+        playerInventoryController.onItemCountChanged.AddListener(() => 
+            developmentCardsCountText.text = playerInventoryController.ItemCount.ToString());
         
-        victoryPointsText.text = chatGPT.VictoryPoints.ToString();
-        
-        int sum = 0;
-        for (int i = 0; i < 5; i++)
-        {
-            sum += chatGPT.Resources[i];
-        }
-        resourcesCountText.text = sum.ToString();
-        developmentCardsCountText.text = playerInventoryController.ItemCount.ToString();    
+        UpdateResources();
+        victoryPointsText.text = 0.ToString();
+        largestArmyText.text = 0.ToString();
+        //longestRoadText.text = 0.ToString();
     }
+
+    void UpdateResources() => 
+        resourcesCountText.text = chatGPT.TotalResources().ToString();
 }

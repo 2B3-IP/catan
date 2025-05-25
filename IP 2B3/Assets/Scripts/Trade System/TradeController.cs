@@ -6,16 +6,17 @@ using B3.ResourcesSystem;
 
 namespace B3.TradeSystem
 {
-    public abstract class TradeSystem : MonoBehaviour
+    public class TradeController : MonoBehaviour
     {
         [SerializeField] private BankController bankController;
         
         // +value = daca oferi
         // -value = daca primesti
-        protected void TradeResources(PlayerBase player, PlayerBase otherPlayer, int[] resourcesToTrade)
+        public void TradeResources(PlayerBase player, PlayerBase otherPlayer, int[] resourcesToTrade)
         {
             for (int i = 0; i < resourcesToTrade.Length; i++)
             {
+                //print(i);
                 int value = resourcesToTrade[i];
                 var resource = (ResourceType)i;
 
@@ -23,6 +24,7 @@ namespace B3.TradeSystem
                 {
                     player.RemoveResource(resource, resourcesToTrade[i]);
                     otherPlayer.AddResource(resource, resourcesToTrade[i]);
+                    //print(i);
                 }
                 else
                 {
@@ -34,7 +36,7 @@ namespace B3.TradeSystem
         }
 
         // 4 : 1 sau 3 : 1 sau 2 : 1
-        protected void TradeResources(PlayerBase player, ResourceType resourceToTrade, ResourceType resourceToGet)
+        public void TradeResources(PlayerBase player, ResourceType resourceToTrade, ResourceType resourceToGet)
         {
             var playerBuffs = player.PlayerBuffs;
             int resourceCount = playerBuffs.GetResourceAmount(resourceToTrade);

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2421626181950576391}
   - component: {fileID: 3757976149989513223}
   - component: {fileID: 7251285206914050406}
+  - component: {fileID: 3716936130456399448}
   m_Layer: 0
   m_Name: HumanPlayer
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3879276844280853339}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 27.734758, y: 2.5272145, z: 24.20422}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -47,11 +48,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerName: Red
   colorTag: <color=red>
-  throwForceButton: {fileID: 0}
   boardController: {fileID: 0}
   buildingController: {fileID: 0}
   clickButton: {fileID: 0}
   pieceLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  settlementLayerMask:
     serializedVersion: 2
     m_Bits: 0
   hitDistance: 200
@@ -68,3 +71,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   developmentCardController: {fileID: 0}
+--- !u!114 &3716936130456399448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3879276844280853339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cdb1b059d82423091dca2813e85a843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

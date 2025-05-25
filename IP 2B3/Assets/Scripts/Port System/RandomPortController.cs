@@ -14,10 +14,11 @@ namespace B3.PortSystem
             var ownerBuffs = player.GetComponent<PlayerBuffs>();
             if (ownerBuffs == null)
                 return;
-            Debug.Log("add port ? buff");
+            
             for (int i = 0; i < 5; i++)
             {
                 var resourceType = (ResourceType)i;
+                Debug.Log("add port " + resourceType +" buff");
                 ownerBuffs.AddBuff(resourceType, PlayerBuff.Trade3_1);
             }
         }

@@ -1,13 +1,22 @@
 ﻿using B3.PlayerSystem;
+using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace B3.GameStateSystem
 {
     public sealed class GameStateMachine : MonoBehaviour
     {
-        [SerializeField] private int startStateIndex;
+        [SerializeField] private int firstStateIndex;
+        [SerializeField] private int secondStateIndex;
+        
         [SerializeReference] private GameStateBase[] gameStates;
         [SerializeField] private PlayersManager playersManager;
+
+        public UnityEvent onCurrentPlayerChanged = new();
+        public UnityEvent onStateChanged = new();
 
         private GameStateBase _currentState;
 
@@ -17,16 +26,28 @@ namespace B3.GameStateSystem
         internal int PlayerCount => playersManager.players.Count;
         internal bool IsLastPlayer => _currentPlayerIndex == PlayerCount - 1;
         internal bool IsFirstPlayer => _currentPlayerIndex == 0;
+        internal PlayersManager PlayersManager => playersManager;
 
-        private void Start() =>
-            StartMachine();
+        private void Start() => StartMachine(firstStateIndex);
 
-        public void StartMachine()
+        public void StartMachine(int index)
         {
-            var gameState = gameStates[startStateIndex];
+            var gameState = gameStates[index];
             ChangeState(gameState);
         }
 
+        public T GetState<T>() where T : GameStateBase
+        {
+            foreach (var state in gameStates)
+            {
+                if (state is T t)
+                    return t;
+            }
+            return null;
+        }
+
+        public bool IsInState<T>() where T : GameStateBase => _currentState is T;
+        
         internal void ChangeState<T>()
         {
             foreach (var state in gameStates)
@@ -42,29 +63,33 @@ namespace B3.GameStateSystem
         internal void StartMachineWithOtherPlayer()
         {
             ChangePlayer();
-            StartMachine();
+            StartMachine(secondStateIndex);
         }
 
-        internal bool ChangePlayer(bool inversedOrder = false)
+        internal void ChangePlayer(bool inversedOrder = false)
         {
-            CurrentPlayer.IsTurnEnded = true;
-
+            CurrentPlayer.IsTurnEnded = false;
+            
             int amount = inversedOrder ? -1 : 1;
             _currentPlayerIndex = (_currentPlayerIndex + amount) % PlayerCount;
-
-            CurrentPlayer.IsTurnEnded = false;
-            return _currentPlayerIndex == 0;
+            onCurrentPlayerChanged?.Invoke();
+            
+            Debug.Log("Player: " + _currentPlayerIndex);
         }
 
+       
         private void ChangeState(GameStateBase state)
         {
             if (_currentState == state)
                 return;
 
             _currentState = state;
-
+            
+            Debug.Log($"Current state: {_currentState.GetType().Name}");
+            
             StopAllCoroutines();
             StartCoroutine(_currentState.OnEnter(this));
+            onStateChanged?.Invoke();
         }
     }
 }

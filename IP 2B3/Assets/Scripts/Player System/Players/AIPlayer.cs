@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using B3.BoardSystem;
+using B3.BuySystem;
 using B3.ThiefSystem;
+using B3.TradeSystem;
 using UnityEngine;
 
 namespace B3.PlayerSystem
@@ -8,7 +10,10 @@ namespace B3.PlayerSystem
     public sealed class AIPlayer : PlayerBase
     {
         [SerializeField] private BoardController boardController;
-
+        [SerializeField] private BuyController buyController;
+        [SerializeField] private TradeController tradeSystem;
+        [SerializeField] private PlayersManager playersManager;
+        
         public override IEnumerator ThrowDiceCoroutine()
         {
             //DiceSum = Random.Range(MIN_DICE_THROW_FORCE, MAX_DICE_THROW_FORCE); //TODO: TEMP
@@ -17,24 +22,71 @@ namespace B3.PlayerSystem
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
-            yield break; // cea mai buna pozitie pt thief
+            var thiefPosition = AI.GetThiefPostion();
+            var pieceController = boardController.BoardGrid[thiefPosition];
+            
+            yield return new WaitForSeconds(1f);
+
+            SelectedThiefPiece = pieceController;
+            
+            var thiefPivot = pieceController.ThiefPivot;
+            yield return thiefController.MoveThief(thiefPivot.position);
         }
 
         public override void OnTradeAndBuildUpdate()
         {
-            // verifica daca are de contruit + de dat trade
-            // daca nu mai are IsTurnEnded = false;
+            var command = AI.GetFreeStateCommand();
+
+            switch (command.ToLower())
+            {
+                case "buy house":
+                    StartCoroutine(buyController.BuyHouse(this));
+                    break;
+
+                case "buy city":
+                    StartCoroutine(buyController.BuyCity(this));
+                    break;
+
+                case "buy road":
+                    StartCoroutine(buyController.BuyRoad(this));
+                    break;
+
+                case "buy card":
+                    buyController.BuyDevelopmentCard(this);
+                    break;
+                
+                case "trade bank":
+                    var bankTradeInfo = AI.GetBankTradeInfo();
+                    tradeSystem.TradeResources(this, bankTradeInfo.Item1, bankTradeInfo.Item2);
+                    break;
+
+                case "trade player":
+                    var playerTradeInfo = AI.GetPlayerTradeInfo();
+                    var player = playersManager.players[playerTradeInfo.Item1]; 
+                    
+                    tradeSystem.TradeResources(this, player, playerTradeInfo.Item2);
+                    break;
+
+                case "end turn":
+                    IsTurnEnded = true;
+                    break;
+
+                default:
+                    Debug.Log("AI unknown command");
+                    break;
+            }
         }
 
         public override IEnumerator BuildHouseCoroutine()
         {
-            var housePosition = AI.GetHousePosition();
+            /*var housePosition = AI.GetHousePosition();
             var boardGrid = boardController.BoardGrid;
 
-            yield return new WaitForSeconds(1f);
+            //yield return new WaitForSeconds(1f);
 
             var settlementController = boardGrid.GetVertex(housePosition.Item1, housePosition.Item2);
-            SelectedHouse = settlementController;
+            SelectedHouse = settlementController;*/
+            yield break;
         }
 
         public override IEnumerator UpgradeToCityCoroutine()
@@ -50,13 +102,22 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildRoadCoroutine()
         {
-            var housePosition = AI.GetRoadPosition();
+            /*var housePosition = AI.GetRoadPosition();
             var boardGrid = boardController.BoardGrid;
 
-            yield return new WaitForSeconds(1f);
+            //yield return new WaitForSeconds(1f);
 
             var pathController = boardGrid.GetEdge(housePosition.Item1, housePosition.Item2);
-            SelectedPath = pathController;
+            SelectedPath = pathController;*/
+            yield break;
+        }
+
+        public override IEnumerator DiscardResourcesCoroutine(float timeout)
+        {
+            yield return new WaitForSeconds(1f);
+            var discardedResources = AI.GetDiscardedResources();
+            
+            yield break;
         }
     }
 }

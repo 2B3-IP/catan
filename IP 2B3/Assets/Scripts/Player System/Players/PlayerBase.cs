@@ -7,7 +7,9 @@ using B3.PlayerBuffSystem;
 using B3.ResourcesSystem;
 using B3.SettlementSystem;
 using B3.ThiefSystem;
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace B3.PlayerSystem
 {
@@ -19,16 +21,25 @@ namespace B3.PlayerSystem
         public string playerName;
         public string colorTag = "<color=red>";
         
+        
         /// <summary>
-        /// Mapat cu ResourceType (Resources[0] = Ore, Resources[1] = Wheat, Resources[2] = Wood, Resources[3] = Brick, Resources[4] = Sheep)
+        /// Mapat cu ResourceType (Resources[0] = Wood, Resources[1] = Brick, Resources[2] = Wheat, Resources[3] = Sheep, Resources[4] = Ore)
         /// </summary>
         /// 
-        public int[] Resources { get; private set; }  = new int[5];
+        public int[] Resources { get; private set; } = { 99, 99, 99, 99, 99 };//new int[5];
 
         public int VictoryPoints { get; private set; }
         public int DiceSum { get; protected set; }
+        public int UsedKnightCards { get; private set; }
+        
+        [Foldout("Events")] public UnityEvent onResourcesChanged = new();
+        [Foldout("Events")] public UnityEvent onVPChanged = new();
+        [Foldout("Events")] public UnityEvent onUsedKnightsChanged = new();
+        
         public SettlementController SelectedHouse { get; protected set; }
         
+        public int[] DiscardResources { get; protected set; }
+
         public PathController SelectedPath { get; protected set; }
         public bool IsTurnEnded { get; set; }
         
@@ -52,6 +63,8 @@ namespace B3.PlayerSystem
         public abstract IEnumerator BuildRoadCoroutine();
         public abstract IEnumerator UpgradeToCityCoroutine();
         
+        public abstract IEnumerator DiscardResourcesCoroutine(float timeout);
+        
         public IEnumerator EndTurnCoroutine()
         {
             while (!IsTurnEnded)
@@ -59,12 +72,17 @@ namespace B3.PlayerSystem
                 OnTradeAndBuildUpdate();
                 yield return null;
             }
+            Debug.Log("end turn");
         }
+
+    
+
         
-        public void AddResource(ResourceType resource, int amount)//De modificat pe UI staturile corespunzatoare
+        public void AddResource(ResourceType resource, int amount)
         {
             int resourceIndex = (int)resource;
             Resources[resourceIndex] += amount;
+            onResourcesChanged.Invoke();
         }
         
         public void RemoveResource(ResourceType resource, int amount)
@@ -74,11 +92,22 @@ namespace B3.PlayerSystem
                 return;
             
             Resources[resourceIndex] -= amount;
+            onResourcesChanged.Invoke();
         }
-        
+
+        public int TotalResources()
+        {
+            int total = 0;
+            for(int i = 0; i < Resources.Length; i++)
+                total += Resources[i];
+            return total;
+        }
+
+       
         public void AddVictoryPoints(int amount)
         {
             VictoryPoints += amount;
+            onVPChanged.Invoke();
         }
         
         public void RemoveVictoryPoints(int amount)
@@ -87,6 +116,13 @@ namespace B3.PlayerSystem
                 return;
             
             VictoryPoints -= amount;
+            onVPChanged.Invoke();
+        }
+
+        public void AddUsedKnight()
+        {
+            UsedKnightCards++;
+            onUsedKnightsChanged.Invoke();
         }
         
         public int GetHousesCount()

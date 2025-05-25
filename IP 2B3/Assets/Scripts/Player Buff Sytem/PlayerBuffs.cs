@@ -12,18 +12,20 @@ namespace B3.PlayerBuffSystem
         {
             for (int i = 0; i < 5; i++)
             {
+                //nu mi ia bine cheia din dictionar
                 var resourceType = (ResourceType)i;
-                AddBuff(resourceType, PlayerBuff.Trade4_1);
+                _buffs.Add(resourceType, PlayerBuff.Trade4_1);
             }
         }
 
         public void AddBuff(ResourceType resourceType, PlayerBuff buff)
         {
+            
             var currentBuffIndex = _buffs[resourceType];
             if (buff < currentBuffIndex)
                 return;
             
-            _buffs.Add(resourceType, buff);
+            _buffs[resourceType] = buff;
         }
 
         public int GetResourceAmount(ResourceType resourceType)

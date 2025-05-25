@@ -32,7 +32,8 @@ public class BuyDevCard : MonoBehaviour
     class DisplayedCard
     {
         public int Count { get; set; }
-        public TMP_Text Text { get; init; }
+        public TMP_Text CountText { get; init; }
+        public GameObject Go { get; init; }
     }
     
     public void Start()
@@ -50,11 +51,20 @@ public class BuyDevCard : MonoBehaviour
 
     void UseCard(DevelopmentCardType cardType)
     {
-        var entry = displayedCards;
+        var entry = displayedCards[cardType];
         if (!inventoryController.UseItem(cardType))
         {
             NotificationManager.Instance.AddNotification("You cannot use this card until next turn ");
             return;
+        }
+
+        entry.CountText.text = (--entry.Count).ToString();
+        
+        if (entry.Count == 0)
+        {
+            entry.Go.SetActive(false);
+            Destroy(entry.Go);
+            displayedCards.Remove(cardType);
         }
     }
 
@@ -65,7 +75,7 @@ public class BuyDevCard : MonoBehaviour
         if (displayedCards.TryGetValue(cardType, out DisplayedCard entry))
         {
             entry.Count++;
-            entry.Text.text = entry.Count.ToString();
+            entry.CountText.text = entry.Count.ToString();
         }
         else
         {
@@ -86,15 +96,21 @@ public class BuyDevCard : MonoBehaviour
             var button = go.GetComponentInChildren<Button>();
             button.onClick.AddListener(() => UseCard(cardType));
             
-            // get text component
+            // set title and description
+            var hover = go.transform.GetChild(2);
+            hover.GetChild(0).GetComponent<TMP_Text>().text = cardType.Name();
+            hover.GetChild(1).GetComponent<TMP_Text>().text = cardType.Description();
+            
+            // get count text component
             var bubble = go.transform.GetChild(1);
-            var textComponent = bubble.GetComponentInChildren<TMP_Text>();
-            textComponent.text = "1";
+            var countText = bubble.GetComponentInChildren<TMP_Text>();
+            countText.text = "1";
             
             displayedCards.Add(cardType, new DisplayedCard
             {
                 Count = 1,
-                Text = textComponent
+                Go = go,
+                CountText = countText
             });
             
             buyCard.SetAsLastSibling();

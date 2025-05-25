@@ -73,6 +73,34 @@ public static class AI
     {
         return (new HexPosition(0, 0), HexEdgeDir.TopLeft);
     }
+    
+    public static HexPosition GetThiefPostion()
+    {
+        return new HexPosition(0, 0);
+    }
+
+    public static int[] GetDiscardedResources()
+    {
+        return new int[5];
+    }
+
+    //playerId si array-ul de resurse pentru trade
+    public static (int, int[]) GetPlayerTradeInfo()
+    {
+        return (0, new int[5]);
+    }
+
+    //resursele pe care le dai, resursa pe care o primesti
+    public static (ResourceType, ResourceType) GetBankTradeInfo()
+    {
+        return (ResourceType.Brick, ResourceType.Brick);
+    }
+
+    //check OnTradeAndBuildUpdate() din AIPlayer pentru toate comenzile
+    public static String GetFreeStateCommand()
+    {
+        return "end turn";
+    }
 
     public static void SendMove(string message)
     {
@@ -103,4 +131,31 @@ public static class AI
              Debug.Log(ex.ToString());
         }   
     }
+   public static void SendDice(int dice)
+{
+    try
+    {
+        TcpListener server = new TcpListener(IPAddress.Any, 6969);
+        server.Start();
+        Debug.Log("Server is running on port 6969...");
+
+        TcpClient client = server.AcceptTcpClient();
+        Debug.Log("Client connected!");
+
+        using (StreamWriter writer = new StreamWriter(client.GetStream()))
+        {
+            writer.WriteLine("DICE_NUMBER " + dice);
+            Debug.Log("Sent single dice number to client: " + dice);
+        }
+
+        client.Close();
+        server.Stop();
+    }
+    catch (Exception ex)
+    {
+        Debug.Log(ex.ToString());
+    }
+}
+
+
 }

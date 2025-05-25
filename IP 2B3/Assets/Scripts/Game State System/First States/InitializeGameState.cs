@@ -1,8 +1,11 @@
 ﻿using System.Collections;
+using System.Linq;
 using B3.BoardSystem;
 using UnityEngine;
 using B3.DiceSystem;
+using B3.PieceSystem;
 using B3.PlayerSystem;
+using B3.ThiefSystem;
 using Game_Settings;
 
 namespace B3.GameStateSystem
@@ -13,6 +16,7 @@ namespace B3.GameStateSystem
         [SerializeField] private GameSettings gameSettings;
         [SerializeField] private BoardController boardController;
         [SerializeField] private PlayersManager playersManager;
+        [SerializeField] private ThiefController thiefController;
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {  
@@ -21,8 +25,18 @@ namespace B3.GameStateSystem
             
             playersManager.Initialize(gameSettings.numberOfPlayers);
             
+            var allPieces = Object.FindObjectsByType<PieceController>(FindObjectsSortMode.None);
+            foreach (var piece in allPieces)
+            {
+                if (!piece.IsDesert)
+                    continue;
+
+                Debug.Log(piece, piece);
+                yield return thiefController.MoveThief(piece.ThiefPivot.position);
+                break;
+            }
+            
             stateMachine.ChangeState<AddHouseState>();
-            yield break;
         }
     }
 }

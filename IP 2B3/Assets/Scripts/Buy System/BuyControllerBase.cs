@@ -1,4 +1,5 @@
 ﻿using B3.BankSystem;
+using B3.DevelopmentCardSystem;
 using UnityEngine;
 using B3.GameStateSystem;
 using B3.PlayerSystem;
@@ -8,7 +9,7 @@ namespace B3.BuySystem
 {
     public abstract class BuyControllerBase : MonoBehaviour
     {
-        [SerializeField] private BankController bankController;
+        [SerializeField] protected BankController bankController;
 
         private readonly int[] _inversedItemsCosts =
         {
@@ -21,7 +22,7 @@ namespace B3.BuySystem
         public abstract bool BuyHouse(PlayerBase player);
         public abstract bool BuyRoad(PlayerBase player);
         public abstract bool BuyCity(PlayerBase player);
-        public abstract bool BuyDevelopmentCard(PlayerBase player);
+        public abstract DevelopmentCardType? BuyDevelopmentCard(PlayerBase player);
 
         protected bool HasEnoughResources(PlayerBase player, BuyItemType itemType)
         {

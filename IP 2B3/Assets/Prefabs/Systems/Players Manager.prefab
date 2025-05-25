@@ -61,6 +61,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2964574333336448466}
     m_Modifications:
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: colorTag
+      value: <color=blue>
+      objectReference: {fileID: 0}
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: playerName
+      value: Blue
+      objectReference: {fileID: 0}
     - target: {fileID: 3173389152480104931, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
       propertyPath: developmentCardController
       value: 
@@ -138,6 +146,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2964574333336448466}
     m_Modifications:
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: colorTag
+      value: <color=yellow>
+      objectReference: {fileID: 0}
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: playerName
+      value: Yellow
+      objectReference: {fileID: 0}
     - target: {fileID: 3173389152480104931, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
       propertyPath: developmentCardController
       value: 
@@ -256,6 +272,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3757976149989513223, guid: c84c1f686d9ae4841bc48903ed22cc27, type: 3}
+      propertyPath: clickButton
+      value: 
+      objectReference: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 3757976149989513223, guid: c84c1f686d9ae4841bc48903ed22cc27, type: 3}
       propertyPath: pieceLayerMask.m_Bits
       value: 64
       objectReference: {fileID: 0}
@@ -292,6 +312,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2964574333336448466}
     m_Modifications:
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: colorTag
+      value: <color=green>
+      objectReference: {fileID: 0}
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: playerName
+      value: Green
+      objectReference: {fileID: 0}
     - target: {fileID: 3173389152480104931, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
       propertyPath: developmentCardController
       value: 

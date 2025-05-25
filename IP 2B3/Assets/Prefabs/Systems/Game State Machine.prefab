@@ -61,7 +61,7 @@ MonoBehaviour:
     - rid: 1461691153215914052
       type: {class: InitializeGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
-        gameSettings: {fileID: 0}
+        gameSettings: {fileID: 11400000, guid: c608fd40c83703448a2aad5847cfea98, type: 2}
         boardController: {fileID: 0}
         playersManager: {fileID: 0}
     - rid: 3160003638182543451
@@ -72,7 +72,6 @@ MonoBehaviour:
       type: {class: AddRoadState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
         buildingController: {fileID: 0}
-        repeatTimes: 2
     - rid: 3160003638182543458
       type: {class: PlayerEndGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data: 
@@ -88,7 +87,6 @@ MonoBehaviour:
       type: {class: ResourceGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
         diceThrower: {fileID: 0}
-        allPieces: []
     - rid: 6434893590810853527
       type: {class: ThiefGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:

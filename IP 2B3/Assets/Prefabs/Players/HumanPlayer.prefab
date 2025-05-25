@@ -45,11 +45,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa59ad46b5fa4e90ae3eeb87ce54a5ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: Red
+  colorTag: <color=red>
   throwForceButton: {fileID: 0}
+  boardController: {fileID: 0}
+  buildingController: {fileID: 0}
   clickButton: {fileID: 0}
   pieceLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  hitDistance: 200
 --- !u!114 &7251285206914050406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,3 +67,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dd119e4cb944e418bd3e51da4e22fda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  developmentCardController: {fileID: 0}

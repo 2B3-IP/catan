@@ -33,6 +33,7 @@ namespace B3.GameStateSystem
                 if (!piece.IsDesert)
                     continue;
 
+                Debug.Log(piece, piece);
                 yield return thiefController.MoveThief(piece.ThiefPivot.position);
                 break;
             }

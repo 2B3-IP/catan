@@ -95,15 +95,10 @@ namespace B3.BuildingSystem
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
             
-<<<<<<< HEAD
             Debug.Log($"AFTER: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
-
-            TryAddPortBuffForSettlement(selectedHouse, player);
-
-=======
+            
             AddPortBuffForSettlement(selectedHouse, player);
             
->>>>>>> 778992dd7ce1e150b04a455080d4cf08c8ab5307
             var message = $"House built at {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y}, {selectedHouse.VertexDir} by {player.name}";
             Debug.Log(message);
 
@@ -516,7 +511,7 @@ namespace B3.BuildingSystem
             
             var targetEndpoints = GetExactEdgeEndpoints(targetPath.HexPosition, targetPath.EdgeDir);
             
-            Debug.Log($"\nTarget path has {targetEndpoints.Count} endpoints:");
+            Debug.Log($"Target path has {targetEndpoints.Count} endpoints:");
             foreach (var endpoint in targetEndpoints)
             {
                 Debug.Log($"  - {endpoint.Item1.X},{endpoint.Item1.Y} {endpoint.Item2}");
@@ -524,7 +519,7 @@ namespace B3.BuildingSystem
             
             foreach (var (vertexPos, vertexDir) in targetEndpoints)
             {
-                Debug.Log($"\n--- Checking endpoint {vertexPos.X},{vertexPos.Y} {vertexDir} ---");
+                Debug.Log($"--- Checking endpoint {vertexPos.X},{vertexPos.Y} {vertexDir} ---");
                 
                 Debug.Log("Checking player.Settlements list for this vertex...");
                 foreach (var settlement in player.Settlements)
@@ -724,18 +719,12 @@ namespace B3.BuildingSystem
     
             Debug.Log($"Player {player.name} now has {player.Settlements.Count} settlements in list");
         }
-<<<<<<< HEAD
-        
-        private void TryAddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
-=======
 
         private void AddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
->>>>>>> 778992dd7ce1e150b04a455080d4cf08c8ab5307
         {
             if (settlement.ConnectedPortController != null) settlement.ConnectedPortController.AddPlayerBuff(player);
         }
         
-
         public override IEnumerator BuildCity(PlayerBase player)
         {
             if (!CanBuildCity(player))

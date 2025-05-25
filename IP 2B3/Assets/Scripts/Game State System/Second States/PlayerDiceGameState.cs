@@ -38,10 +38,7 @@ namespace B3.GameStateSystem
             
             int diceRolls = currentPlayer.DiceSum;
 
-            if (diceRolls == THIEF_ROLL)
-            {
-                stateMachine.ChangeState<DiscardGameState>();
-            }
+            if (diceRolls == THIEF_ROLL) stateMachine.ChangeState<DiscardGameState>();
             else stateMachine.ChangeState<ResourceGameState>();
         }
     }

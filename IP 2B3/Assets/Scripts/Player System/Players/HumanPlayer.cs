@@ -75,7 +75,7 @@ namespace B3.PlayerSystem
             {
                 yield return RayCastCoroutine(pieceLayerMask);
                 
-                var pieceController = _closestHit.transform.GetComponent<PieceController>();
+                var pieceController = _closestHit.transform.GetComponentInParent<PieceController>();
                 SelectedThiefPiece = pieceController;
             }
         }

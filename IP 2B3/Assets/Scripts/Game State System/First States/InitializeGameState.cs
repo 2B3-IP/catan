@@ -25,17 +25,18 @@ namespace B3.GameStateSystem
             
             playersManager.Initialize(gameSettings.numberOfPlayers);
             
-            stateMachine.ChangeState<AddHouseState>();
-            
             var allPieces = Object.FindObjectsByType<PieceController>(FindObjectsSortMode.None);
             foreach (var piece in allPieces)
             {
                 if (!piece.IsDesert)
                     continue;
 
+                Debug.Log(piece, piece);
                 yield return thiefController.MoveThief(piece.ThiefPivot.position);
                 break;
             }
+            
+            stateMachine.ChangeState<AddHouseState>();
         }
     }
 }

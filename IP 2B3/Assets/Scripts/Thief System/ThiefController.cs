@@ -9,6 +9,9 @@ namespace B3.ThiefSystem
         [SerializeField] private float stoppingDistance = 0.01f;
         public override IEnumerator MoveThief(Vector3 endPosition)
         {
+            Debug.Log("moving thief");
+            transform.position = endPosition;
+            yield break;
             while (Vector3.Distance(transform.position, endPosition) > stoppingDistance)
             {
                 transform.position = Vector3.MoveTowards(transform.position, endPosition, moveSpeed * Time.deltaTime);

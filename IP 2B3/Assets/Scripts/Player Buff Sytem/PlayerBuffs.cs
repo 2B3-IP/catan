@@ -14,7 +14,7 @@ namespace B3.PlayerBuffSystem
             {
                 //nu mi ia bine cheia din dictionar
                 var resourceType = (ResourceType)i;
-                AddBuff(resourceType, PlayerBuff.Trade4_1);
+                _buffs.Add(resourceType, PlayerBuff.Trade4_1);
             }
         }
 

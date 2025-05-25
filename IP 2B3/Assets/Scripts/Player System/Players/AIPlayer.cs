@@ -12,6 +12,7 @@ namespace B3.PlayerSystem
         [SerializeField] private BoardController boardController;
         [SerializeField] private BuyController buyController;
         [SerializeField] private TradeController tradeSystem;
+        [SerializeField] private PlayersManager playersManager;
         
         public override IEnumerator ThrowDiceCoroutine()
         {
@@ -61,8 +62,8 @@ namespace B3.PlayerSystem
 
                 case "trade player":
                     var playerTradeInfo = AI.GetPlayerTradeInfo();
-                    // convert player playerTradeInfo.Item1
-                    PlayerBase player = null;
+                    var player = playersManager.players[playerTradeInfo.Item1]; 
+                    
                     tradeSystem.TradeResources(this, player, playerTradeInfo.Item2);
                     break;
 

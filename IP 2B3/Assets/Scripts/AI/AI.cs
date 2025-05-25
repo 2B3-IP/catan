@@ -90,7 +90,7 @@ public static class AI
         return (0, new int[5]);
     }
 
-    //resursele pe care le dai, resursele pe care le primesti
+    //resursele pe care le dai, resursa pe care o primesti
     public static (ResourceType, ResourceType) GetBankTradeInfo()
     {
         return (ResourceType.Brick, ResourceType.Brick);

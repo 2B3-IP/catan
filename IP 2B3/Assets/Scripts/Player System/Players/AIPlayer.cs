@@ -11,7 +11,7 @@ namespace B3.PlayerSystem
     {
         [SerializeField] private BoardController boardController;
         [SerializeField] private BuyController buyController;
-        [SerializeField] private TradeSystem tradeSystem;
+        [SerializeField] private TradeController tradeSystem;
         
         public override IEnumerator ThrowDiceCoroutine()
         {
@@ -55,17 +55,15 @@ namespace B3.PlayerSystem
                     break;
                 
                 case "trade bank":
-                    var resourcesToGive = AI.GetBankTradeInfo().Item1;
-                    var resourcesToTake = AI.GetBankTradeInfo().Item2;
-
-                    tradeSystem.TradeResources(this, resourcesToGive, resourcesToTake);
+                    var bankTradeInfo = AI.GetBankTradeInfo();
+                    tradeSystem.TradeResources(this, bankTradeInfo.Item1, bankTradeInfo.Item2);
                     break;
 
                 case "trade player":
-                    var player = AI.GetPlayerTradeInfo().Item1;
-                    var resourcesToTrade = AI.GetPlayerTradeInfo().Item2;
-
-                    tradeSystem.TradeResources(player, resourcesToTrade);
+                    var playerTradeInfo = AI.GetPlayerTradeInfo();
+                    // convert player playerTradeInfo.Item1
+                    PlayerBase player = null;
+                    tradeSystem.TradeResources(this, player, playerTradeInfo.Item2);
                     break;
 
                 case "end turn":

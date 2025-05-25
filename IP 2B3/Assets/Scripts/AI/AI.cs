@@ -91,9 +91,9 @@ public static class AI
     }
 
     //resursele pe care le dai, resursele pe care le primesti
-    public static (int[], int[]) GetBankTradeInfo()
+    public static (ResourceType, ResourceType) GetBankTradeInfo()
     {
-        return (new int[5], new int[5]);
+        return (ResourceType.Brick, ResourceType.Brick);
     }
 
     //check OnTradeAndBuildUpdate() din AIPlayer pentru toate comenzile

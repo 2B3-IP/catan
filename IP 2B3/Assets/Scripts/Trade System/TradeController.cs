@@ -6,7 +6,7 @@ using B3.ResourcesSystem;
 
 namespace B3.TradeSystem
 {
-    public class TradeSystem : MonoBehaviour
+    public class TradeController : MonoBehaviour
     {
         [SerializeField] private BankController bankController;
         

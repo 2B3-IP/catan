@@ -71,7 +71,7 @@ namespace B3.BoardSystem
                     for (int i = 0; i < 6; i++) {
                         // this is sketchy af but I am mostly sure it's correct :3e
                         edges[i] = neighbours[i]?.Edges[(i + 3) % 6];
-                        vertices[i] = (neighbours[i]?.Vertices[(i + 2) % 6]) ?? (neighbours[(i+1) % 6]?.Vertices[(i + 3) % 6]);
+                        vertices[i] = (neighbours[i]?.Vertices[(i + 2) % 6]) ?? (neighbours[(i+1) % 6]?.Vertices[(i + 4) % 6]);
                     }
                     
                     // init leftover vertices and edges

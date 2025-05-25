@@ -61,6 +61,7 @@ namespace B3.PlayerSystem
                 OnTradeAndBuildUpdate();
                 yield return null;
             }
+            Debug.Log("end turn");
         }
 
     

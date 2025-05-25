@@ -370,6 +370,7 @@ RectTransform:
   - {fileID: 2066754241}
   - {fileID: 1761032081}
   - {fileID: 1694513234}
+  - {fileID: 1386472444}
   m_Father: {fileID: 282193205}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -392,7 +393,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173442932}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1c22075390574b4292293b0ada1d615, type: 3}
   m_Name: 
@@ -403,6 +404,9 @@ MonoBehaviour:
   CardManagerMine: {fileID: 0}
   CardManagerTheirs: {fileID: 0}
   BankController: {fileID: 0}
+  CurrentPlayer: {fileID: 0}
+  TradeController: {fileID: 0}
+  OtherPlayer: {fileID: 0}
   TradeOfferCardManagerTheirs: {fileID: 0}
   TradeOfferCardManagerMine: {fileID: 0}
   TradeType: {fileID: 0}
@@ -4195,6 +4199,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 837847821}
     - target: {fileID: 3801760704258457940, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      propertyPath: CurrentPlayer
+      value: 
+      objectReference: {fileID: 1858971809}
+    - target: {fileID: 3801760704258457940, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
       propertyPath: WaitingScreen
       value: 
       objectReference: {fileID: 1197005355}
@@ -4202,6 +4210,14 @@ PrefabInstance:
       propertyPath: BankController
       value: 
       objectReference: {fileID: 372445769}
+    - target: {fileID: 3801760704258457940, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      propertyPath: TradeController
+      value: 
+      objectReference: {fileID: 1386472445}
+    - target: {fileID: 3894616641682205872, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1858971809}
     - target: {fileID: 4200894467754171542, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -4236,6 +4252,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4996591345752101332, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
       propertyPath: MyType
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996591345752101332, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      propertyPath: TheirType
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4996591345752101332, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
@@ -5102,6 +5122,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 837847821}
     - target: {fileID: 3801760704258457940, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      propertyPath: CurrentPlayer
+      value: 
+      objectReference: {fileID: 1858971809}
+    - target: {fileID: 3801760704258457940, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
       propertyPath: WaitingScreen
       value: 
       objectReference: {fileID: 1197005355}
@@ -5109,6 +5133,14 @@ PrefabInstance:
       propertyPath: BankController
       value: 
       objectReference: {fileID: 372445769}
+    - target: {fileID: 3801760704258457940, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      propertyPath: TradeController
+      value: 
+      objectReference: {fileID: 1386472445}
+    - target: {fileID: 3894616641682205872, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1858971809}
     - target: {fileID: 4200894467754171542, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -5512,6 +5544,59 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &1063340921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1063340922}
+  - component: {fileID: 1063340923}
+  m_Layer: 5
+  m_Name: Dropdown Script
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1063340922
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063340921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2066754241}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1063340923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063340921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f304857915889f34bb8509f8d2d286f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TradeManager: {fileID: 763312366}
+  Red: {fileID: 1858971809}
+  Blue: {fileID: 1403303546}
+  Yellow: {fileID: 1321332246}
+  Green: {fileID: 1680291976}
 --- !u!1001 &1084614885
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5619,7 +5704,7 @@ PrefabInstance:
     - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1694513235}
+      objectReference: {fileID: 763312366}
     - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -7584,6 +7669,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1382423720}
   m_CullTransparentMesh: 1
+--- !u!1 &1386472443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1386472444}
+  - component: {fileID: 1386472445}
+  m_Layer: 5
+  m_Name: Trade Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1386472444
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386472443}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 173442933}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1386472445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386472443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e6ea96d4814ddf85947f8b564eaf25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bankController: {fileID: 0}
 --- !u!1 &1391635461
 GameObject:
   m_ObjectHideFlags: 0
@@ -9137,6 +9271,9 @@ MonoBehaviour:
   CardManagerMine: {fileID: 1941089005}
   CardManagerTheirs: {fileID: 326614618}
   BankController: {fileID: 0}
+  CurrentPlayer: {fileID: 1858971809}
+  TradeController: {fileID: 1386472445}
+  OtherPlayer: {fileID: 0}
   TradeOfferCardManagerTheirs: {fileID: 820175483}
   TradeOfferCardManagerMine: {fileID: 1275201583}
   TradeType: {fileID: 1971245298}
@@ -10098,6 +10235,9 @@ MonoBehaviour:
   CardManagerMine: {fileID: 0}
   CardManagerTheirs: {fileID: 0}
   BankController: {fileID: 0}
+  CurrentPlayer: {fileID: 0}
+  TradeController: {fileID: 0}
+  OtherPlayer: {fileID: 0}
   TradeOfferCardManagerTheirs: {fileID: 0}
   TradeOfferCardManagerMine: {fileID: 0}
   TradeType: {fileID: 0}
@@ -10361,6 +10501,8 @@ GameObject:
   - component: {fileID: 1871644172}
   - component: {fileID: 1871644171}
   - component: {fileID: 1871644170}
+  - component: {fileID: 1871644174}
+  - component: {fileID: 1871644173}
   m_Layer: 5
   m_Name: Dropdown
   m_TagString: Untagged
@@ -10444,9 +10586,6 @@ MonoBehaviour:
     - m_Text: None
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: Red
-      m_Image: {fileID: 0}
-      m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: Yellow
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -10458,7 +10597,19 @@ MonoBehaviour:
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1871644174}
+        m_TargetAssemblyTypeName: DropdownScript, Assembly-CSharp
+        m_MethodName: HandleInputData
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &1871644171
 MonoBehaviour:
@@ -10498,6 +10649,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871644168}
   m_CullTransparentMesh: 1
+--- !u!114 &1871644173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871644168}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff1df679e5b32f64bb106752c63933fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  int0: 0
+  nest1:
+    int1: 0
+    nest2:
+      int2: 0
+--- !u!114 &1871644174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871644168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f304857915889f34bb8509f8d2d286f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TradeManager: {fileID: 763312366}
+  Red: {fileID: 1858971809}
+  Blue: {fileID: 1403303546}
+  Yellow: {fileID: 1321332246}
+  Green: {fileID: 1680291976}
 --- !u!1 &1872857230
 GameObject:
   m_ObjectHideFlags: 0
@@ -11382,9 +11567,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 837847821}
     - target: {fileID: 3801760704258457940, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      propertyPath: CurrentPlayer
+      value: 
+      objectReference: {fileID: 1858971809}
+    - target: {fileID: 3801760704258457940, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
       propertyPath: WaitingScreen
       value: 
       objectReference: {fileID: 1197005355}
+    - target: {fileID: 3801760704258457940, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      propertyPath: TradeController
+      value: 
+      objectReference: {fileID: 1386472445}
     - target: {fileID: 3801760704258457940, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
       propertyPath: TradeOfferCardManagerMine
       value: 
@@ -11393,6 +11586,10 @@ PrefabInstance:
       propertyPath: TradeOfferCardManagerTheirs
       value: 
       objectReference: {fileID: 820175483}
+    - target: {fileID: 3894616641682205872, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1858971809}
     - target: {fileID: 4200894467754171542, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -11619,6 +11816,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2875863899617394297, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
       insertIndex: 1
       addedObject: {fileID: 919422252}
+    - targetCorrespondingSourceObject: {fileID: 2875863899617394297, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1063340922}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 414f9f95afdd5bd4280579ff3792310a, type: 3}
 --- !u!1 &2017745462
@@ -12507,7 +12707,7 @@ PrefabInstance:
     - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1694513235}
+      objectReference: {fileID: 763312366}
     - target: {fileID: 9124001719562308266, guid: e62a23ec903c88e4997fd86be6e12136, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2

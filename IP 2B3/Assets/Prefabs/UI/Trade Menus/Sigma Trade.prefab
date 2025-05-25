@@ -492,6 +492,7 @@ MonoBehaviour:
   AnimationDuration: 0.5
   EaseType: 2
   spacing: 50
+  TradeOffer: {fileID: 0}
   MyWood: {fileID: 3898517923251119177}
   MyBrick: {fileID: 7862934561391478062}
   MyWheat: {fileID: 5373678343408654871}
@@ -626,6 +627,9 @@ MonoBehaviour:
   easeType: 0
   CardManagerMine: {fileID: 2362382435203987644}
   CardManagerTheirs: {fileID: 6095700526513338051}
+  BankController: {fileID: 0}
+  TradeOfferCardManagerTheirs: {fileID: 0}
+  TradeOfferCardManagerMine: {fileID: 0}
   TradeType: {fileID: 4996591345752101332}
   PresumedTradeType: {fileID: 6702975965277925081}
   SelectMenu: {fileID: 0}
@@ -633,6 +637,7 @@ MonoBehaviour:
   PlayerMenu: {fileID: 0}
   HarbourMenu: {fileID: 0}
   WaitingScreen: {fileID: 0}
+  TradeOffer: {fileID: 0}
   MyWood: {fileID: 3898517923251119177}
   MyBrick: {fileID: 7862934561391478062}
   MyWheat: {fileID: 5373678343408654871}
@@ -954,6 +959,64 @@ MonoBehaviour:
   TheirResourceNumber: 0
   MyType: 0
   TheirType: 0
+--- !u!1 &7065635633476435619
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5876631524504014444}
+  - component: {fileID: 3894616641682205872}
+  m_Layer: 5
+  m_Name: Text Manager For Resources
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5876631524504014444
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7065635633476435619}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2875863899617394297}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3894616641682205872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7065635633476435619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fbf333ca29bded47857c3be562dd156, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MyWoodNumber: 0
+  MyBrickNumber: 0
+  MyWheatNumber: 0
+  MySheepNumber: 0
+  MyOreNumber: 0
+  Wood: {fileID: 695058233338878252}
+  Brick: {fileID: 3034261898511190410}
+  Wheat: {fileID: 7238335010410441897}
+  Sheep: {fileID: 2289695027011764400}
+  Ore: {fileID: 1106665847155640314}
 --- !u!1 &8289370254793302468
 GameObject:
   m_ObjectHideFlags: 0
@@ -1005,6 +1068,7 @@ MonoBehaviour:
   AnimationDuration: 0.5
   EaseType: 2
   spacing: 50
+  TradeOffer: {fileID: 0}
   MyWood: {fileID: 7049632258899159949}
   MyBrick: {fileID: 7888768038358670217}
   MyWheat: {fileID: 851769005081659018}
@@ -1074,6 +1138,7 @@ RectTransform:
   - {fileID: 6401399098938999721}
   - {fileID: 5804976621080339386}
   - {fileID: 5082109556132292227}
+  - {fileID: 5876631524504014444}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2074,6 +2139,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
+--- !u!114 &3034261898511190410 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4557161857111112213, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
+  m_PrefabInstance: {fileID: 1523790688117994399}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8265190233365428440 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7464238332131937095, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
@@ -2184,6 +2260,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
+--- !u!114 &2289695027011764400 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4557161857111112213, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
+  m_PrefabInstance: {fileID: 2375908213088516773}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5147234878383124962 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7464238332131937095, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
@@ -2582,6 +2669,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
+--- !u!114 &1106665847155640314 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4557161857111112213, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
+  m_PrefabInstance: {fileID: 3487439957156822511}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6337599447891048104 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7464238332131937095, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
@@ -2692,6 +2790,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
+--- !u!114 &695058233338878252 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4557161857111112213, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
+  m_PrefabInstance: {fileID: 3934770961979466553}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5840412669124470910 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7464238332131937095, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
@@ -3095,6 +3204,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7464238332131937095, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
   m_PrefabInstance: {fileID: 6579180468092573372}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7238335010410441897 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4557161857111112213, guid: 5d77edc8a7c917f45a76c2295165a141, type: 3}
+  m_PrefabInstance: {fileID: 6579180468092573372}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6762962387108632529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3254,6 +3374,9 @@ MonoBehaviour:
   easeType: 1
   CardManagerMine: {fileID: 0}
   CardManagerTheirs: {fileID: 0}
+  BankController: {fileID: 0}
+  TradeOfferCardManagerTheirs: {fileID: 0}
+  TradeOfferCardManagerMine: {fileID: 0}
   TradeType: {fileID: 0}
   PresumedTradeType: {fileID: 0}
   SelectMenu: {fileID: 0}
@@ -3261,6 +3384,7 @@ MonoBehaviour:
   PlayerMenu: {fileID: 0}
   HarbourMenu: {fileID: 0}
   WaitingScreen: {fileID: 0}
+  TradeOffer: {fileID: 0}
   MyWood: {fileID: 0}
   MyBrick: {fileID: 0}
   MyWheat: {fileID: 0}

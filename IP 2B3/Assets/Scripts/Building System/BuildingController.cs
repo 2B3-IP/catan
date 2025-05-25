@@ -95,10 +95,15 @@ namespace B3.BuildingSystem
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
             
+<<<<<<< HEAD
             Debug.Log($"AFTER: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
 
             TryAddPortBuffForSettlement(selectedHouse, player);
 
+=======
+            AddPortBuffForSettlement(selectedHouse, player);
+            
+>>>>>>> 778992dd7ce1e150b04a455080d4cf08c8ab5307
             var message = $"House built at {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y}, {selectedHouse.VertexDir} by {player.name}";
             Debug.Log(message);
 
@@ -719,11 +724,15 @@ namespace B3.BuildingSystem
     
             Debug.Log($"Player {player.name} now has {player.Settlements.Count} settlements in list");
         }
+<<<<<<< HEAD
         
         private void TryAddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
+=======
+
+        private void AddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
+>>>>>>> 778992dd7ce1e150b04a455080d4cf08c8ab5307
         {
             if (settlement.ConnectedPortController != null) settlement.ConnectedPortController.AddPlayerBuff(player);
-            
         }
         
 

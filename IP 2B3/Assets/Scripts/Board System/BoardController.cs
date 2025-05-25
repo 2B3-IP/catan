@@ -97,6 +97,11 @@ namespace B3.BoardSystem
 
             //AI.SendBoard(_piecesResources, _piecesNumber, _portsResources);
         }
+        
+        public PieceController GetPieceAt(HexPosition hex)
+        {
+            return BoardGrid[hex];
+        }
 
         private void SpawnLine(int iMin, int iMax, int j, bool arePortPieces)
         {
@@ -131,6 +136,12 @@ namespace B3.BoardSystem
             else
             {
                 var portController = pieceController.GetComponent<PortController>();
+                portController.boardController = this;
+                bool isPortSettedOk = portController.SetSettlementPosition();
+                if (!isPortSettedOk)
+                {
+                    Debug.Log("port nu i ok");
+                }
                 _portsResources[_currentPortIndex++] = portController.ResourceType;
             }
 

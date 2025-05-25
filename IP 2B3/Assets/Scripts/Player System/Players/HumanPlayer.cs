@@ -20,11 +20,10 @@ namespace B3.PlayerSystem
         private const float CORNER_DISTANCE_THRESHOLD = 2f;
         private const float EDGE_DISTANCE_THRESHOLD = 1f;
         
-        [SerializeField] private InputActionReference throwForceButton;
         [SerializeField] private BoardController boardController;
         [SerializeField] private BuildingController buildingController;
-        
         [SerializeField] private InputActionReference clickButton;
+        
         [SerializeField] private LayerMask pieceLayerMask;
         [SerializeField] private LayerMask settlementLayerMask;
         [SerializeField] private int hitDistance = 200;
@@ -33,7 +32,7 @@ namespace B3.PlayerSystem
         
         private RaycastHit _closestHit;
         private Camera _playerCamera;
-        private bool _hasClicked;
+        private bool _hasDiceClicked, _hasEndClicked, _hasClicked;
 
         protected override void Awake()
         {
@@ -43,32 +42,33 @@ namespace B3.PlayerSystem
 
         private void OnEnable()
         {
-            UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
             clickButton.action.performed += OnClickPerformed;
+            UIDiceButton.OnButtonClick += OnDiceButtonClick;
+            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
         }
 
         private void OnDisable()
         {
-            UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
             clickButton.action.performed -= OnClickPerformed;
-            UIDiceButton.OnButtonClick += OnDiceButtonClick;
-            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
+            UIDiceButton.OnButtonClick -= OnDiceButtonClick;
+            UIEndButton.OnButtonClick -= OnEndPlayerButtonPress;
         }
         
         public override IEnumerator ThrowDiceCoroutine()
         {
-            _hasClicked = false;
+            _hasDiceClicked = false;
 
-            while (!_hasClicked)
+            while (!_hasDiceClicked)
                 yield return null;
 
             DiceSum = Random.Range(1, 6) + Random.Range(1, 6);
 
-            _hasClicked = false;
+            _hasDiceClicked = false;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
+            Debug.Log("moving thief " + name);
             SelectedThiefPiece = null;
             
             while (SelectedThiefPiece == null)
@@ -84,11 +84,11 @@ namespace B3.PlayerSystem
         public override void OnTradeAndBuildUpdate()
         {
             Debug.Log("waiting to end");
-            if(!_hasClicked)
+            if(!_hasEndClicked)
                 return;
             Debug.Log("buton apasat");
             IsTurnEnded = true;
-            _hasClicked = false;
+            _hasEndClicked = false;
         }
 
         public override IEnumerator BuildHouseCoroutine()
@@ -255,20 +255,17 @@ namespace B3.PlayerSystem
             
             return closestEdge;
         }
-
-        private void OnPlayerEndButtonPress() =>
-            IsTurnEnded = true;
         
         private void OnClickPerformed(InputAction.CallbackContext context) =>
             _hasClicked = context.ReadValueAsButton();
         
         private void OnDiceButtonClick() =>
-            _hasClicked = true;
+            _hasDiceClicked = true;
 
         private void OnEndPlayerButtonPress() 
         {
             Debug.Log("Button pressed");
-            _hasClicked = true;
+            _hasEndClicked = true;
         }
     }
 }

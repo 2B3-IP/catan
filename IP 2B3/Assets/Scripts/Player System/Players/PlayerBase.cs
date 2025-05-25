@@ -27,6 +27,7 @@ namespace B3.PlayerSystem
 
         public int VictoryPoints { get; private set; }
         public int DiceSum { get; protected set; }
+        public int UsedKnightCards { get; set; }
         public SettlementController SelectedHouse { get; protected set; }
 
         public PathController SelectedPath { get; protected set; }

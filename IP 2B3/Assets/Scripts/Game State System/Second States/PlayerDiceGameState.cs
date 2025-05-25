@@ -39,11 +39,7 @@ namespace B3.GameStateSystem
             int diceRolls = currentPlayer.DiceSum;
             Debug.Log("dice: " + diceRolls + " " + (diceRolls == THIEF_ROLL));
 
-            if (diceRolls == THIEF_ROLL)
-            {
-                Debug.Log("AICI");
-                stateMachine.ChangeState<DiscardGameState>();
-            }
+            if (diceRolls == THIEF_ROLL) stateMachine.ChangeState<DiscardGameState>();
             else stateMachine.ChangeState<ResourceGameState>();
         }
     }

@@ -30,6 +30,7 @@ namespace B3.DevelopmentCardSystem
                 
                 player.AddResource(chosenResourceType, amount);
             }
+            
             UISelectResource.OnSelectResource -= OnChosenResource;
         }
 
@@ -37,7 +38,6 @@ namespace B3.DevelopmentCardSystem
         {
             resourceWasSelected = true;
             this.chosenResourceType = chosenResource;
-            
         }
     }
 }

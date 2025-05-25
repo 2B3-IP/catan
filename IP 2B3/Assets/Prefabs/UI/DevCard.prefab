@@ -361,6 +361,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 428558153183601991, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.4952049
+      objectReference: {fileID: 0}
     - target: {fileID: 3338119535207362681, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_Name
       value: DevCard
@@ -395,11 +399,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6655650289731304515, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 62.48137
+      value: 58
       objectReference: {fileID: 0}
     - target: {fileID: 6655650289731304515, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 86.64011
+      value: 86
       objectReference: {fileID: 0}
     - target: {fileID: 6655650289731304515, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_LocalPosition.x

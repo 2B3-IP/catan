@@ -1,5 +1,9 @@
 ﻿using B3.PlayerSystem;
+using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace B3.GameStateSystem
 {
@@ -11,6 +15,9 @@ namespace B3.GameStateSystem
         [SerializeReference] private GameStateBase[] gameStates;
         [SerializeField] private PlayersManager playersManager;
 
+        public UnityEvent onCurrentPlayerChanged = new();
+        public UnityEvent onStateChanged = new();
+
         private GameStateBase _currentState;
 
         private int _currentPlayerIndex;
@@ -21,8 +28,7 @@ namespace B3.GameStateSystem
         internal bool IsFirstPlayer => _currentPlayerIndex == 0;
         internal PlayersManager PlayersManager => playersManager;
 
-        private void Start() =>
-            StartMachine(firstStateIndex);
+        private void Start() => StartMachine(firstStateIndex);
 
         public void StartMachine(int index)
         {
@@ -30,6 +36,18 @@ namespace B3.GameStateSystem
             ChangeState(gameState);
         }
 
+        public T GetState<T>() where T : GameStateBase
+        {
+            foreach (var state in gameStates)
+            {
+                if (state is T t)
+                    return t;
+            }
+            return null;
+        }
+
+        public bool IsInState<T>() where T : GameStateBase => _currentState is T;
+        
         internal void ChangeState<T>()
         {
             foreach (var state in gameStates)
@@ -51,20 +69,27 @@ namespace B3.GameStateSystem
         internal void ChangePlayer(bool inversedOrder = false)
         {
             CurrentPlayer.IsTurnEnded = false;
-
+            
             int amount = inversedOrder ? -1 : 1;
             _currentPlayerIndex = (_currentPlayerIndex + amount) % PlayerCount;
+            onCurrentPlayerChanged?.Invoke();
+            
+            Debug.Log("Player: " + _currentPlayerIndex);
         }
 
+       
         private void ChangeState(GameStateBase state)
         {
             if (_currentState == state)
                 return;
 
             _currentState = state;
-
+            
+            Debug.Log($"Current state: {_currentState.GetType().Name}");
+            
             StopAllCoroutines();
             StartCoroutine(_currentState.OnEnter(this));
+            onStateChanged?.Invoke();
         }
     }
 }

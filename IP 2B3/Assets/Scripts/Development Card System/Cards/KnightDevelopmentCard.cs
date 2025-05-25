@@ -15,8 +15,8 @@ namespace B3.DevelopmentCardSystem
         
         public override IEnumerator UseCard(PlayerBase player)
         {
-            Debug.Log("IN KNIGTH");
-            player.UsedKnightCards++;
+            // Debug.Log("IN KNIGTH");
+            player.AddUsedKnight();
 
             if (player.UsedKnightCards > _maxCardsUsed)
             {

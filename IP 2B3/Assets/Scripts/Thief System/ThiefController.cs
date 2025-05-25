@@ -5,20 +5,20 @@ namespace B3.ThiefSystem
 {
     internal sealed class ThiefController : ThiefControllerBase
     {
-        [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private float stoppingDistance = 0.01f;
+        [SerializeField] private LeanTweenType easing;
+        [SerializeField] private float animLength = 2f;
+        
         public override IEnumerator MoveThief(Vector3 endPosition)
         {
-            Debug.Log("moving thief");
-            transform.position = endPosition;
+            LeanTween.cancel(gameObject);
+            
+            LeanTween.moveX(gameObject, endPosition.x, animLength).setEase(easing);
+            LeanTween.moveZ(gameObject, endPosition.z, animLength).setEase(easing);
+            
+            LeanTween.moveY(gameObject, endPosition.y + 5f, animLength / 2).setEase(easing)
+                .setOnComplete(() => LeanTween.moveY(gameObject, endPosition.y, animLength / 2).setEase(easing));
+            
             yield break;
-            while (Vector3.Distance(transform.position, endPosition) > stoppingDistance)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, endPosition, moveSpeed * Time.deltaTime);
-                yield return null;
-            }
-
-            transform.position = endPosition;
         }
     }
 }

@@ -32,6 +32,7 @@ namespace B3.GameStateSystem
                                                          !piece.IsBlocked && !piece.IsDesert);
             
             var boardGrid = boardController.BoardGrid;
+            // todo (front): resource notifications
             foreach (var piece in matchedPieces)
             {
                 foreach (var vertex in boardGrid.GetHexVertices(piece.HexPosition))

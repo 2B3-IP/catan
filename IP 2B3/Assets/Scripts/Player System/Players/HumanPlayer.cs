@@ -10,6 +10,7 @@ using B3.PlayerSystem.UI;
 using B3.ResourcesSystem;
 using B3.SettlementSystem;
 using B3.ThiefSystem;
+using B3.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -68,9 +69,9 @@ namespace B3.PlayerSystem
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
-            Debug.Log("moving thief " + name);
             SelectedThiefPiece = null;
-            
+            var notification = NotificationManager.Instance
+                .AddNotification("Select a Tile to move the Thief", float.PositiveInfinity, false);
             while (SelectedThiefPiece == null)
             {
                 yield return RayCastCoroutine(pieceLayerMask);
@@ -79,6 +80,7 @@ namespace B3.PlayerSystem
                 if (SelectedThiefPiece.IsBlocked)
                     SelectedThiefPiece = null;
             }
+            notification.Destroy();
         }
 
         public override void OnTradeAndBuildUpdate()
@@ -94,6 +96,9 @@ namespace B3.PlayerSystem
         public override IEnumerator BuildHouseCoroutine()
         {
             SelectedHouse = null;
+
+            var notification = NotificationManager.Instance
+                .AddNotification("Select a vertex to build a Settlement", float.PositiveInfinity, false);
             
             while (SelectedHouse == null)
             {
@@ -108,12 +113,16 @@ namespace B3.PlayerSystem
                 if (SelectedHouse != null && SelectedHouse.Owner != null)
                     SelectedHouse = null;
             }
+            
+            notification.Destroy();
         }
         
         public override IEnumerator BuildRoadCoroutine()
         {
             SelectedPath = null;
-
+            var notification = NotificationManager.Instance
+                .AddNotification("Select an edge to build a Road", float.PositiveInfinity, false);
+            
             while (SelectedPath == null)
             {
                 yield return RayCastCoroutine(pieceLayerMask);
@@ -125,11 +134,15 @@ namespace B3.PlayerSystem
                 if (SelectedPath != null && SelectedPath.IsBuilt)
                     SelectedPath = null;
             }
+            
+            notification.Destroy();
         }
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
             SelectedHouse = null;
+            var notification = NotificationManager.Instance
+                .AddNotification("Select a Settlement to upgrade to a City", float.PositiveInfinity, false);
             
             while (SelectedHouse == null)
             {
@@ -140,6 +153,8 @@ namespace B3.PlayerSystem
                 if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this)) 
                     SelectedHouse = null;
             }
+            
+            notification.Destroy();
         }
         
         public override IEnumerator DiscardResourcesCoroutine(float timeout)

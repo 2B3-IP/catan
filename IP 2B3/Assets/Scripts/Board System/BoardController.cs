@@ -49,7 +49,7 @@ namespace B3.BoardSystem
             var edgePosition = BoardGrid.GetHexEdge(dir, hex);
             
             var pathPosition = new Vector3(edgePosition.x, 0, edgePosition.y);
-            var instance = Instantiate(pathPrefab, pathPosition, Quaternion.identity);
+            var instance = Instantiate(pathPrefab, pathPosition, Quaternion.identity, transform);
             
             instance.HexPosition = hex;
             instance.EdgeDir = dir;
@@ -62,7 +62,7 @@ namespace B3.BoardSystem
             var cornerPosition = BoardGrid.GetHexCorner(dir, hex);
 
             var settlementPosition = new Vector3(cornerPosition.x, 0, cornerPosition.y);
-            var instance = Instantiate(settlementPrefab, settlementPosition, Quaternion.identity);
+            var instance = Instantiate(settlementPrefab, settlementPosition, Quaternion.identity, transform);
             
             instance.HexPosition = hex;
             instance.VertexDir = dir;

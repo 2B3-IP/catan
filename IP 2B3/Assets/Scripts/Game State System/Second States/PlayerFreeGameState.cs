@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace B3.GameStateSystem
 {
@@ -7,6 +9,8 @@ namespace B3.GameStateSystem
     internal sealed class PlayerFreeGameState : GameStateBase
     {
         [SerializeField] private float _waitTimeRound = 10f;
+        [HideInInspector]
+        public UnityEvent<float> timeRemainingEvent = new();
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
@@ -19,6 +23,7 @@ namespace B3.GameStateSystem
             while (elapsedTime < _waitTimeRound) 
             {
                 elapsedTime += Time.deltaTime;
+                timeRemainingEvent?.Invoke(_waitTimeRound - elapsedTime);
                 if (currentPlayer.IsTurnEnded)
                     break;
                 

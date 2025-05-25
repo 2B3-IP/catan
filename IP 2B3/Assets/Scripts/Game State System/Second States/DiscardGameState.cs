@@ -14,24 +14,94 @@ namespace B3.GameStateSystem
     [System.Serializable]
     internal sealed class DiscardGameState : GameStateBase
     {
-        public override IEnumerator OnEnter(GameStateMachine stateMachine)
+        [SerializeField] private BankController bankController;
+         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
             Debug.Log("discard state");
-            stateMachine.ChangeState<ThiefGameState>();
-            yield break;
-            
+
             var allPlayers = stateMachine.PlayersManager.players;
-            // list<cortoutine> l;
-            foreach(var player in allPlayers)
+            List<Coroutine> coroutines = new List<Coroutine>();
+            int discardPlayers = 0;
+            foreach (var player in allPlayers)
             {
-                //if(player is not AIPlayer) // temp
-                // l.add(stateMachine.StartCoroutine(player.StartCoroutine(player.DiscardResourcesCoroutine(10f))); //  The timeout for discarding 
+                int total = player.TotalResources();
+                if (player is not AIPlayer && total > 7) //temp
+                {
+                    Coroutine coroutine = stateMachine.StartCoroutine(player.DiscardResourcesCoroutine(10f));
+                    coroutines.Add(coroutine);
+                    discardPlayers++;
+                }
+            }
+
+            float elapsed = 0f;
+            float timeout = 10f;
+         
+
+            while (elapsed < timeout )
+            {
+                elapsed += Time.deltaTime;
+                int count = discardPlayers;
+
+                foreach (var player in allPlayers)
+                {
+                    if (player.DiscardResources != null)
+                    {
+                        count--;
+
+                    }
+                }
+
+                if (count == 0)
+                    break;
+
+                yield return null;
             }
             
-            // while(ewlapse < ceve)
-            //{}
-            // for(player) if(*player.discardResources != null) playe.resiurce[i] -= amount; bank.give(i, amount);
-            // for(l1 : l) stateMACHINE.stoPCoriutine(l1);
+            foreach (var coroutine in coroutines)
+            {
+                stateMachine.StopCoroutine(coroutine);
+            }
+
+
+            foreach (var player in allPlayers)
+            {
+                if(player.DiscardResources == null)
+                    RemoveRandomResources(player);
+                else
+                {
+                    for (int i = 0; i < player.Resources.Length; i++)
+                    {
+                        player.RemoveResource((ResourceType)i, player.DiscardResources[i]);
+                        bankController.GiveResources((ResourceType)i, player.DiscardResources[i]);
+                    }
+                }
+                
+            }
+            
+            stateMachine.ChangeState<ThiefGameState>();
+            yield break;
+        }
+
+
+        private void RemoveRandomResources(PlayerBase player)
+        {
+            var totalResources = player.TotalResources();
+            if (totalResources > 7)
+            {
+                int toDiscard = totalResources / 2;
+
+                for (int i = 0; i < toDiscard; i++)
+                {
+                    int index = 0;
+                    do
+                    { index = Random.Range(0, player.Resources.Length);
+                    } while (player.Resources[index] <= 0);
+            
+                    bankController.GiveResources((ResourceType)index, 1);
+                    player.Resources[index]--;
+                
+                }
+            }
         }
     }
 }

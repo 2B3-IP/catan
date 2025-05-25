@@ -144,37 +144,8 @@ namespace B3.PlayerSystem
         
         public override IEnumerator DiscardResourcesCoroutine(float timeout)
         {
-            int total = TotalResources();
-            if (total <= 7)
-                yield break;
-
-            int toDiscard = total / 2;
-            // while(!_hasClicked) yield return null
-            
-            bool playerChoseManually = false;
-            
-            float elapsed = 0f;
-            while (elapsed < timeout && !playerChoseManually)
-            {   // TODO: front - choose which resources to discard and set playerChoseManually truee
-                elapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            if (!playerChoseManually)
-            {
-                for (int i = 0; i < toDiscard;)
-                {
-                    int index = Random.Range(0, Resources.Length);
-                    if (Resources[index] > 0)
-                    {
-                        Resources[index]--;
-                        i++;
-                    }
-                }
-                
-            }
            
-
+             // TODO: front - choose which resources to discard and set DiscardResources
             yield break;
         }
         

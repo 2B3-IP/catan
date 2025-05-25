@@ -29,6 +29,8 @@ namespace B3.PlayerSystem
         public int DiceSum { get; protected set; }
         public int UsedKnightCards { get; set; }
         public SettlementController SelectedHouse { get; protected set; }
+        
+        public int[] DiscardResources { get; protected set; }
 
         public PathController SelectedPath { get; protected set; }
         public bool IsTurnEnded { get; set; }

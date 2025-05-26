@@ -62,7 +62,7 @@ namespace B3.PlayerSystem
             while (!_hasDiceClicked)
                 yield return null;
 
-            DiceSum = Random.Range(1, 6) + Random.Range(1, 6);
+            DiceSum = Random.Range(1, 7) + Random.Range(1, 7);
 
             _hasDiceClicked = false;
         }

@@ -43,10 +43,9 @@ namespace B3.GameStateSystem
                         continue;
                     var resourceType = piece.ResourceType;
                     int amount = settlement.ResourceAmount;
-                    
+                  
                     owner.AddResource(resourceType, amount);
-                    Debug.Log($"Resource Added {resourceType} with {amount}");
-                    Debug.Log($"Resource Amount: {owner.name}");
+                    Debug.Log($"Resource {resourceType} Added to {owner.name}  with amount :{amount}");
                     bankController.GetResources(resourceType, amount);
                 }
             }

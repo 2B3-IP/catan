@@ -1,16 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using B3.BankSystem;
 using B3.BoardSystem;
 using B3.BuildingSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.PlayerSystem.UI;
-using B3.ResourcesSystem;
 using B3.SettlementSystem;
 using B3.ThiefSystem;
-using B3.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,10 +18,11 @@ namespace B3.PlayerSystem
         private const float CORNER_DISTANCE_THRESHOLD = 2f;
         private const float EDGE_DISTANCE_THRESHOLD = 1f;
         
+        [SerializeField] private InputActionReference throwForceButton;
         [SerializeField] private BoardController boardController;
         [SerializeField] private BuildingController buildingController;
-        [SerializeField] private InputActionReference clickButton;
         
+        [SerializeField] private InputActionReference clickButton;
         [SerializeField] private LayerMask pieceLayerMask;
         [SerializeField] private LayerMask settlementLayerMask;
         [SerializeField] private int hitDistance = 200;
@@ -33,7 +31,7 @@ namespace B3.PlayerSystem
         
         private RaycastHit _closestHit;
         private Camera _playerCamera;
-        private bool _hasDiceClicked, _hasEndClicked, _hasClicked;
+        private bool _hasClicked;
 
         protected override void Awake()
         {
@@ -43,62 +41,55 @@ namespace B3.PlayerSystem
 
         private void OnEnable()
         {
+            UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
             clickButton.action.performed += OnClickPerformed;
-            UIDiceButton.OnButtonClick += OnDiceButtonClick;
-            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
         }
 
         private void OnDisable()
         {
+            UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
             clickButton.action.performed -= OnClickPerformed;
-            UIDiceButton.OnButtonClick -= OnDiceButtonClick;
-            UIEndButton.OnButtonClick -= OnEndPlayerButtonPress;
+            UIDiceButton.OnButtonClick += OnDiceButtonClick;
+            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
         }
         
         public override IEnumerator ThrowDiceCoroutine()
         {
-            _hasDiceClicked = false;
+            _hasClicked = false;
 
-            while (!_hasDiceClicked)
+            while (!_hasClicked)
                 yield return null;
 
-            DiceSum = Random.Range(1, 7) + Random.Range(1, 7);
+            DiceSum = 8;
 
-            _hasDiceClicked = false;
+            _hasClicked = false;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
-            SelectedThiefPiece = null;
-            var notification = NotificationManager.Instance
-                .AddNotification("Select a Tile to move the Thief", float.PositiveInfinity, false);
-            while (SelectedThiefPiece == null)
-            {
-                yield return RayCastCoroutine(pieceLayerMask);
-                SelectedThiefPiece = _closestHit.transform.GetComponentInParent<PieceController>();
-
-                if (SelectedThiefPiece.IsBlocked)
-                    SelectedThiefPiece = null;
-            }
-            notification.Destroy();
+            yield return RayCastCoroutine(pieceLayerMask);
+            
+            var pieceController = _closestHit.transform.GetComponent<PieceController>();
+            SelectedThiefPiece = pieceController;
+            
+            var thiefPivot = pieceController.ThiefPivot;
+            
+            yield return thiefController.MoveThief(thiefPivot.position);
         }
 
         public override void OnTradeAndBuildUpdate()
         {
             Debug.Log("waiting to end");
-            if(!_hasEndClicked)
+            if(!_hasClicked)
                 return;
             Debug.Log("buton apasat");
             IsTurnEnded = true;
-            _hasEndClicked = false;
+            _hasClicked = false;
         }
 
         public override IEnumerator BuildHouseCoroutine()
         {
             SelectedHouse = null;
-
-            var notification = NotificationManager.Instance
-                .AddNotification("Select a vertex to build a Settlement", float.PositiveInfinity, false);
             
             while (SelectedHouse == null)
             {
@@ -113,16 +104,12 @@ namespace B3.PlayerSystem
                 if (SelectedHouse != null && SelectedHouse.Owner != null)
                     SelectedHouse = null;
             }
-            
-            notification.Destroy();
         }
         
         public override IEnumerator BuildRoadCoroutine()
         {
             SelectedPath = null;
-            var notification = NotificationManager.Instance
-                .AddNotification("Select an edge to build a Road", float.PositiveInfinity, false);
-            
+
             while (SelectedPath == null)
             {
                 yield return RayCastCoroutine(pieceLayerMask);
@@ -134,15 +121,11 @@ namespace B3.PlayerSystem
                 if (SelectedPath != null && SelectedPath.IsBuilt)
                     SelectedPath = null;
             }
-            
-            notification.Destroy();
         }
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
             SelectedHouse = null;
-            var notification = NotificationManager.Instance
-                .AddNotification("Select a Settlement to upgrade to a City", float.PositiveInfinity, false);
             
             while (SelectedHouse == null)
             {
@@ -153,14 +136,41 @@ namespace B3.PlayerSystem
                 if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this)) 
                     SelectedHouse = null;
             }
-            
-            notification.Destroy();
         }
         
         public override IEnumerator DiscardResourcesCoroutine(float timeout)
         {
+            int total = TotalResources();
+            if (total <= 7)
+                yield break;
+
+            int toDiscard = total / 2;
+            
+            bool playerChoseManually = false;
+            
+            float elapsed = 0f;
+            while (elapsed < timeout && !playerChoseManually)
+            {   // TODO: front - choose which resources to discard and set playerChoseManually truee
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            if (!playerChoseManually)
+            {
+                
+                for (int i = 0; i < toDiscard;)
+                {
+                    int index = UnityEngine.Random.Range(0, Resources.Length);
+                    if (Resources[index] > 0)
+                    {
+                        Resources[index]--;
+                        i++;
+                    }
+                }
+                
+            }
            
-             // TODO: front - choose which resources to discard and set DiscardResources
+
             yield break;
         }
         
@@ -241,17 +251,20 @@ namespace B3.PlayerSystem
             
             return closestEdge;
         }
+
+        private void OnPlayerEndButtonPress() =>
+            IsTurnEnded = true;
         
         private void OnClickPerformed(InputAction.CallbackContext context) =>
             _hasClicked = context.ReadValueAsButton();
         
         private void OnDiceButtonClick() =>
-            _hasDiceClicked = true;
+            _hasClicked = true;
 
         private void OnEndPlayerButtonPress() 
         {
             Debug.Log("Button pressed");
-            _hasEndClicked = true;
+            _hasClicked = true;
         }
     }
 }

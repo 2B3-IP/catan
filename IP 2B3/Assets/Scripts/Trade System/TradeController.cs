@@ -16,13 +16,15 @@ namespace B3.TradeSystem
         {
             for (int i = 0; i < resourcesToTrade.Length; i++)
             {
+                //print(i);
                 int value = resourcesToTrade[i];
-                var resource = (ResourceType)Mathf.Abs(resourcesToTrade[i]);
+                var resource = (ResourceType)i;
 
                 if (value > 0)
                 {
                     player.RemoveResource(resource, resourcesToTrade[i]);
                     otherPlayer.AddResource(resource, resourcesToTrade[i]);
+                    //print(i);
                 }
                 else
                 {

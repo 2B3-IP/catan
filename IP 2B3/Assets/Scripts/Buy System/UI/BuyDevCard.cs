@@ -33,6 +33,7 @@ public class BuyDevCard : MonoBehaviour
     {
         public int Count { get; set; }
         public TMP_Text CountText { get; init; }
+        public GameObject Go { get; init; }
     }
     
     public void Start()
@@ -50,11 +51,20 @@ public class BuyDevCard : MonoBehaviour
 
     void UseCard(DevelopmentCardType cardType)
     {
-        var entry = displayedCards;
+        var entry = displayedCards[cardType];
         if (!inventoryController.UseItem(cardType))
         {
             NotificationManager.Instance.AddNotification("You cannot use this card until next turn ");
             return;
+        }
+
+        entry.CountText.text = (--entry.Count).ToString();
+        
+        if (entry.Count == 0)
+        {
+            entry.Go.SetActive(false);
+            Destroy(entry.Go);
+            displayedCards.Remove(cardType);
         }
     }
 
@@ -99,6 +109,7 @@ public class BuyDevCard : MonoBehaviour
             displayedCards.Add(cardType, new DisplayedCard
             {
                 Count = 1,
+                Go = go,
                 CountText = countText
             });
             

@@ -77,7 +77,7 @@ namespace B3.BuildingSystem
                 yield return player.BuildHouseCoroutine();
                 selectedHouse = player.SelectedHouse;
 
-                if (!_isFirstStates && selectedHouse != null)
+                if (selectedHouse != null)
                 {
                     bool canBuild = CanBuildHouse(selectedHouse, player);
                     Debug.Log($"Checking if can build house at {selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}: {canBuild}");
@@ -181,15 +181,27 @@ namespace B3.BuildingSystem
 
             var boardGrid = boardController.BoardGrid;
             var neighbouringVertices = boardGrid.GetNeighbouringVertices(housePosition, houseDir);
+            foreach (var (settlement, pos, dir) in neighbouringVertices)
+            {
+                if (settlement.HasOwner)
+                {
+                    Debug.Log("DISTANCE OF 2 NOT RESPECTED");
+                    return false;
+                }
+            }
+            if (_isFirstStates)
+            {
+                return true;
+            }
             Debug.Log("INAINTE DE FOR ");
             int index = 0;
 
             bool canBePlaced = false;
             foreach (var (settlement, pos, dir) in neighbouringVertices)
             {
-                // am o casa vecina deja construita
+                /*// am o casa vecina deja construita
                 if (settlement.HasOwner)
-                    return false;
+                    return false;*/
 
                 HexVertexDir a = houseDir switch
                 {
@@ -251,6 +263,7 @@ namespace B3.BuildingSystem
         
         protected override bool CanBuildRoad(PlayerBase player, PathController targetPath)
         {
+            return true;
             var housePosition = targetPath.HexPosition;
             var houseDir = targetPath.EdgeDir;
 

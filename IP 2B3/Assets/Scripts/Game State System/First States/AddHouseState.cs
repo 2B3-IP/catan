@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using B3.BuildingSystem;
+using B3.PlayerSystem;
 
 namespace B3.GameStateSystem
 {
@@ -12,7 +13,8 @@ namespace B3.GameStateSystem
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
             var currentPlayer = stateMachine.CurrentPlayer;
-            yield return buildingController.BuildHouse(currentPlayer);
+            if (currentPlayer is not AIPlayer)
+                yield return buildingController.BuildHouse(currentPlayer);
 
             stateMachine.ChangeState<AddRoadState>();
         }

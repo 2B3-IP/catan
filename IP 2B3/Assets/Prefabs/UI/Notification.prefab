@@ -120,19 +120,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1935748320665333488}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3453440876807255073}
-        m_TargetAssemblyTypeName: B3.UI.NotificationInstance, Assembly-CSharp
-        m_MethodName: DestroyNotification
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3854429028478356526
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,4 +321,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 8433054548859552951}
   canvasGroup: {fileID: 2730302256326452059}
+  button: {fileID: 3593280623607343820}
   animDuration: 0.5

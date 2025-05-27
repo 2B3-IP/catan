@@ -49,7 +49,7 @@ namespace B3.BoardSystem
             var edgePosition = BoardGrid.GetHexEdge(dir, hex);
             
             var pathPosition = new Vector3(edgePosition.x, 0, edgePosition.y);
-            var instance = Instantiate(pathPrefab, pathPosition, Quaternion.identity);
+            var instance = Instantiate(pathPrefab, pathPosition, Quaternion.identity, transform);
             
             instance.HexPosition = hex;
             instance.EdgeDir = dir;
@@ -62,7 +62,7 @@ namespace B3.BoardSystem
             var cornerPosition = BoardGrid.GetHexCorner(dir, hex);
 
             var settlementPosition = new Vector3(cornerPosition.x, 0, cornerPosition.y);
-            var instance = Instantiate(settlementPrefab, settlementPosition, Quaternion.identity);
+            var instance = Instantiate(settlementPrefab, settlementPosition, Quaternion.identity, transform);
             
             instance.HexPosition = hex;
             instance.VertexDir = dir;
@@ -95,7 +95,12 @@ namespace B3.BoardSystem
             SpawnPiece(-3, 1, true);
             SpawnPiece(-2, -1, true);
 
-            //AI.SendBoard(_piecesResources, _piecesNumber, _portsResources);
+            AI.SendBoard(_piecesResources, _piecesNumber, _portsResources);
+        }
+        
+        public PieceController GetPieceAt(HexPosition hex)
+        {
+            return BoardGrid[hex];
         }
 
         private void SpawnLine(int iMin, int iMax, int j, bool arePortPieces)
@@ -131,6 +136,12 @@ namespace B3.BoardSystem
             else
             {
                 var portController = pieceController.GetComponent<PortController>();
+                portController.boardController = this;
+                bool isPortSettedOk = portController.SetSettlementPosition();
+                if (!isPortSettedOk)
+                {
+                    Debug.Log("port nu i ok");
+                }
                 _portsResources[_currentPortIndex++] = portController.ResourceType;
             }
 

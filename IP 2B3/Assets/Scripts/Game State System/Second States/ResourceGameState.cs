@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using B3.BankSystem;
 using B3.BoardSystem;
+using UnityEngine.Rendering;
 
 namespace B3.GameStateSystem
 {
@@ -29,8 +30,9 @@ namespace B3.GameStateSystem
             Debug.Log(diceRolls);
             var matchedPieces = allPieces.Where(piece => piece.Number == diceRolls && 
                                                          !piece.IsBlocked && !piece.IsDesert);
-
+            
             var boardGrid = boardController.BoardGrid;
+            // todo (front): resource notifications
             foreach (var piece in matchedPieces)
             {
                 foreach (var vertex in boardGrid.GetHexVertices(piece.HexPosition))

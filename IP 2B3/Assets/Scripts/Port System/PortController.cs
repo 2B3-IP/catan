@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using B3.BoardSystem;
 using B3.BuildingSystem;
 using B3.GameStateSystem;
@@ -13,8 +14,8 @@ namespace B3.PortSystem
 {
     public abstract class PortController : MovingPieceController
     {
-        [SerializeField] private BoardController boardController;
-        
+        [SerializeField] public BoardController boardController;
+
         private PieceController _pieceController;
 
         protected override void Awake()
@@ -27,83 +28,110 @@ namespace B3.PortSystem
 
         public abstract void AddPlayerBuff(PlayerBase player);
 
-        public bool IsSettlementPosition(SettlementController settlement)
+        public bool SetSettlementPosition()
         {
             // luam vertexul de pe partea opusa pe ideea ca 
             //locul portului de pe hexul de port este in oglinda cu locul hexului
             //de pe hexul tile
-            HexVertexDir settlementHexDir = settlement.VertexDir.Opposite();
 
             var hexPosition = _pieceController.HexPosition;
+            
             switch (hexPosition.X, hexPosition.Y)
             {
                 case (-1, 3):
                 {
-                    if (settlementHexDir.Equals(HexVertexDir.BottomLeft) ||
-                        settlementHexDir.Equals(HexVertexDir.BottomRight))
-                        return true;
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopLeft);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopRight);
+                    settlement1.ConnectedPortController = this;
+                    settlement2.ConnectedPortController = this;
+                    return true;
                     break;
                 }
                 case (1, 2):
                 {
-                    if (settlementHexDir.Equals(HexVertexDir.BottomLeft) ||
-                        settlementHexDir.Equals(HexVertexDir.BottomRight))
-                        return true;
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopLeft);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopRight);
+                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
+                    settlement1.ConnectedPortController = this;
+                    settlement2.ConnectedPortController = this;
+                    settlement3.ConnectedPortController = this;
+                    return true;
                     break;
                 }
                 case (3, 0):
                 {
-                    if (settlementHexDir.Equals(HexVertexDir.BottomLeft) ||
-                        settlementHexDir.Equals(HexVertexDir.Left))
-                        return true;
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.TopRight);
+                    settlement1.ConnectedPortController = this;
+                    settlement2.ConnectedPortController = this;
+                    return true;
                     break;
                 }
                 case (3, -2):
                 {
-                    if (settlementHexDir.Equals(HexVertexDir.TopLeft) ||
-                        settlementHexDir.Equals(HexVertexDir.Left))
-                        return true;
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.Right);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.BottomRight);
+                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
+                    settlement1.ConnectedPortController = this;
+                    settlement2.ConnectedPortController = this;
+                    settlement3.ConnectedPortController = this;
+                    return true;
                     break;
                 }
                 case (2, -3):
                 {
-                    if (settlementHexDir.Equals(HexVertexDir.TopLeft) ||
-                        settlementHexDir.Equals(HexVertexDir.Left))
-                        return true;
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.Right);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.BottomRight);
+                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomLeft);
+                    settlement1.ConnectedPortController = this;
+                    settlement2.ConnectedPortController = this;
+                    settlement3.ConnectedPortController = this;
+                    return true;
                     break;
                 }
                 case (0, -3):
                 {
-                    if (settlementHexDir.Equals(HexVertexDir.TopLeft) ||
-                        settlementHexDir.Equals(HexVertexDir.TopRight))
-                        return true;
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomLeft);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomRight);
+                    settlement1.ConnectedPortController = this;
+                    settlement2.ConnectedPortController = this;
+                    return true;
                     break;
                 }
                 case (-2, -1):
                 {
-                    if (settlementHexDir.Equals(HexVertexDir.TopRight) ||
-                        settlementHexDir.Equals(HexVertexDir.Right))
-                        return true;
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.Left);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.BottomLeft);
+                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomRight);
+                    settlement1.ConnectedPortController = this;
+                    settlement2.ConnectedPortController = this;
+                    settlement3.ConnectedPortController = this;
+                    return true;
                     break;
                 }
                 case (-3, 1):
                 {
-                    if (settlementHexDir.Equals(HexVertexDir.TopRight) ||
-                        settlementHexDir.Equals(HexVertexDir.Right))
-                        return true;
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.Left);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.BottomLeft);
+                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomRight, HexVertexDir.BottomRight);
+                    settlement1.ConnectedPortController = this;
+                    settlement2.ConnectedPortController = this;
+                    settlement3.ConnectedPortController = this;
+                    return true;
                     break;
                 }
                 case (-3, 3):
                 {
-                    if (settlementHexDir.Equals(HexVertexDir.BottomRight) ||
-                        settlementHexDir.Equals(HexVertexDir.Right))
-                        return true;
+                    var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.BottomRight, HexVertexDir.Left);
+                    var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.BottomRight, HexVertexDir.TopLeft);
+                    settlement1.ConnectedPortController = this;
+                    settlement2.ConnectedPortController = this;
+                    return true;
                     break;
                 }
                 default:
                     return false;
             }
-            return false;
         }
 
         //nu cred ca mai trebuie asta

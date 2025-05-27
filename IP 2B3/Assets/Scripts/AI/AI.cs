@@ -73,15 +73,44 @@ public static class AI
     {
         return (new HexPosition(0, 0), HexEdgeDir.TopLeft);
     }
+    
+    public static HexPosition GetThiefPostion()
+    {
+        return new HexPosition(0, 0);
+    }
+
+    public static int[] GetDiscardedResources()
+    {
+        return new int[5];
+    }
+
+    //playerId si array-ul de resurse pentru trade
+    public static (int, int[]) GetPlayerTradeInfo()
+    {
+        return (0, new int[5]);
+    }
+
+    //resursele pe care le dai, resursa pe care o primesti
+    public static (ResourceType, ResourceType) GetBankTradeInfo()
+    {
+        return (ResourceType.Brick, ResourceType.Brick);
+    }
+
+    //check OnTradeAndBuildUpdate() din AIPlayer pentru toate comenzile
+    public static String GetFreeStateCommand()
+    {
+        return "end turn";
+    }
 
     public static void SendMove(string message)
     {
-        return;
+        Debug.Log("Sending move: " + message);
+        // return;
         try
         {
-            TcpListener server = new TcpListener(IPAddress.Any, 6969);
+            TcpListener server = new TcpListener(IPAddress.Any, 6868);
             server.Start();
-            Debug.Log("Server is running on port 6969...");
+            Debug.Log("Server is running on port 6868...");
 
             TcpClient client = server.AcceptTcpClient();
             Debug.Log("Client connected!");
@@ -89,8 +118,7 @@ public static class AI
             using (StreamWriter writer = new StreamWriter(client.GetStream()))
             {
                 // Send move
-                writer.Write("MOVE");
-                writer.Write(" " + message);
+                writer.Write(message);
                 writer.WriteLine();
 
                 Debug.Log("Data sent to client.");

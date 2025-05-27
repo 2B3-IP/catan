@@ -31,6 +31,9 @@ namespace B3.BuildingSystem
         protected bool CanBuildCity(PlayerBase player)
         {
             int citiesCount = player.GetCitiesCount();
+            if (citiesCount == player.Settlements.Count)
+                return false;
+            
             return citiesCount < MAX_CITIES_PER_PLAYER;
         }
         

@@ -22,7 +22,8 @@ namespace B3.EditorExtensions
             root.Add(buttonsRoot);
 
             root.Add(new PropertyField(gameStatesProperty));
-            root.Add(new PropertyField(serializedObject.FindProperty("startStateIndex")));
+            root.Add(new PropertyField(serializedObject.FindProperty("firstStateIndex")));
+            root.Add(new PropertyField(serializedObject.FindProperty("secondStateIndex")));
             root.Add(new PropertyField(serializedObject.FindProperty("playersManager")));
             
             return root;

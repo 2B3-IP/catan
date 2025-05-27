@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace B3.GameStateSystem
 {
-    [System.Serializable]
+    [Serializable]
     internal sealed class PlayerEndGameState : GameStateBase
     {
         public static event Action OnPlayerEnd;
@@ -13,9 +13,10 @@ namespace B3.GameStateSystem
         {
             Debug.Log("PlayerEndGameState OnEnter");
             OnPlayerEnd?.Invoke();
-            stateMachine.StartMachineWithOtherPlayer();
             
             AI.SendMove("end round");
+            
+            stateMachine.StartMachineWithOtherPlayer();
             yield break;
         }
     }

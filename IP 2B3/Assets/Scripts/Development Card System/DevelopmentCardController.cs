@@ -9,10 +9,12 @@ namespace B3.DevelopmentCardSystem
     public sealed class DevelopmentCardController : MonoBehaviour
     {
         [SerializeReference] public List<DevelopmentCardBase> cards;
+        [SerializeField] private PlayerBase temp;
         
         public void UseCard(PlayerBase player, DevelopmentCardType cardType)
         {
-            cards[(int)cardType].UseCard(player);
+            var developmentCard = cards[(int)cardType];
+            StartCoroutine(developmentCard.UseCard(player));
         }
 
         [Button]
@@ -24,6 +26,37 @@ namespace B3.DevelopmentCardSystem
             cards.Add(new MonopolyDevelopmentCard());
             cards.Add(new YearOfPlentyDevelopmentCard());
             cards.Add(new VictoryPointDevelopmentCard());
+        }
+        
+        [Button]
+        private void UseKnight()
+        {
+            Debug.Log("MERGE");
+            UseCard(temp, DevelopmentCardType.Knight);
+        }
+        
+        [Button]
+        private void UseMonopoly()
+        {
+            UseCard(temp, DevelopmentCardType.Monopoly);
+        }
+        
+        [Button]
+        private void UseRoadBuilding()
+        {
+            UseCard(temp, DevelopmentCardType.RoadBuilding);
+        }
+        
+        [Button]
+        private void UseVictoryPoint()
+        {
+            UseCard(temp, DevelopmentCardType.VictoryPoint);
+        }
+        
+        [Button]
+        private void UseYearOfPlenty()
+        {
+            UseCard(temp, DevelopmentCardType.YearOfPlenty);
         }
     }
 }

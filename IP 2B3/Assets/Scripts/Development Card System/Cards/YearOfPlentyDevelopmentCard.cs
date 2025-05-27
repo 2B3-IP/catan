@@ -21,7 +21,6 @@ namespace B3.DevelopmentCardSystem
             while (!resourceWasSelected)
                 yield return null;
             
-            
             bankController.GetResources(selectedResourceType, 2);
             player.AddResource(selectedResourceType, 2);
             

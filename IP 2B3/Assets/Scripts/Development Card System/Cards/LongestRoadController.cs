@@ -15,6 +15,7 @@ namespace B3.DevelopmentCardSystem
         
         public void CheckLongestRoadAfterBuild(PlayerBase player)
         {
+            Debug.Log("========[INLONGESTROAD]=========");
             int playerLongestRoad = CalculateLongestRoad(player);
             
             // verificam daca jucatorul are drumul cel mai lung (minim 5)
@@ -29,6 +30,7 @@ namespace B3.DevelopmentCardSystem
                 _currentLongestRoadLength = playerLongestRoad;
                 Debug.Log($"{player.name} si-a marit drumul cel mai lung la {playerLongestRoad}");
             }
+            Debug.Log("========[OUTLONGESTROAD]=========");
         }
         
         private void TransferLongestRoadCard(PlayerBase newOwner, int newLength)
@@ -81,12 +83,18 @@ namespace B3.DevelopmentCardSystem
             {
                 if (!visited.Contains(connectedRoad))
                 {
+                   // Debug.Log($"[DFS] From {currentRoad} → Going to {connectedRoad}");
                     int pathLength = 1 + DFSLongestPath(connectedRoad, player, visited);
+                   // Debug.Log($"[DFS] Path from {currentRoad} to {connectedRoad} returned: {pathLength}");
                     maxLength = Mathf.Max(maxLength, pathLength);
+                } else
+                {
+                    Debug.Log($"[DFS] Skipping {connectedRoad} (already visited)");
                 }
             }
             
             visited.Remove(currentRoad);
+           // Debug.Log($"[DFS] Exit: {currentRoad} → MaxLength: {maxLength}");
             return maxLength;
         }
         
@@ -94,8 +102,8 @@ namespace B3.DevelopmentCardSystem
         {
             var connectedRoads = new List<PathController>();
 
-            Debug.Log("[GetConnectedRoads]" +  road.HexPosition + " " + road.EdgeDir);
-            Debug.Log(road.HexPosition.X + " " + road.HexPosition.Y + " " + road.EdgeDir);
+           // Debug.Log("[GetConnectedRoads]" +  road.HexPosition + " " + road.EdgeDir);
+            //Debug.Log(road.HexPosition.X + " " + road.HexPosition.Y + " " + road.EdgeDir);
             // fiecare drum are 2 capete
             var endpoints = GetExactEdgeEndpoints(road.HexPosition, road.EdgeDir);
               
@@ -105,14 +113,14 @@ namespace B3.DevelopmentCardSystem
                 var boardController = FindObjectOfType<BoardController>();
                 var vertex = boardController.BoardGrid.GetVertex(vertexPos, vertexDir);
 
-                
-                Debug.Log("[Vertexul]" + vertex.HexPosition.X + " " + vertex.HexPosition.Y + " " + vertexDir);
+                //Debug.Log($"[GetConnectedRoads] Checking vertex: {vertexPos.X},{vertexPos.Y} {vertexDir}");
                 // gasim drumurile conectate la acest vertex (nu doar cele ale jucatorului)
                 foreach (var otherRoad in player.Paths)
                 {
                     if (otherRoad == road || !otherRoad.IsBuilt)
                         continue;
 
+                    //Debug.Log($"[OtherRoadFound] {road} → {otherRoad} via {vertexPos.X},{vertexPos.Y} {vertexDir}");
                     var otherEndpoints = GetExactEdgeEndpoints(otherRoad.HexPosition, otherRoad.EdgeDir);
 
                     bool sharesVertex = otherEndpoints.Any(ep => 
@@ -120,11 +128,18 @@ namespace B3.DevelopmentCardSystem
 
                     if (sharesVertex)
                     {
+                        //Debug.Log("[share]");
                         bool blockedByOpponent = HasOpponentSettlement(vertexPos, vertexDir, player);
                         if (!blockedByOpponent)
                         {
+                          //  Debug.Log($"[Connected] {road} → {otherRoad} via {vertexPos.X},{vertexPos.Y} {vertexDir}");
                             connectedRoads.Add(otherRoad);
                         }
+                    }
+                    else
+                    {
+                       // Debug.Log($"[OtherRoadADDED] {road} → {otherRoad} via {vertexPos.X},{vertexPos.Y} {vertexDir}");
+                        connectedRoads.Add(otherRoad);
                     }
                 }
             }

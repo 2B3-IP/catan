@@ -77,18 +77,18 @@ namespace B3.BuildingSystem
                 yield return player.BuildHouseCoroutine();
                 selectedHouse = player.SelectedHouse;
 
-                if (!_isFirstStates && selectedHouse != null)
-                {
-                    bool canBuild = CanBuildHouse(selectedHouse, player);
-                    Debug.Log($"Checking if can build house at {selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}: {canBuild}");
-    
-                    if (!canBuild)
-                    {
-                        Debug.Log("Cannot build house here - resetting selection");
-                        HasBuilt = false;
-                        selectedHouse = null;
-                    }
-                }
+                if (selectedHouse == null) 
+                    continue;
+                
+                bool canBuild = CanBuildHouse(selectedHouse, player);
+                Debug.Log($"Checking if can build house at {selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}: {canBuild}");
+
+                if (canBuild) 
+                    continue;
+                
+                Debug.Log("Cannot build house here - resetting selection");
+                HasBuilt = false;
+                selectedHouse = null;
             }
 
             Debug.Log("Building house successfully!");
@@ -190,6 +190,9 @@ namespace B3.BuildingSystem
                 // am o casa vecina deja construita
                 if (settlement.HasOwner)
                     return false;
+
+                if (_isFirstStates)
+                    continue;
                 
                 var edgeDir = index switch
                 {

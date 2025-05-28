@@ -30,6 +30,19 @@ namespace B3.BuildingSystem
 
         private void Awake()
         {
+            if (longestRoadController == null)
+            {
+                longestRoadController = FindObjectOfType<LongestRoadController>();
+                if (longestRoadController == null)
+                {
+                    Debug.LogWarning("⚠️ longestRoadController is STILL null even after FindObjectOfType!");
+                }
+                else
+                {
+                    Debug.Log("✅ longestRoadController set via FindObjectOfType");
+                }
+            }
+            
             _allPaths = FindObjectsByType<PathController>(FindObjectsSortMode.None);
     
             Debug.Log($"Found {_allPaths.Length} total paths in Awake");
@@ -170,6 +183,7 @@ namespace B3.BuildingSystem
     
             if (longestRoadController != null)
             {
+                Debug.Log("==[LONGEST ROAD]==");
                 longestRoadController.CheckLongestRoadAfterBuild(player);
             }
         }
@@ -414,6 +428,7 @@ namespace B3.BuildingSystem
         
         protected override bool CanBuildRoad(PlayerBase player, PathController targetPath)
         {
+            return true;
             Debug.Log($"\n=== CAN BUILD ROAD CHECK ===");
             Debug.Log($"Player: {player.name}");
             Debug.Log($"Target path: {targetPath?.HexPosition.X},{targetPath?.HexPosition.Y} {targetPath?.EdgeDir}");

@@ -85,7 +85,7 @@ namespace B3.PlayerSystem
 
         public override void OnTradeAndBuildUpdate()
         {
-            Debug.Log("waiting to end");
+            //Debug.Log("waiting to end");
             if(!_hasEndClicked)
                 return;
             Debug.Log("buton apasat");

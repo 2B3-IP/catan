@@ -184,7 +184,7 @@ namespace B3.BuildingSystem
             
             int index = 0;
 
-            bool canBePlaced = false;
+            bool canBePlaced = _isFirstStates;
             foreach (var (settlement, pos, dir) in neighbouringVertices)
             {
                 // am o casa vecina deja construita

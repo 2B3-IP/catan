@@ -3750,6 +3750,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 372445769}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[3160003638182543459]._waitTimeRound
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: managedReferences[6434893590810853526].bankController
       value: 
       objectReference: {fileID: 372445769}

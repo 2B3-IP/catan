@@ -31,7 +31,7 @@ namespace B3.PlayerSystem
         
         private RaycastHit _closestHit;
         private Camera _playerCamera;
-        private bool _hasClicked;
+        private bool _hasInputClicked, _hasEndClicked, _hasDiceClick;
 
         protected override void Awake()
         {
@@ -41,28 +41,28 @@ namespace B3.PlayerSystem
 
         private void OnEnable()
         {
-            UIEndPlayerButton.OnEndButtonPressed += OnPlayerEndButtonPress;
             clickButton.action.performed += OnClickPerformed;
+            UIDiceButton.OnButtonClick += OnDiceButtonClick;
+            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
         }
 
         private void OnDisable()
         {
-            UIEndPlayerButton.OnEndButtonPressed -= OnPlayerEndButtonPress;
             clickButton.action.performed -= OnClickPerformed;
-            UIDiceButton.OnButtonClick += OnDiceButtonClick;
-            UIEndButton.OnButtonClick += OnEndPlayerButtonPress;
+            UIDiceButton.OnButtonClick -= OnDiceButtonClick;
+            UIEndButton.OnButtonClick -= OnEndPlayerButtonPress;
         }
         
         public override IEnumerator ThrowDiceCoroutine()
         {
-            _hasClicked = false;
+            _hasDiceClick = false;
 
-            while (!_hasClicked)
+            while (!_hasDiceClick)
                 yield return null;
 
             DiceSum = 8;
 
-            _hasClicked = false;
+            _hasDiceClick = false;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
@@ -80,11 +80,11 @@ namespace B3.PlayerSystem
         public override void OnTradeAndBuildUpdate()
         {
             Debug.Log("waiting to end");
-            if(!_hasClicked)
+            if(!_hasEndClicked)
                 return;
             Debug.Log("buton apasat");
             IsTurnEnded = true;
-            _hasClicked = false;
+            _hasEndClicked = false;
         }
 
         public override IEnumerator BuildHouseCoroutine()
@@ -176,18 +176,18 @@ namespace B3.PlayerSystem
         
         private IEnumerator RayCastCoroutine(LayerMask layerMask)
         {
-            _hasClicked = false;
+            _hasInputClicked = false;
             int hitCount = 0;
             Debug.Log("raycasting");
             while(hitCount == 0)
             {
-                while (!_hasClicked)
+                while (!_hasInputClicked)
                 {
                     //Debug.Log("waiting");
                     yield return null;
                 }
 
-                _hasClicked = false;
+                _hasInputClicked = false;
                 
                 var ray = _playerCamera.ScreenPointToRay(Mouse.current.position.value);
                 hitCount = Physics.RaycastNonAlloc(ray, _hits, hitDistance, layerMask); 
@@ -251,20 +251,17 @@ namespace B3.PlayerSystem
             
             return closestEdge;
         }
-
-        private void OnPlayerEndButtonPress() =>
-            IsTurnEnded = true;
         
         private void OnClickPerformed(InputAction.CallbackContext context) =>
-            _hasClicked = context.ReadValueAsButton();
+            _hasInputClicked = context.ReadValueAsButton();
         
         private void OnDiceButtonClick() =>
-            _hasClicked = true;
+            _hasDiceClick = true;
 
         private void OnEndPlayerButtonPress() 
         {
             Debug.Log("Button pressed");
-            _hasClicked = true;
+            _hasEndClicked = true;
         }
     }
 }

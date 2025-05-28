@@ -7282,7 +7282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b50042a68a941a298330c2efb281250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1354030728
+--- !u!114 &1354030730
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13850,13 +13850,17 @@ PrefabInstance:
       propertyPath: boardController
       value: 
       objectReference: {fileID: 181466517}
+    - target: {fileID: 8843807386498478706, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
+      propertyPath: longestRoadController
+      value: 
+      objectReference: {fileID: 1354030730}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2329082926742181549, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1354030728}
+      addedObject: {fileID: 1354030730}
   m_SourcePrefab: {fileID: 100100000, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
 --- !u!1001 &8869400020247260129
 PrefabInstance:

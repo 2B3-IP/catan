@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using B3.BoardSystem;
 using B3.GameStateSystem;
 using B3.PlayerSystem;
 using B3.SettlementSystem;
@@ -11,6 +12,8 @@ namespace B3.BuildingSystem
         private const int MAX_HOUSES_PER_PLAYER = 5;
         private const int MAX_CITIES_PER_PLAYER = 4;
         private const int MAX_ROADS_PER_PLAYER = 15;
+        
+        [SerializeField] protected BoardController boardController;
         
         public abstract IEnumerator BuildHouse(PlayerBase player); // ii arati playerului care sunt spatiile ramase libere
                                                                    // , dupa player alege unde vrea sa construiasca,

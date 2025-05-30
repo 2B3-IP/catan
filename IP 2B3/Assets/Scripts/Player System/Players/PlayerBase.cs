@@ -31,6 +31,7 @@ namespace B3.PlayerSystem
         public int VictoryPoints { get; private set; }
         public int DiceSum { get; protected set; }
         public int UsedKnightCards { get; private set; }
+        public int LongestRoad { get; set; }
         
         [Foldout("Events")] public UnityEvent onResourcesChanged = new();
         [Foldout("Events")] public UnityEvent onVPChanged = new();

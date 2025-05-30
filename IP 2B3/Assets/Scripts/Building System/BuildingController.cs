@@ -168,7 +168,7 @@ namespace B3.BuildingSystem
             Debug.Log($"Road built successfully! Player now has {player.Paths.Count} roads");
     
             if (longestRoadController != null)
-                longestRoadController.CheckLongestRoadAfterBuild(player, selectedPath);
+                longestRoadController.CheckLongestRoadAfterBuild(player, selectedPath);;
         }
 
         protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player)

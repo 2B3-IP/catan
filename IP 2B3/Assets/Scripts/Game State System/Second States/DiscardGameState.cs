@@ -59,9 +59,9 @@ namespace B3.GameStateSystem
             
             foreach (var coroutine in coroutines)
             {
-                stateMachine.StopCoroutine(coroutine);
+                if(coroutine != null)
+                    stateMachine.StopCoroutine(coroutine);
             }
-
 
             foreach (var player in allPlayers)
             {

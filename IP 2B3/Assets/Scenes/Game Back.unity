@@ -403,6 +403,9 @@ MonoBehaviour:
   CardManagerMine: {fileID: 0}
   CardManagerTheirs: {fileID: 0}
   BankController: {fileID: 0}
+  CurrentPlayer: {fileID: 0}
+  TradeController: {fileID: 0}
+  OtherPlayer: {fileID: 0}
   TradeOfferCardManagerTheirs: {fileID: 0}
   TradeOfferCardManagerMine: {fileID: 0}
   TradeType: {fileID: 0}
@@ -3564,6 +3567,11 @@ CanvasRenderer:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6326354666050566186, guid: 5f5983d19843f7b4580e5eea95e084ce, type: 3}
   m_PrefabInstance: {fileID: 1596148553}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &857173087 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2329082926742181549, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
+  m_PrefabInstance: {fileID: 8490809835869949319}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &870930518
 GameObject:
@@ -7268,10 +7276,22 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8843807386498478706, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
   m_PrefabInstance: {fileID: 8490809835869949319}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 857173087}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b50042a68a941a298330c2efb281250, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1354030730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857173087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c3c111d7bf4a23b76f267062894c06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1365027431
@@ -9137,6 +9157,9 @@ MonoBehaviour:
   CardManagerMine: {fileID: 1941089005}
   CardManagerTheirs: {fileID: 326614618}
   BankController: {fileID: 0}
+  CurrentPlayer: {fileID: 0}
+  TradeController: {fileID: 0}
+  OtherPlayer: {fileID: 0}
   TradeOfferCardManagerTheirs: {fileID: 820175483}
   TradeOfferCardManagerMine: {fileID: 1275201583}
   TradeType: {fileID: 1971245298}
@@ -10098,6 +10121,9 @@ MonoBehaviour:
   CardManagerMine: {fileID: 0}
   CardManagerTheirs: {fileID: 0}
   BankController: {fileID: 0}
+  CurrentPlayer: {fileID: 0}
+  TradeController: {fileID: 0}
+  OtherPlayer: {fileID: 0}
   TradeOfferCardManagerTheirs: {fileID: 0}
   TradeOfferCardManagerMine: {fileID: 0}
   TradeType: {fileID: 0}
@@ -13824,10 +13850,17 @@ PrefabInstance:
       propertyPath: boardController
       value: 
       objectReference: {fileID: 181466517}
+    - target: {fileID: 8843807386498478706, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
+      propertyPath: longestRoadController
+      value: 
+      objectReference: {fileID: 1354030730}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2329082926742181549, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1354030730}
   m_SourcePrefab: {fileID: 100100000, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
 --- !u!1001 &8869400020247260129
 PrefabInstance:

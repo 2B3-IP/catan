@@ -30,10 +30,6 @@ namespace B3.PortSystem
 
         public bool SetSettlementPosition()
         {
-            // luam vertexul de pe partea opusa pe ideea ca 
-            //locul portului de pe hexul de port este in oglinda cu locul hexului
-            //de pe hexul tile
-
             var hexPosition = _pieceController.HexPosition;
             
             switch (hexPosition.X, hexPosition.Y)

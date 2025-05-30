@@ -133,8 +133,8 @@ namespace B3.BoardSystem
             if (leftVertex is null && rightVertex is null) yield break;
             
             // sanity check
-            if (leftVertex is not null && rightVertex is not null && ReferenceEquals(leftVertex, rightVertex))
-                Debug.LogError("Left and right vertices are not the same instance in GetNeighbouringVertices, something has gone terribly wrong!");
+            //if (leftVertex is not null && rightVertex is not null && ReferenceEquals(leftVertex, rightVertex))
+            //    Debug.LogError("Left and right vertices are not the same instance in GetNeighbouringVertices, something has gone terribly wrong!");
 
             if (leftVertex is not null)
                 yield return (leftVertex, leftCellPos, (HexVertexDir) leftDir);

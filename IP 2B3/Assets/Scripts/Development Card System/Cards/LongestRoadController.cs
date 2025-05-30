@@ -15,6 +15,7 @@ namespace B3.DevelopmentCardSystem
         
         public void CheckLongestRoadAfterBuild(PlayerBase player)
         {
+            Debug.Log("========[INLONGESTROAD]=========");
             int playerLongestRoad = CalculateLongestRoad(player);
             
             // verificam daca jucatorul are drumul cel mai lung (minim 5)
@@ -29,6 +30,7 @@ namespace B3.DevelopmentCardSystem
                 _currentLongestRoadLength = playerLongestRoad;
                 Debug.Log($"{player.name} si-a marit drumul cel mai lung la {playerLongestRoad}");
             }
+            Debug.Log("========[OUTLONGESTROAD]=========");
         }
         
         private void TransferLongestRoadCard(PlayerBase newOwner, int newLength)
@@ -81,49 +83,81 @@ namespace B3.DevelopmentCardSystem
             {
                 if (!visited.Contains(connectedRoad))
                 {
+                   // Debug.Log($"[DFS] From {currentRoad} → Going to {connectedRoad}");
                     int pathLength = 1 + DFSLongestPath(connectedRoad, player, visited);
+                   // Debug.Log($"[DFS] Path from {currentRoad} to {connectedRoad} returned: {pathLength}");
                     maxLength = Mathf.Max(maxLength, pathLength);
+                } else
+                {
+                    Debug.Log($"[DFS] Skipping {connectedRoad} (already visited)");
                 }
             }
             
             visited.Remove(currentRoad);
+           // Debug.Log($"[DFS] Exit: {currentRoad} → MaxLength: {maxLength}");
             return maxLength;
         }
         
         private List<PathController> GetConnectedRoads(PathController road, PlayerBase player)
         {
             var connectedRoads = new List<PathController>();
-            var roadEndpoints = GetExactEdgeEndpoints(road.HexPosition, road.EdgeDir);
-            
-            // pentru fiecare capat al drumului
-            foreach (var (vertexPos, vertexDir) in roadEndpoints)
+
+           // Debug.Log("[GetConnectedRoads]" +  road.HexPosition + " " + road.EdgeDir);
+            //Debug.Log(road.HexPosition.X + " " + road.HexPosition.Y + " " + road.EdgeDir);
+            // fiecare drum are 2 capete
+            var endpoints = GetExactEdgeEndpoints(road.HexPosition, road.EdgeDir);
+              
+            foreach (var (vertexPos, vertexDir) in endpoints)
             {
-                // verificam daca la acest vertex se conecteaza alte drumuri ale playerului
+                // obt toate drumurile conectate la acest vertex
+                var boardController = FindObjectOfType<BoardController>();
+                var vertex = boardController.BoardGrid.GetVertex(vertexPos, vertexDir);
+
+                //Debug.Log($"[GetConnectedRoads] Checking vertex: {vertexPos.X},{vertexPos.Y} {vertexDir}");
+                // gasim drumurile conectate la acest vertex (nu doar cele ale jucatorului)
                 foreach (var otherRoad in player.Paths)
                 {
-                    if (otherRoad != road && otherRoad.IsBuilt)
+                    if (otherRoad == road || !otherRoad.IsBuilt)
+                        continue;
+
+                    //Debug.Log($"[OtherRoadFound] {road} → {otherRoad} via {vertexPos.X},{vertexPos.Y} {vertexDir}");
+                    var otherEndpoints = GetExactEdgeEndpoints(otherRoad.HexPosition, otherRoad.EdgeDir);
+
+                    bool sharesVertex = otherEndpoints.Any(ep => 
+                        ep.Item1.X == vertexPos.X && ep.Item1.Y == vertexPos.Y && ep.Item2 == vertexDir);
+
+                    if (sharesVertex)
                     {
-                        var otherEndpoints = GetExactEdgeEndpoints(otherRoad.HexPosition, otherRoad.EdgeDir);
-                        
-                        foreach (var (otherVertexPos, otherVertexDir) in otherEndpoints)
+                        //Debug.Log("[share]");
+                        bool blockedByOpponent = HasOpponentSettlement(vertexPos, vertexDir, player);
+                        if (!blockedByOpponent)
                         {
-                            if (vertexPos.X == otherVertexPos.X && 
-                                vertexPos.Y == otherVertexPos.Y && 
-                                vertexDir == otherVertexDir)
-                            {
-                                // verificam daca la acest vertex NU exista o asezare a altui jucator
-                                // (asezarile intrerup drumul pentru calculul longest road)
-                                if (!HasOtherPlayerSettlement(vertexPos, vertexDir, player))
-                                {
-                                    connectedRoads.Add(otherRoad);
-                                }
-                            }
+                          //  Debug.Log($"[Connected] {road} → {otherRoad} via {vertexPos.X},{vertexPos.Y} {vertexDir}");
+                            connectedRoads.Add(otherRoad);
                         }
+                    }
+                    else
+                    {
+                       // Debug.Log($"[OtherRoadADDED] {road} → {otherRoad} via {vertexPos.X},{vertexPos.Y} {vertexDir}");
+                        connectedRoads.Add(otherRoad);
                     }
                 }
             }
-            
+
             return connectedRoads;
+        }
+        
+        private bool HasOpponentSettlement(HexPosition vertexPos, HexVertexDir vertexDir, PlayerBase player)
+        {
+            var boardController = FindObjectOfType<BoardController>();
+            var vertex = boardController.BoardGrid.GetVertex(vertexPos, vertexDir);
+
+            if (vertex is SettlementController settlement && settlement.HasOwner)
+            {
+                return settlement.Owner != player;
+            }
+
+            return false;
         }
         
         private bool HasOtherPlayerSettlement(HexPosition vertexPos, HexVertexDir vertexDir, PlayerBase player)

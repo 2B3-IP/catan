@@ -3750,6 +3750,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 372445769}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[3160003638182543459]._waitTimeRound
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: managedReferences[6434893590810853526].bankController
       value: 
       objectReference: {fileID: 372445769}
@@ -7353,7 +7357,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8843807386498478706, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
   m_PrefabInstance: {fileID: 8490809835869949319}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2025230685}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b50042a68a941a298330c2efb281250, type: 3}
@@ -11905,6 +11909,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2017745462}
   m_CullTransparentMesh: 1
+--- !u!1 &2025230685 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2329082926742181549, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
+  m_PrefabInstance: {fileID: 8490809835869949319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2025230687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025230685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c3c111d7bf4a23b76f267062894c06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardController: {fileID: 181466517}
 --- !u!1001 &2025670692
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14024,10 +14046,17 @@ PrefabInstance:
       propertyPath: boardController
       value: 
       objectReference: {fileID: 181466517}
+    - target: {fileID: 8843807386498478706, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
+      propertyPath: longestRoadController
+      value: 
+      objectReference: {fileID: 2025230687}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2329082926742181549, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2025230687}
   m_SourcePrefab: {fileID: 100100000, guid: e365e412bd1a80442b3b92e251e6f2ff, type: 3}
 --- !u!1001 &8869400020247260129
 PrefabInstance:

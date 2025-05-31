@@ -262,19 +262,26 @@ namespace B3.BuildingSystem
             if (!CanBuildCity(player))
                 yield break;
 
-            Debug.Log("Building city for:" + player.name);
-            yield return player.UpgradeToCityCoroutine();
-
-            var closestCorner = player.SelectedHouse;
-
-            Debug.Log(closestCorner.Owner.name + " vs " + player.name);
-            if (!closestCorner.HasOwner || closestCorner.Owner != player)
-                Debug.Log("Not your settlement");
-            else
+            SettlementController closestCorner = null;
+            while (closestCorner == null)
             {
-                closestCorner.UpgradeToCity();
-                player.AddVictoryPoints(1);
-                HasBuilt = true;
+                Debug.Log("Building city for:" + player.name);
+                yield return player.UpgradeToCityCoroutine();
+
+                closestCorner = player.SelectedHouse;
+                
+                Debug.Log(closestCorner.Owner.name + " vs " + player.name);
+                if (!closestCorner.HasOwner || closestCorner.Owner != player)
+                {
+                    closestCorner = null;
+                    Debug.Log("Not your settlement");
+                }
+                else
+                {
+                    closestCorner.UpgradeToCity();
+                    player.AddVictoryPoints(1);
+                    HasBuilt = true;
+                }
             }
         }
         

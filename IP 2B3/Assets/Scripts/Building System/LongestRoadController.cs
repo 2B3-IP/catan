@@ -90,23 +90,23 @@ namespace B3.DevelopmentCardSystem
 
             int maxLength = 0;
 
-            int index = 0;
+            int index = -1;
             
             foreach (var (settlement, pos, dir) in neighbouringVertices)
             {
+                index++;
                 if (visited.Contains(settlement))
                 {
                     continue;
                 }
-
+                
                 var edgeDir = index switch
                 {
-                    1 => HexEdgeDirExt.GetHexDir(vertex.GetVertexDirBasedOnStartDir(position, pos), dir),
-                    _ => HexEdgeDirExt.GetHexDir(dir, vertex)
+                    0 => HexEdgeDirExt.GetHexDir(vertex, dir),
+                    1 => HexEdgeDirExt.GetHexDir(dir, vertex),
+                    _ => HexEdgeDirExt.GetHexDir(dir, vertex.GetVertexDirBasedOnStartDir(position, pos))
                 };
-
-                index++;
-
+                
                 var path = boardGrid.GetEdge(pos, edgeDir);
                 if (path == null || path.Owner != player)
                     continue;

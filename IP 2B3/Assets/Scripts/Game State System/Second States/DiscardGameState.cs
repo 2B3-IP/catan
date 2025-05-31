@@ -99,8 +99,7 @@ namespace B3.GameStateSystem
                     } while (player.Resources[index] <= 0);
             
                     bankController.GiveResources((ResourceType)index, 1);
-                    player.Resources[index]--;
-                
+                    player.RemoveResource((ResourceType)index, 1);
                 }
             }
         }

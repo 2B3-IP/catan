@@ -80,7 +80,7 @@ namespace B3.BuildingSystem
                 
                 Debug.Log("Cannot build house here - resetting selection");
                 HasBuilt = false;
-                yield break;
+                selectedHouse = null;
             }
 
             Debug.Log("Building house successfully!");
@@ -131,7 +131,7 @@ namespace B3.BuildingSystem
                     {
                         Debug.Log($"Cannot build road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir} - resetting selection");
                         HasBuilt = false;
-                        yield break;
+                        selectedPath = null;
                     }
                     else {
                         Debug.Log($"Can build road - proceeding with construction");

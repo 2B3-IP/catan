@@ -22,7 +22,7 @@ namespace B3.PlayerSystem
                 numberOfPlayers = 4;
             }
 
-            for (int i = 3; i >= numberOfPlayers; i++)
+            for (int i = 3; i >= numberOfPlayers; i--)
             {
                 Destroy(players[i].gameObject);
                 players.RemoveAt(i);

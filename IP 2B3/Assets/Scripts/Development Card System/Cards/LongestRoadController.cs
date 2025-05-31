@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using B3.BoardSystem;
 using B3.BuildingSystem;
@@ -8,39 +9,38 @@ using UnityEngine;
 
 namespace B3.DevelopmentCardSystem
 {
-    public class LongestRoadController : MonoBehaviour
+   public class LongestRoadController : MonoBehaviour
     {
+        [SerializeField] private BoardController boardController;
+        
         private PlayerBase _currentLongestRoadOwner;
         private int _currentLongestRoadLength = 4; // minim 5 pentru a primi cardul
         
-        public void CheckLongestRoadAfterBuild(PlayerBase player)
+        public void CheckLongestRoadAfterBuild(PlayerBase player, PathController placedRoad)
         {
-            int playerLongestRoad = CalculateLongestRoad(player);
+            int playerLongestRoad = CalculateLongestRoad(player, placedRoad);
             
-            // verificam daca jucatorul are drumul cel mai lung (minim 5)
-            if (playerLongestRoad >= 5 && playerLongestRoad > _currentLongestRoadLength)
-            {
-                // transferam cardul la noul jucator
-                TransferLongestRoadCard(player, playerLongestRoad);
-            }
-            // daca jucatorul curent inca are cel mai lung drum, verificam daca si-a marit drumul
-            else if (_currentLongestRoadOwner == player && playerLongestRoad > _currentLongestRoadLength)
+            if (_currentLongestRoadOwner == player && playerLongestRoad > _currentLongestRoadLength)
             {
                 _currentLongestRoadLength = playerLongestRoad;
                 Debug.Log($"{player.name} si-a marit drumul cel mai lung la {playerLongestRoad}");
             }
+            else if (playerLongestRoad >= 5 && playerLongestRoad > _currentLongestRoadLength)
+            {
+                TransferLongestRoadCard(player, playerLongestRoad);
+            }
+
+            player.LongestRoad = playerLongestRoad;
         }
         
         private void TransferLongestRoadCard(PlayerBase newOwner, int newLength)
         {
-            // ii luam punctele celui care avea cardul inainte
             if (_currentLongestRoadOwner != null)
             {
                 _currentLongestRoadOwner.RemoveVictoryPoints(2);
                 Debug.Log($"{_currentLongestRoadOwner.name} a pierdut cardul 'Longest Road' (-2 puncte)");
             }
             
-            // ii dam punctele noului jucator
             _currentLongestRoadOwner = newOwner;
             _currentLongestRoadLength = newLength;
             newOwner.AddVictoryPoints(2);
@@ -48,146 +48,76 @@ namespace B3.DevelopmentCardSystem
             Debug.Log($"{newOwner.name} a primit cardul 'Longest Road' (+2 puncte) cu un drum de {newLength}");
         }
         
-        private int CalculateLongestRoad(PlayerBase player)
+        private int CalculateLongestRoad(PlayerBase player, PathController placedRoad)
         {
             var playerRoads = player.Paths.Where(p => p.IsBuilt).ToList();
-            
             if (playerRoads.Count == 0)
                 return 0;
             
+            int length = DFSLongestPath(placedRoad, player);
+            
+            return length;
+        }
+        
+        private int DFSLongestPath(PathController currentRoad, PlayerBase player)
+        {
+            var roadPosition = currentRoad.HexPosition;
+            var roadDir = currentRoad.EdgeDir;
+            
+            var boardGrid = boardController.BoardGrid;
+            var (roadVertex1, roadVertex2) = roadDir.GetVertexDirs();
+           
+            var vertex1 = boardGrid.GetVertex(roadPosition, roadVertex1);
+            var vertex2 = boardGrid.GetVertex(roadPosition, roadVertex2);
+            
+            visited = new HashSet<SettlementController>{vertex1,vertex2};
+            int length1 = TraverseVertex(player, vertex1, vertex1, vertex2);
+            int length2 = TraverseVertex(player, vertex2, vertex1, vertex2);
+           
+            return length1 + length2 + 1;
+        }
+        private HashSet<SettlementController> visited;
+
+        private int TraverseVertex(PlayerBase player, SettlementController currentSettlement, SettlementController v1 = null, SettlementController v2 = null)
+        {
+            var boardGrid = boardController.BoardGrid;
+
+            var vertex = currentSettlement.VertexDir;
+            var position = currentSettlement.HexPosition;
+
+            var neighbouringVertices =
+                boardGrid.GetNeighbouringVertices(position, vertex);
+
             int maxLength = 0;
+
+            int index = 0;
             
-            // incercam sa gasim cel mai lung drum pornind din fiecare capat posibil
-            foreach (var startRoad in playerRoads)
+            foreach (var (settlement, pos, dir) in neighbouringVertices)
             {
-                var visited = new HashSet<PathController>();
-                int length = DFSLongestPath(startRoad, player, visited);
-                maxLength = Mathf.Max(maxLength, length);
-            }
-            
-            return maxLength;
-        }
-        
-        private int DFSLongestPath(PathController currentRoad, PlayerBase player, HashSet<PathController> visited)
-        {
-            visited.Add(currentRoad);
-            
-            int maxLength = 1; // drumul curent
-            
-            // gasim toate drumurile conectate la drumul curent
-            var connectedRoads = GetConnectedRoads(currentRoad, player);
-            
-            foreach (var connectedRoad in connectedRoads)
-            {
-                if (!visited.Contains(connectedRoad))
+                if (visited.Contains(settlement))
                 {
-                    int pathLength = 1 + DFSLongestPath(connectedRoad, player, visited);
-                    maxLength = Mathf.Max(maxLength, pathLength);
+                    continue;
                 }
-            }
-            
-            visited.Remove(currentRoad);
-            return maxLength;
-        }
-        
-        private List<PathController> GetConnectedRoads(PathController road, PlayerBase player)
-        {
-            var connectedRoads = new List<PathController>();
-            var roadEndpoints = GetExactEdgeEndpoints(road.HexPosition, road.EdgeDir);
-            
-            // pentru fiecare capat al drumului
-            foreach (var (vertexPos, vertexDir) in roadEndpoints)
-            {
-                // verificam daca la acest vertex se conecteaza alte drumuri ale playerului
-                foreach (var otherRoad in player.Paths)
+
+                var edgeDir = index switch
                 {
-                    if (otherRoad != road && otherRoad.IsBuilt)
-                    {
-                        var otherEndpoints = GetExactEdgeEndpoints(otherRoad.HexPosition, otherRoad.EdgeDir);
-                        
-                        foreach (var (otherVertexPos, otherVertexDir) in otherEndpoints)
-                        {
-                            if (vertexPos.X == otherVertexPos.X && 
-                                vertexPos.Y == otherVertexPos.Y && 
-                                vertexDir == otherVertexDir)
-                            {
-                                // verificam daca la acest vertex NU exista o asezare a altui jucator
-                                // (asezarile intrerup drumul pentru calculul longest road)
-                                if (!HasOtherPlayerSettlement(vertexPos, vertexDir, player))
-                                {
-                                    connectedRoads.Add(otherRoad);
-                                }
-                            }
-                        }
-                    }
-                }
+                    1 => HexEdgeDirExt.GetHexDir(vertex.GetVertexDirBasedOnStartDir(position, pos), dir),
+                    _ => HexEdgeDirExt.GetHexDir(dir, vertex)
+                };
+
+                index++;
+
+                var path = boardGrid.GetEdge(pos, edgeDir);
+                if (path == null || path.Owner != player)
+                    continue;
+                
+                visited.Add(settlement);
+                int length = 1 + TraverseVertex(player, settlement, v1, v2);
+
+                if (maxLength < length)
+                    maxLength = length;
             }
-            
-            return connectedRoads;
-        }
-        
-        private bool HasOtherPlayerSettlement(HexPosition vertexPos, HexVertexDir vertexDir, PlayerBase player)
-        {
-            var boardController = FindObjectOfType<BoardController>();
-            var vertex = boardController.BoardGrid.GetVertex(vertexPos, vertexDir);
-            
-            if (vertex is SettlementController settlement && settlement.HasOwner)
-            {
-                // drumul se intrerupe DOAR daca asezarea apartine unui ALT jucator
-                return settlement.Owner != player;
-            }
-            
-            return false;
-        }
-        
-        private List<(HexPosition, HexVertexDir)> GetExactEdgeEndpoints(HexPosition hexPos, HexEdgeDir edgeDir)
-        {
-            var endpoints = new List<(HexPosition, HexVertexDir)>();
-            
-            switch (edgeDir)
-            {
-                case HexEdgeDir.Top:
-                    endpoints.Add((hexPos, HexVertexDir.TopLeft));
-                    endpoints.Add((hexPos, HexVertexDir.TopRight));
-                    break;
-                case HexEdgeDir.TopRight:
-                    endpoints.Add((hexPos, HexVertexDir.TopRight));
-                    endpoints.Add((hexPos, HexVertexDir.Right));
-                    break;
-                case HexEdgeDir.BottomRight:
-                    endpoints.Add((hexPos, HexVertexDir.Right));
-                    endpoints.Add((hexPos, HexVertexDir.BottomRight));
-                    break;
-                case HexEdgeDir.Bottom:
-                    endpoints.Add((hexPos, HexVertexDir.BottomRight));
-                    endpoints.Add((hexPos, HexVertexDir.BottomLeft));
-                    break;
-                case HexEdgeDir.BottomLeft:
-                    endpoints.Add((hexPos, HexVertexDir.BottomLeft));
-                    endpoints.Add((hexPos, HexVertexDir.Left));
-                    break;
-                case HexEdgeDir.TopLeft:
-                    endpoints.Add((hexPos, HexVertexDir.Left));
-                    endpoints.Add((hexPos, HexVertexDir.TopLeft));
-                    break;
-            }
-            
-            return endpoints;
-        }
-        
-        public int GetPlayerLongestRoad(PlayerBase player)
-        {
-            return CalculateLongestRoad(player);
-        }
-        
-        public PlayerBase GetCurrentLongestRoadOwner()
-        {
-            return _currentLongestRoadOwner;
-        }
-        
-        public int GetCurrentLongestRoadLength()
-        {
-            return _currentLongestRoadLength;
+            return maxLength;
         }
     }
 }

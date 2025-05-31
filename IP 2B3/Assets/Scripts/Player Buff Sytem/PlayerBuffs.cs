@@ -12,7 +12,6 @@ namespace B3.PlayerBuffSystem
         {
             for (int i = 0; i < 5; i++)
             {
-                //nu mi ia bine cheia din dictionar
                 var resourceType = (ResourceType)i;
                 _buffs.Add(resourceType, PlayerBuff.Trade4_1);
             }

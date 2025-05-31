@@ -27,5 +27,10 @@ namespace B3.BuildingSystem
             IsBuilt = true;
             roadPrefab.gameObject.SetActive(true);
         }
+        
+        public override string ToString()
+        {
+            return $"Road[{HexPosition.X},{HexPosition.Y} {EdgeDir}]";
+        }
     }
 }

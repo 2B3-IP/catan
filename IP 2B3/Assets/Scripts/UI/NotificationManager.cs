@@ -5,6 +5,7 @@ using NaughtyAttributes;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
@@ -51,6 +52,8 @@ namespace B3.UI
             {
                 _instance.text.text = text;
             }
+
+            public void AddOnClickListener(UnityAction listener) => _instance.button.onClick.AddListener(listener);
             
             public void Destroy()
             {

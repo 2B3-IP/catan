@@ -13,8 +13,7 @@ namespace B3.GameStateSystem
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
             var currentPlayer = stateMachine.CurrentPlayer;
-            if (currentPlayer is not AIPlayer)
-                yield return buildingController.BuildHouse(currentPlayer);
+            yield return buildingController.BuildHouse(currentPlayer);
 
             stateMachine.ChangeState<AddRoadState>();
         }

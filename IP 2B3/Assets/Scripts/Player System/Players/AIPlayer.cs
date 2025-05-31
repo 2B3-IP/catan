@@ -16,13 +16,13 @@ namespace B3.PlayerSystem
         
         public override IEnumerator ThrowDiceCoroutine()
         {
-            //DiceSum = Random.Range(MIN_DICE_THROW_FORCE, MAX_DICE_THROW_FORCE); //TODO: TEMP
+            DiceSum = Random.Range(1, 7) + Random.Range(1, 7); //TODO: TEMP
             yield break;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
-            var thiefPosition = AI.GetThiefPostion();
+            var thiefPosition = AI.GetThiefPosition();
             var pieceController = boardController.BoardGrid[thiefPosition];
             
             yield return new WaitForSeconds(1f);
@@ -79,13 +79,13 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildHouseCoroutine()
         {
-            /*var housePosition = AI.GetHousePosition();
+            var housePosition = AI.GetHousePosition();
             var boardGrid = boardController.BoardGrid;
 
             //yield return new WaitForSeconds(1f);
 
             var settlementController = boardGrid.GetVertex(housePosition.Item1, housePosition.Item2);
-            SelectedHouse = settlementController;*/
+            SelectedHouse = settlementController;
             yield break;
         }
 
@@ -102,22 +102,20 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildRoadCoroutine()
         {
-            /*var housePosition = AI.GetRoadPosition();
+            var housePosition = AI.GetRoadPosition();
             var boardGrid = boardController.BoardGrid;
 
             //yield return new WaitForSeconds(1f);
 
             var pathController = boardGrid.GetEdge(housePosition.Item1, housePosition.Item2);
-            SelectedPath = pathController;*/
+            SelectedPath = pathController;
             yield break;
         }
 
         public override IEnumerator DiscardResourcesCoroutine(float timeout)
         {
             yield return new WaitForSeconds(1f);
-            var discardedResources = AI.GetDiscardedResources();
-            
-            yield break;
+            DiscardResources = AI.GetDiscardedResources();
         }
     }
 }

@@ -142,20 +142,8 @@ namespace B3.PlayerSystem
         
         public override IEnumerator DiscardResourcesCoroutine(float timeout)
         {
-            int total = TotalResources();
-            if (total <= 7)
-                yield break;
-
-            int toDiscard = total / 2;
-            
-            bool playerChoseManually = false;
-            
-            float elapsed = 0f;
-            while (elapsed < timeout && !playerChoseManually)
-            {   // TODO: front - choose which resources to discard and set playerChoseManually truee
-                elapsed += Time.deltaTime;
-                yield return null;
-            }
+            //TODO: FRONT
+            yield break;
         }
         
         private IEnumerator RayCastCoroutine(LayerMask layerMask)

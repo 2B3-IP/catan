@@ -15,7 +15,6 @@ namespace B3.GameStateSystem
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
             var currentPlayer = stateMachine.CurrentPlayer;
-            if (currentPlayer is not AIPlayer)
             yield return buildingController.BuildRoad(currentPlayer);
 
             if (stateMachine.IsLastPlayer && !_isInverseOrder)

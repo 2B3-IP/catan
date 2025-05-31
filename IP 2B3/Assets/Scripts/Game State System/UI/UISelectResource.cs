@@ -1,26 +1,48 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using B3.ResourcesSystem;
+using B3.UI;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 namespace B3.GameStateSystem
 {
-    public class UISelectResource : MonoBehaviour
+    public static class UISelectResource
     {
-        [SerializeField] private  Button selectResourceButton;
-        [SerializeField] private ResourceType selectedResourceType;
-        
-        public static event Action<ResourceType> OnSelectResource;
+		public static IEnumerator SelectResourceType(Action<ResourceType> returnCallback)
+		{
+			ResourceType? selectedResource = null;
+			
+			var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select a type of resource:", float.PositiveInfinity, false);
+			
+			List<NotificationManager.NotificationHandle> resourceNotifications = new();
+			for (int i = 0; i < 5; i++) {
+				var resType = (ResourceType) i;
+				resourceNotifications.Add(NotificationManager.Instance
+					.AddNotification(resType.GetString(), float.PositiveInfinity, false)
+				);
+                resourceNotifications[i].AddOnClickListener(() =>
+                {
+	                selectedResource = resType;
+                });
+            }
 
-        private void Awake()
-        {
-            selectResourceButton.onClick.AddListener(SelectResourceType);
-        }
-
-        private void SelectResourceType()
-        {
-            OnSelectResource?.Invoke(selectedResourceType);
-        }
+			while (selectedResource == null)
+			{
+				yield return new WaitForFixedUpdate();
+			}
+			
+			instructionNotif.Destroy();
+			for (int i = 0; i < 5; i++)
+			{
+				resourceNotifications[i].Destroy();
+			}
+			
+			returnCallback(selectedResource.Value);
+		}
         
     }
 }

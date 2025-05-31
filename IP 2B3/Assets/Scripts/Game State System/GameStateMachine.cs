@@ -85,8 +85,6 @@ namespace B3.GameStateSystem
 
             _currentState = state;
             
-            Debug.Log($"Current state: {_currentState.GetType().Name}");
-            
             StopAllCoroutines();
             StartCoroutine(_currentState.OnEnter(this));
             onStateChanged?.Invoke();

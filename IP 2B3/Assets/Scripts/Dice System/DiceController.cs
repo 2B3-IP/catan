@@ -66,7 +66,7 @@ namespace B3.DiceSystem
             }
 
             DiceRoll = faceIndex + 1;
-            Debug.Log(DiceRoll);
+            Debug.Log( "DICEROLL" + DiceRoll);
         }
     }
 }

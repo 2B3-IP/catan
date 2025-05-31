@@ -204,10 +204,10 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _GroundEnabled: 1
-    - _GroundFadeAmount: 0.02
+    - _GroundEnabled: 0
+    - _GroundFadeAmount: 0.038
     - _Ground_Fade: -0.01
-    - _Ground_Height: -0.02
+    - _Ground_Height: -0.08
     - _HorizonSaturationAmount: 0.894
     - _HorizonSaturationFalloff: 4.45
     - _Metallic: 0
@@ -249,7 +249,7 @@ Material:
     - _Sun_Enabled: 1
     - _Sun_Sky_Lighting_Enabled: 1
     - _SunsetHorizontalFalloff: 0.6
-    - _SunsetIntensity: 0.3
+    - _SunsetIntensity: 0.332
     - _SunsetRadialFalloff: 0.1
     - _SunsetVerticalFalloff: 0.5
     - _Surface: 0
@@ -282,7 +282,7 @@ Material:
     - _CloudWindSpeed: {r: 0.2, g: 0.3, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GroundColor: {r: 0.028301895, g: 0.028301895, b: 0.026566401, a: 0}
+    - _GroundColor: {r: 0, g: 0, b: 0, a: 0}
     - _HorizonColorDay: {r: 0.26637593, g: 0.5447223, b: 0.7735849, a: 1}
     - _HorizonColorNight: {r: 0.025605002, g: 0.021300001, b: 0.05, a: 0}
     - _MoonColor: {r: 0.67058825, g: 0.7254902, b: 0.7490196, a: 0}

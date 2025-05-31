@@ -53,7 +53,7 @@ namespace B3.BuildingSystem
             }
 
             int housesCount = player.GetHousesCount();
-            return housesCount < MAX_HOUSES_PER_PLAYER && canBuildHouse;
+            return housesCount <= MAX_HOUSES_PER_PLAYER && canBuildHouse;
         }
         
         protected bool CanBuildCity(PlayerBase player)
@@ -62,7 +62,7 @@ namespace B3.BuildingSystem
             if (citiesCount == player.Settlements.Count)
                 return false;
             
-            return citiesCount < MAX_CITIES_PER_PLAYER;
+            return citiesCount <= MAX_CITIES_PER_PLAYER;
         }
         
         protected bool CanBuildRoad(PlayerBase player)
@@ -117,7 +117,8 @@ namespace B3.BuildingSystem
             }
 
             int roadsCount = player.Paths.Count;
-            return roadsCount < MAX_ROADS_PER_PLAYER && canBuildRoad;
+            Debug.Log("ROADS COUNT: " + roadsCount);
+            return roadsCount <= MAX_ROADS_PER_PLAYER && canBuildRoad;
         }
 
         private bool CanBuildRoadNeighbouring(SettlementController settlement1,FullHexGrid<PieceController, SettlementController, PathController> boardGrid)

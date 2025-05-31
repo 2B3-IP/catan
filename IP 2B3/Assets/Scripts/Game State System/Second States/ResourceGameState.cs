@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using B3.BankSystem;
 using B3.BoardSystem;
+using B3.BuildingSystem;
+using B3.PlayerSystem;
+using B3.SettlementSystem;
 using UnityEngine.Rendering;
 
 namespace B3.GameStateSystem

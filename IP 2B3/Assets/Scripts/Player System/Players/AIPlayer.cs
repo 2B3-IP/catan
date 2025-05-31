@@ -3,6 +3,7 @@ using B3.BoardSystem;
 using B3.BuySystem;
 using B3.ThiefSystem;
 using B3.TradeSystem;
+using B3.UI;
 using UnityEngine;
 
 namespace B3.PlayerSystem
@@ -41,18 +42,22 @@ namespace B3.PlayerSystem
             {
                 case "buy house":
                     StartCoroutine(buyController.BuyHouse(this));
+                    NotificationManager.Instance.AddNotification($"{this.colorTag}{this.playerName}</color> built a house.");
                     break;
 
                 case "buy city":
                     StartCoroutine(buyController.BuyCity(this));
+                    NotificationManager.Instance.AddNotification($"{this.colorTag}{this.playerName}</color> built a city.");
                     break;
 
                 case "buy road":
                     StartCoroutine(buyController.BuyRoad(this));
+                    NotificationManager.Instance.AddNotification($"{this.colorTag}{this.playerName}</color> built a road.");
                     break;
 
                 case "buy card":
                     buyController.BuyDevelopmentCard(this);
+                    NotificationManager.Instance.AddNotification($"{this.colorTag}{this.playerName}</color> bought a development card.");
                     break;
                 
                 case "trade bank":

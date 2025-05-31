@@ -69,6 +69,8 @@ MonoBehaviour:
     - rid: 1461691153215914052
       type: {class: InitializeGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
+        waterGridSize: 50
+        waterPrefab: {fileID: 2809170893415596209, guid: f1c152f9cc09eb2449a463edc5723b12, type: 3}
         gameSettings: {fileID: 11400000, guid: c608fd40c83703448a2aad5847cfea98, type: 2}
         boardController: {fileID: 0}
         playersManager: {fileID: 0}

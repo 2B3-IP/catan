@@ -6,6 +6,7 @@ using B3.BoardSystem;
 using B3.DevelopmentCardSystem;
 using B3.GameStateSystem;
 using UnityEngine.InputSystem;
+using B3.UI;
 
 namespace B3.BuildingSystem
 {
@@ -63,7 +64,8 @@ namespace B3.BuildingSystem
                 yield break;
 
             SettlementController selectedHouse = null;
-
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select a vertex to build a house", float.PositiveInfinity, false);
             while (selectedHouse == null)
             {
                 yield return player.BuildHouseCoroutine();
@@ -82,7 +84,7 @@ namespace B3.BuildingSystem
                 HasBuilt = false;
                 selectedHouse = null;
             }
-
+            instructionNotif.Destroy();
             Debug.Log("Building house successfully!");
             
             Debug.Log($"BEFORE: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
@@ -115,7 +117,8 @@ namespace B3.BuildingSystem
             }
     
             PathController selectedPath = null;
-    
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select an edge to build a road", float.PositiveInfinity, false);
             while (selectedPath == null)
             {
                 Debug.Log("Waiting for player to select a path...");
@@ -142,7 +145,7 @@ namespace B3.BuildingSystem
                     Debug.Log("No path selected by player");
                 }
             }
-    
+            instructionNotif.Destroy();
             Debug.Log($"Building road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir}");
     
             HasBuilt = true;

@@ -117,7 +117,8 @@ namespace B3.BuildingSystem
             }
 
             int roadsCount = player.Paths.Count;
-            return roadsCount < MAX_ROADS_PER_PLAYER && canBuildRoad;
+            Debug.Log("ROADS COUNT: " + roadsCount);
+            return roadsCount <= MAX_ROADS_PER_PLAYER && canBuildRoad;
         }
 
         private bool CanBuildRoadNeighbouring(SettlementController settlement1,FullHexGrid<PieceController, SettlementController, PathController> boardGrid)

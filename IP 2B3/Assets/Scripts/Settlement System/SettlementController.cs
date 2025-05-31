@@ -92,8 +92,16 @@ namespace B3.SettlementSystem
             
             IsCity = true;
             
-            houseObject.SetActive(false);
-            cityObject.SetActive(true);
+            LeanTween.rotateAroundLocal(houseObject, Vector3.up, 360f, animLength);
+            LeanTween.scale(houseObject, Vector3.zero, animLength).setFrom(Vector3.one).setOnComplete(() =>
+                {
+                    LeanTween.rotateAroundLocal(cityObject, Vector3.up, 360f, animLength * 1.5f);
+                    LeanTween.scale(cityObject, Vector3.one, animLength * 1.5f).setFrom(Vector3.zero);
+                    houseObject.SetActive(false);
+                    cityObject.SetActive(true);
+                } 
+            );
+            
         }
     }
 }

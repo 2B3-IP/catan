@@ -16,6 +16,7 @@ namespace B3.BuildingSystem
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private SettlementController settlementPrefab;
         [SerializeField] private LongestRoadController longestRoadController;
+        public CanvasGroup canvasGroup;
 
         private PathController[] _allPaths;
         private bool _isFirstStates = true;
@@ -63,14 +64,18 @@ namespace B3.BuildingSystem
         public override IEnumerator BuildHouse(PlayerBase player)
         {
             if (!_isFirstStates && !CanBuildHouse(player))
+            {
+                if (player is HumanPlayer) canvasGroup.interactable = true;
                 yield break;
+            }
 
             if (_isFirstStates)
                 countFirstStates++;
-
+            
             SettlementController selectedHouse = null;
             var instructionNotif = NotificationManager.Instance
                 .AddNotification("Select a vertex to build a house", float.PositiveInfinity, false);
+            if (player is HumanPlayer) canvasGroup.interactable = false;
             while (selectedHouse == null)
             {
                 yield return player.BuildHouseCoroutine();
@@ -115,6 +120,7 @@ namespace B3.BuildingSystem
 
             if(player is HumanPlayer)
                 AI.SendMove(message);
+            if (player is HumanPlayer) canvasGroup.interactable = true;
         }
 
 
@@ -122,7 +128,7 @@ namespace B3.BuildingSystem
         {
             if (!_isFirstStates && !CanBuildRoad(player))
             {
-                Debug.Log("CanBuildRoad(player) returned false - exiting");
+                if (player is HumanPlayer) canvasGroup.interactable = true;
                 yield break;
             }
     
@@ -132,6 +138,9 @@ namespace B3.BuildingSystem
             while (selectedPath == null)
             {
                 Debug.Log("Waiting for player to select a path...");
+
+                if (player is HumanPlayer) canvasGroup.interactable = false;
+                
                 yield return player.BuildRoadCoroutine();
                 selectedPath = player.SelectedPath;
         
@@ -167,7 +176,8 @@ namespace B3.BuildingSystem
             Debug.Log($"Road built successfully! Player now has {player.Paths.Count} roads");
     
             if (longestRoadController != null)
-                longestRoadController.CheckLongestRoadAfterBuild(player, selectedPath);;
+                longestRoadController.CheckLongestRoadAfterBuild(player, selectedPath);
+            if (player is HumanPlayer) canvasGroup.interactable = true;
         }
 
         protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player)
@@ -276,9 +286,13 @@ namespace B3.BuildingSystem
         public override IEnumerator BuildCity(PlayerBase player)
         {
             if (!CanBuildCity(player))
+            {
+                if (player is HumanPlayer) canvasGroup.interactable = true;
                 yield break;
+            }
 
             SettlementController closestCorner = null;
+            if (player is HumanPlayer) canvasGroup.interactable = false;
             while (closestCorner == null)
             {
                 Debug.Log("Building city for:" + player.name);
@@ -291,6 +305,7 @@ namespace B3.BuildingSystem
                 {
                     closestCorner = null;
                     Debug.Log("Not your settlement");
+                    //if (player is HumanPlayer) canvasGroup.interactable = true;
                 }
                 else
                 {
@@ -299,6 +314,7 @@ namespace B3.BuildingSystem
                     HasBuilt = true;
                 }
             }
+            if (player is HumanPlayer) canvasGroup.interactable = true;
         }
         
         private void OnDiceGameState() =>

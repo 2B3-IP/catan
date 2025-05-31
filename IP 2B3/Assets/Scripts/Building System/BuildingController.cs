@@ -1,18 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using B3.SettlementSystem;
 using B3.PlayerSystem;
 using B3.BoardSystem;
 using B3.DevelopmentCardSystem;
 using B3.GameStateSystem;
-using B3.PieceSystem;
-using B3.PlayerBuffSystem;
-using B3.PortSystem;
 using UnityEngine.InputSystem;
-using System;
-using NUnit.Framework;
 
 namespace B3.BuildingSystem
 {
@@ -87,7 +80,7 @@ namespace B3.BuildingSystem
                 
                 Debug.Log("Cannot build house here - resetting selection");
                 HasBuilt = false;
-                selectedHouse = null;
+                yield break;
             }
 
             Debug.Log("Building house successfully!");
@@ -97,7 +90,7 @@ namespace B3.BuildingSystem
             selectedHouse.Owner = player;
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
-            player.AddVictoryPoints(1);
+            
             HasBuilt = true;
             
             Debug.Log($"AFTER: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
@@ -142,13 +135,13 @@ namespace B3.BuildingSystem
             
                     if (!canBuild)
                     {
-                        Debug.Log($"❌ Cannot build road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir} - resetting selection");
+                        Debug.Log($"Cannot build road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir} - resetting selection");
                         HasBuilt = false;
-                        selectedPath = null;
+                        yield break;
                     }
                     else
                     {
-                        Debug.Log($"✅ Can build road - proceeding with construction");
+                        Debug.Log($"Can build road - proceeding with construction");
                     }
                 }
                 else
@@ -287,7 +280,6 @@ namespace B3.BuildingSystem
             else
             {
                 closestCorner.UpgradeToCity();
-                player.AddVictoryPoints(1);
             }
         }
         

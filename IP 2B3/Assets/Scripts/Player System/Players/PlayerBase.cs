@@ -31,11 +31,12 @@ namespace B3.PlayerSystem
         public int VictoryPoints { get; private set; }
         public int DiceSum { get; protected set; }
         public int UsedKnightCards { get; private set; }
-        public int LongestRoad { get; set; }
+        public int LongestRoad { get; private set; }
         
         [Foldout("Events")] public UnityEvent onResourcesChanged = new();
         [Foldout("Events")] public UnityEvent onVPChanged = new();
         [Foldout("Events")] public UnityEvent onUsedKnightsChanged = new();
+        [Foldout("Events")] public UnityEvent onLongestRoadChanged = new();
         
         public SettlementController SelectedHouse { get; protected set; }
         
@@ -74,6 +75,12 @@ namespace B3.PlayerSystem
                 yield return null;
             }
             Debug.Log("end turn");
+        }
+
+        public void SetLongestRoad(int value)
+        {
+            LongestRoad = value;
+            onLongestRoadChanged.Invoke();
         }
         
         public void AddResource(ResourceType resource, int amount)

@@ -29,8 +29,8 @@ namespace B3.DevelopmentCardSystem
             {
                 TransferLongestRoadCard(player, playerLongestRoad);
             }
-
-            player.LongestRoad = playerLongestRoad;
+            
+            player.SetLongestRoad(playerLongestRoad);
         }
         
         private void TransferLongestRoadCard(PlayerBase newOwner, int newLength)

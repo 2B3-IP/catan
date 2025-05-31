@@ -90,6 +90,7 @@ namespace B3.BuildingSystem
             selectedHouse.Owner = player;
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
+            player.AddVictoryPoints(1);
             
             HasBuilt = true;
             
@@ -149,7 +150,6 @@ namespace B3.BuildingSystem
             selectedPath.BuildRoad();
     
             player.Paths.Add(selectedPath);
-            player.AddVictoryPoints(1);
     
             Debug.Log($"Road built successfully! Player now has {player.Paths.Count} roads");
     

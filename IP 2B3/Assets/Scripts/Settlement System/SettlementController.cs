@@ -11,6 +11,9 @@ namespace B3.SettlementSystem
         [SerializeField] private GameObject houseObject;
         [SerializeField] private GameObject cityObject;
         [SerializeField] private Material highlightMaterial;
+        
+        [SerializeField] private LeanTweenType easing;
+        [SerializeField] private float animLength = 2f;
 
         public PortController ConnectedPortController { get; set; }
         public HexPosition HexPosition { get; set; }
@@ -58,6 +61,12 @@ namespace B3.SettlementSystem
         {
             if (IsCity)
                 return;
+            
+            houseObject.transform.position = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z);
+            houseObject.transform.localScale = Vector3.zero;
+            
+            LeanTween.scale(houseObject, Vector3.one, animLength).setFrom(Vector3.zero);
+            LeanTween.moveLocalY(houseObject, houseObject.transform.position.y - 5f, animLength);
             
             houseObject.SetActive(true);
             cityObject.SetActive(false);

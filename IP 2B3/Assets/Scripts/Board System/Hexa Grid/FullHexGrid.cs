@@ -47,10 +47,29 @@ namespace B3.BoardSystem
         [CanBeNull] 
         public Cell this[HexPosition position]
         {
-            get => InnerGrid[position]?.Cell;
-            
+            get
+            {
+                if (position is 
+                    { X: -1, Y: 3 } 
+                    or { X: 1, Y: 2 } 
+                    or { X: 3, Y: 0 } 
+                    or { X: 3, Y: -2 } 
+                    or { X: -2, Y: -1 })
+                    return null;
+                
+                return InnerGrid[position]?.Cell;
+            }
+
             set
             {
+                if (position is 
+                    { X: -1, Y: 3 } 
+                    or { X: 1, Y: 2 } 
+                    or { X: 3, Y: 0 } 
+                    or { X: 3, Y: -2 } 
+                    or { X: -2, Y: -1 })
+                    return;
+                
                 var innerCell = InnerGrid[position];
                 if (innerCell is null)
                 {
@@ -88,7 +107,7 @@ namespace B3.BoardSystem
                     innerCell.Cell = value;
             }
         }
-        
+
         // returns null if the cell has not been init
         [CanBeNull]
         public Vertex GetVertex(HexPosition position, HexVertexDir dir) 

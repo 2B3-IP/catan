@@ -59,7 +59,7 @@ namespace B3.BuildingSystem
 
         public override IEnumerator BuildHouse(PlayerBase player)
         {
-            if ( !_isFirstStates && !CanBuildHouse(player))
+            if (!_isFirstStates && !CanBuildHouse(player))
                 yield break;
 
             SettlementController selectedHouse = null;
@@ -274,6 +274,7 @@ namespace B3.BuildingSystem
             {
                 closestCorner.UpgradeToCity();
                 player.AddVictoryPoints(1);
+                HasBuilt = true;
             }
         }
         

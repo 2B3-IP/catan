@@ -52,13 +52,13 @@ namespace B3.BuildingSystem
                 }
             }
 
-            int housesCount = player.GetHousesCount();
+            int housesCount = player.GetHousesCount() + 1;
             return housesCount <= MAX_HOUSES_PER_PLAYER && canBuildHouse;
         }
         
         protected bool CanBuildCity(PlayerBase player)
         {
-            int citiesCount = player.GetCitiesCount();
+            int citiesCount = player.GetCitiesCount() + 1;
             if (citiesCount == player.Settlements.Count)
                 return false;
             
@@ -116,7 +116,7 @@ namespace B3.BuildingSystem
                 }
             }
 
-            int roadsCount = player.Paths.Count;
+            int roadsCount = player.Paths.Count + 1;
             Debug.Log("ROADS COUNT: " + roadsCount);
             return roadsCount <= MAX_ROADS_PER_PLAYER && canBuildRoad;
         }

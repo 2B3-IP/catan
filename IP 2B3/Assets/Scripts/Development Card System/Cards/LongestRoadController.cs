@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace B3.DevelopmentCardSystem
 {
-    public class LongestRoadController : MonoBehaviour
+   public class LongestRoadController : MonoBehaviour
     {
         [SerializeField] private BoardController boardController;
         
@@ -83,16 +83,12 @@ namespace B3.DevelopmentCardSystem
             Debug.Log("VERTEX1", vertex1);
             Debug.Log("VERTEX2", vertex2);
             
-            visited = new HashSet<SettlementController>
-            {
-                vertex1, vertex2
-            };
+            visited = new HashSet<SettlementController>{vertex1,vertex2};
             int length1 = TraverseVertex(player, vertex1, vertex1, vertex2);
             int length2 = TraverseVertex(player, vertex2, vertex1, vertex2);
             Debug.Log("LENGTH: " + length1 + " " + length2);
             return length1 + length2 + 1;
         }
-
         private HashSet<SettlementController> visited;
 
         private int TraverseVertex(PlayerBase player, SettlementController currentSettlement, SettlementController v1 = null, SettlementController v2 = null)
@@ -111,18 +107,12 @@ namespace B3.DevelopmentCardSystem
             int maxLength = 0;
 
             int index = 0;
-
+            
             foreach (var (settlement, pos, dir) in neighbouringVertices)
             {
                 if (visited.Contains(settlement))
                 {
-                    if (settlement != v1 || settlement != v2)
-                    {
-                        maxLength++;
-                Debug.Log("VERTEX for", settlement);
-                        
-                    }
-                    
+                    Debug.Log("VERTEX deja vizitat", settlement);
                     continue;
                 }
                 Debug.Log("VERTEX dupa if", settlement);
@@ -138,14 +128,15 @@ namespace B3.DevelopmentCardSystem
                 var path = boardGrid.GetEdge(pos, edgeDir);
                 if (path == null || path.Owner != player)
                     continue;
-
+                
                 visited.Add(settlement);
-                int length = TraverseVertex(player, settlement, v1, v2);
+                Debug.Log("VERTEX adaugat", settlement);
+                int length = 1 + TraverseVertex(player, settlement, v1, v2);
 
                 if (maxLength < length)
                     maxLength = length;
             }
-
+            
             Debug.Log("MAX LENGTH: " + maxLength);
             return maxLength;
         }

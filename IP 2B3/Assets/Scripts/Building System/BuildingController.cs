@@ -97,7 +97,7 @@ namespace B3.BuildingSystem
             selectedHouse.Owner = player;
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
-            
+            player.AddVictoryPoints(1);
             HasBuilt = true;
             
             Debug.Log($"AFTER: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
@@ -287,6 +287,7 @@ namespace B3.BuildingSystem
             else
             {
                 closestCorner.UpgradeToCity();
+                player.AddVictoryPoints(1);
             }
         }
         

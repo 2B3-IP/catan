@@ -64,6 +64,7 @@ namespace B3.GameStateSystem
         {
             ChangePlayer();
             StartMachine(secondStateIndex);
+            Debug.Log("START MACHINE WITH PLAYER: " + _currentPlayerIndex);
         }
 
         internal void ChangePlayer(bool inversedOrder = false)
@@ -71,10 +72,11 @@ namespace B3.GameStateSystem
             CurrentPlayer.IsTurnEnded = false;
             
             int amount = inversedOrder ? -1 : 1;
+            Debug.Log("[SM] current: " + _currentPlayerIndex + " amount: " + amount + " PlayerCount: " + PlayerCount);
             _currentPlayerIndex = (_currentPlayerIndex + amount) % PlayerCount;
             onCurrentPlayerChanged?.Invoke();
             
-            Debug.Log("Player: " + _currentPlayerIndex);
+            Debug.Log("[SM]Player: " + _currentPlayerIndex);
         }
 
        
@@ -84,8 +86,6 @@ namespace B3.GameStateSystem
                 return;
 
             _currentState = state;
-            
-            Debug.Log($"Current state: {_currentState.GetType().Name}");
             
             StopAllCoroutines();
             StartCoroutine(_currentState.OnEnter(this));

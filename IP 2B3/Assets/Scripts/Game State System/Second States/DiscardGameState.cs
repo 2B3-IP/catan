@@ -22,6 +22,7 @@ namespace B3.GameStateSystem
             var allPlayers = stateMachine.PlayersManager.players;
             List<Coroutine> coroutines = new List<Coroutine>();
             int discardPlayers = 0;
+            /*
             foreach (var player in allPlayers)
             {
                 int total = player.TotalResources();
@@ -61,7 +62,7 @@ namespace B3.GameStateSystem
             {
                 if(coroutine != null)
                     stateMachine.StopCoroutine(coroutine);
-            }
+            }*/
 
             foreach (var player in allPlayers)
             {

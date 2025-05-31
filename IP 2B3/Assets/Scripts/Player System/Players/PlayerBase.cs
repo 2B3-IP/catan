@@ -75,9 +75,6 @@ namespace B3.PlayerSystem
             }
             Debug.Log("end turn");
         }
-
-    
-
         
         public void AddResource(ResourceType resource, int amount)
         {

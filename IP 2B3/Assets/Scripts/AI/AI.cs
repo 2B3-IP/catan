@@ -59,9 +59,10 @@ public static class AI
     }
 
     // hex ul selectat de ai, coltu hex ului
+    private static int i = 0;
     public static (HexPosition, HexVertexDir) GetHousePosition()
     {
-        return (new HexPosition(0, 0), HexVertexDir.Left);
+        return (new HexPosition(i, i), HexVertexDir.Left);
     }
 
     public static (HexPosition, HexVertexDir) GetCityPosition()
@@ -71,10 +72,10 @@ public static class AI
 
     public static (HexPosition, HexEdgeDir) GetRoadPosition()
     {
-        return (new HexPosition(0, 0), HexEdgeDir.TopLeft);
+        return (new HexPosition(i, i++), HexEdgeDir.TopLeft);
     }
     
-    public static HexPosition GetThiefPostion()
+    public static HexPosition GetThiefPosition()
     {
         return new HexPosition(0, 0);
     }

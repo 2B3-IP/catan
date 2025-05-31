@@ -12,7 +12,12 @@ namespace B3.GameStateSystem
 {
     [System.Serializable]
     internal sealed class InitializeGameState : GameStateBase
-    {  
+    {
+        private const float WATER_SIZE = 22.86f;
+        
+        [SerializeField] private int waterGridSize = 10;
+        [SerializeField] private GameObject waterPrefab;
+        
         [SerializeField] private GameSettings gameSettings;
         [SerializeField] private BoardController boardController;
         [SerializeField] private PlayersManager playersManager;
@@ -22,7 +27,8 @@ namespace B3.GameStateSystem
         {  
             if (gameSettings.autoGenerateBoard)
                 boardController.Generate();
-            
+
+            SpawnWater();
             playersManager.Initialize(gameSettings.numberOfPlayers);
             
             var allPieces = Object.FindObjectsByType<PieceController>(FindObjectsSortMode.None);
@@ -37,6 +43,20 @@ namespace B3.GameStateSystem
             }
             
             stateMachine.ChangeState<AddHouseState>();
+        }
+
+        private void SpawnWater()
+        {
+            int half = waterGridSize / 2;
+
+            for (int x = -half; x < half; x++)
+            {
+                for (int z = -half; z < half; z++)
+                {
+                    Vector3 position = new Vector3(x * WATER_SIZE, -6.3f, z * WATER_SIZE);
+                    Object.Instantiate(waterPrefab, position, Quaternion.identity);
+                }
+            }
         }
     }
 }

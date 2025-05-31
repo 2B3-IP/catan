@@ -1,18 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using B3.SettlementSystem;
 using B3.PlayerSystem;
 using B3.BoardSystem;
 using B3.DevelopmentCardSystem;
 using B3.GameStateSystem;
-using B3.PieceSystem;
-using B3.PlayerBuffSystem;
-using B3.PortSystem;
 using UnityEngine.InputSystem;
-using System;
-using NUnit.Framework;
 
 namespace B3.BuildingSystem
 {
@@ -66,7 +59,7 @@ namespace B3.BuildingSystem
 
         public override IEnumerator BuildHouse(PlayerBase player)
         {
-            if (!CanBuildHouse(player))
+            if ( !_isFirstStates && !CanBuildHouse(player))
                 yield break;
 
             SettlementController selectedHouse = null;
@@ -97,6 +90,7 @@ namespace B3.BuildingSystem
             selectedHouse.Owner = player;
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
+            player.AddVictoryPoints(1);
             
             HasBuilt = true;
             
@@ -114,9 +108,7 @@ namespace B3.BuildingSystem
 
         public override IEnumerator BuildRoad(PlayerBase player)
         {
-            Debug.Log($"=== BUILD ROAD STARTED for {player.name} ===");
-    
-            if (!CanBuildRoad(player))
+            if (!_isFirstStates && !CanBuildRoad(player))
             {
                 Debug.Log("CanBuildRoad(player) returned false - exiting");
                 yield break;
@@ -132,23 +124,17 @@ namespace B3.BuildingSystem
         
                 if (selectedPath != null)
                 {
-                    Debug.Log($"=== PLAYER SELECTED PATH ===");
-                    Debug.Log($"Selected path: {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir}");
-                    Debug.Log($"Path state: IsBuilt={selectedPath.IsBuilt}, Owner={selectedPath.Owner?.name ?? "NULL"}");
-            
-                    // Debug detailat pentru validare
-                    bool canBuild = CanBuildRoad(player, selectedPath);
+                     bool canBuild = CanBuildRoad(player, selectedPath);
                     Debug.Log($"CanBuildRoad result: {canBuild}");
             
                     if (!canBuild)
                     {
-                        Debug.Log($"❌ Cannot build road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir} - resetting selection");
+                        Debug.Log($"Cannot build road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir} - resetting selection");
                         HasBuilt = false;
                         selectedPath = null;
                     }
-                    else
-                    {
-                        Debug.Log($"✅ Can build road - proceeding with construction");
+                    else {
+                        Debug.Log($"Can build road - proceeding with construction");
                     }
                 }
                 else
@@ -287,6 +273,7 @@ namespace B3.BuildingSystem
             else
             {
                 closestCorner.UpgradeToCity();
+                player.AddVictoryPoints(1);
             }
         }
         

@@ -5,6 +5,7 @@ using B3.PlayerSystem;
 using B3.BoardSystem;
 using B3.DevelopmentCardSystem;
 using B3.GameStateSystem;
+using B3.PieceSystem;
 using UnityEngine.InputSystem;
 using B3.UI;
 
@@ -18,6 +19,7 @@ namespace B3.BuildingSystem
 
         private PathController[] _allPaths;
         private bool _isFirstStates = true;
+        private int countFirstStates = 0;
         
         public bool HasBuilt { get; private set; }
 
@@ -60,8 +62,11 @@ namespace B3.BuildingSystem
 
         public override IEnumerator BuildHouse(PlayerBase player)
         {
-            if ( !_isFirstStates && !CanBuildHouse(player))
+            if (!_isFirstStates && !CanBuildHouse(player))
                 yield break;
+
+            if (_isFirstStates)
+                countFirstStates++;
 
             SettlementController selectedHouse = null;
             var instructionNotif = NotificationManager.Instance
@@ -88,7 +93,12 @@ namespace B3.BuildingSystem
             Debug.Log("Building house successfully!");
             
             Debug.Log($"BEFORE: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
-    
+
+            if (_isFirstStates && countFirstStates == 4)//TREBUIE VAZUT CAND ADAUGAM RESURSELE
+            {
+                AddResourcesForSettlement(selectedHouse, player);
+            }
+
             selectedHouse.Owner = player;
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
@@ -255,6 +265,9 @@ namespace B3.BuildingSystem
             }
         }
         
+        
+
+        private PieceController[] allPieces;
         private void AddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
         {
             if (settlement.ConnectedPortController != null) settlement.ConnectedPortController.AddPlayerBuff(player);
@@ -265,22 +278,88 @@ namespace B3.BuildingSystem
             if (!CanBuildCity(player))
                 yield break;
 
-            Debug.Log("Building city for:" + player.name);
-            yield return player.UpgradeToCityCoroutine();
-
-            var closestCorner = player.SelectedHouse;
-
-            Debug.Log(closestCorner.Owner.name + " vs " + player.name);
-            if (!closestCorner.HasOwner || closestCorner.Owner != player)
-                Debug.Log("Not your settlement");
-            else
+            SettlementController closestCorner = null;
+            while (closestCorner == null)
             {
-                closestCorner.UpgradeToCity();
-                player.AddVictoryPoints(1);
+                Debug.Log("Building city for:" + player.name);
+                yield return player.UpgradeToCityCoroutine();
+
+                closestCorner = player.SelectedHouse;
+                
+                Debug.Log(closestCorner.Owner.name + " vs " + player.name);
+                if (!closestCorner.HasOwner || closestCorner.Owner != player)
+                {
+                    closestCorner = null;
+                    Debug.Log("Not your settlement");
+                }
+                else
+                {
+                    closestCorner.UpgradeToCity();
+                    player.AddVictoryPoints(1);
+                    HasBuilt = true;
+                }
             }
         }
         
         private void OnDiceGameState() =>
             _isFirstStates = false;
+        
+                
+         private void AddResourcesForSettlement(SettlementController selectedHouse, PlayerBase player)
+        {
+            var boardGrid = boardController.BoardGrid;
+            var vertexPosition = selectedHouse.HexPosition;
+            var vertexDirection = selectedHouse.VertexDir;
+            
+            var pieceController = boardGrid[vertexPosition];
+            player.AddResource(pieceController.ResourceType, 1);
+            
+            switch (vertexDirection)
+            {
+                case HexVertexDir.TopRight :
+                {
+                    AddResourcesToPlayer(HexEdgeDir.TopRight, HexEdgeDir.Top, vertexPosition, player, boardGrid);
+                    break;
+                }
+                case HexVertexDir.Right:
+                {
+                    AddResourcesToPlayer(HexEdgeDir.TopRight,HexEdgeDir.BottomRight,vertexPosition,player,boardGrid);
+                    break;
+                }
+                case HexVertexDir.BottomRight:
+                {
+                    AddResourcesToPlayer(HexEdgeDir.BottomRight, HexEdgeDir.Bottom, vertexPosition, player, boardGrid);
+                    break;
+                }
+                case HexVertexDir.BottomLeft:
+                {
+                    AddResourcesToPlayer(HexEdgeDir.BottomLeft, HexEdgeDir.Bottom, vertexPosition, player, boardGrid);
+                    break;
+                }
+                case HexVertexDir.Left:
+                {
+                    AddResourcesToPlayer(HexEdgeDir.BottomLeft, HexEdgeDir.TopLeft, vertexPosition, player, boardGrid);
+                    break;
+                }
+                case HexVertexDir.TopLeft:
+                {
+                    AddResourcesToPlayer(HexEdgeDir.TopLeft, HexEdgeDir.Top, vertexPosition, player, boardGrid);
+                    break;
+                }
+            }
+        }
+
+        private void AddResourcesToPlayer(HexEdgeDir dir1, HexEdgeDir dir2, HexPosition vertexPosition, PlayerBase player, FullHexGrid<PieceController, SettlementController, PathController> boardGrid )
+        {
+            var hex1 = vertexPosition.GetNeighbour(dir1);
+            var hex2 = vertexPosition.GetNeighbour(dir2);
+
+            var pieceController1 = boardGrid[hex1];
+            var pieceController2 = boardGrid[hex2];
+            
+            player.AddResource(pieceController1.ResourceType, 1);
+            player.AddResource(pieceController2.ResourceType, 1);
+        }
     }
+    
 }

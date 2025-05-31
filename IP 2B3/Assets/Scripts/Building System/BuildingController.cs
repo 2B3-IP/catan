@@ -107,8 +107,6 @@ namespace B3.BuildingSystem
 
         public override IEnumerator BuildRoad(PlayerBase player)
         {
-            Debug.Log($"=== BUILD ROAD STARTED for {player.name} ===");
-    
             if (!CanBuildRoad(player))
             {
                 Debug.Log("CanBuildRoad(player) returned false - exiting");
@@ -125,12 +123,7 @@ namespace B3.BuildingSystem
         
                 if (selectedPath != null)
                 {
-                    Debug.Log($"=== PLAYER SELECTED PATH ===");
-                    Debug.Log($"Selected path: {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir}");
-                    Debug.Log($"Path state: IsBuilt={selectedPath.IsBuilt}, Owner={selectedPath.Owner?.name ?? "NULL"}");
-            
-                    // Debug detailat pentru validare
-                    bool canBuild = CanBuildRoad(player, selectedPath);
+                     bool canBuild = CanBuildRoad(player, selectedPath);
                     Debug.Log($"CanBuildRoad result: {canBuild}");
             
                     if (!canBuild)
@@ -139,8 +132,7 @@ namespace B3.BuildingSystem
                         HasBuilt = false;
                         yield break;
                     }
-                    else
-                    {
+                    else {
                         Debug.Log($"Can build road - proceeding with construction");
                     }
                 }
@@ -157,6 +149,7 @@ namespace B3.BuildingSystem
             selectedPath.BuildRoad();
     
             player.Paths.Add(selectedPath);
+            player.AddVictoryPoints(1);
     
             Debug.Log($"Road built successfully! Player now has {player.Paths.Count} roads");
     
@@ -280,6 +273,7 @@ namespace B3.BuildingSystem
             else
             {
                 closestCorner.UpgradeToCity();
+                player.AddVictoryPoints(1);
             }
         }
         

@@ -60,21 +60,23 @@ namespace B3.PlayerSystem
             while (!_hasDiceClick)
                 yield return null;
 
-            DiceSum = 8;
+            DiceSum = 7;
 
             _hasDiceClick = false;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
-            yield return RayCastCoroutine(pieceLayerMask);
+            SelectedThiefPiece = null;
             
-            var pieceController = _closestHit.transform.GetComponent<PieceController>();
-            SelectedThiefPiece = pieceController;
-            
-            var thiefPivot = pieceController.ThiefPivot;
-            
-            yield return thiefController.MoveThief(thiefPivot.position);
+            while (SelectedThiefPiece == null)
+            {
+                yield return RayCastCoroutine(pieceLayerMask);
+                SelectedThiefPiece = _closestHit.transform.GetComponentInParent<PieceController>();
+
+                if (SelectedThiefPiece.IsBlocked)
+                    SelectedThiefPiece = null;
+            }
         }
 
         public override void OnTradeAndBuildUpdate()
@@ -154,24 +156,6 @@ namespace B3.PlayerSystem
                 elapsed += Time.deltaTime;
                 yield return null;
             }
-
-            if (!playerChoseManually)
-            {
-                
-                for (int i = 0; i < toDiscard;)
-                {
-                    int index = UnityEngine.Random.Range(0, Resources.Length);
-                    if (Resources[index] > 0)
-                    {
-                        Resources[index]--;
-                        i++;
-                    }
-                }
-                
-            }
-           
-
-            yield break;
         }
         
         private IEnumerator RayCastCoroutine(LayerMask layerMask)

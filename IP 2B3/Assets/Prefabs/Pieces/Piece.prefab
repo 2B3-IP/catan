@@ -324,6 +324,7 @@ Transform:
   - {fileID: 2305855120834639696}
   - {fileID: 526735237253257512}
   - {fileID: 4134428543226658201}
+  - {fileID: 4080819969799974711}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5022685486829936994
@@ -342,7 +343,7 @@ MonoBehaviour:
   <ResourceType>k__BackingField: 0
   <IsBlocked>k__BackingField: 0
   <IsDesert>k__BackingField: 0
-  <ThiefPivot>k__BackingField: {fileID: 969629654706567566}
+  <ThiefPivot>k__BackingField: {fileID: 4080819969799974711}
   radius: 1
   numberText: {fileID: 514370252411488558}
 --- !u!1 &6725650610803093364
@@ -432,6 +433,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6958902736119964522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4080819969799974711}
+  m_Layer: 6
+  m_Name: Thief Pivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4080819969799974711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6958902736119964522}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6353825636534302838}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7779977402117031791
 GameObject:
   m_ObjectHideFlags: 0

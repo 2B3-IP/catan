@@ -17,10 +17,9 @@ namespace B3.PortSystem
         [SerializeField] public BoardController boardController;
 
         private PieceController _pieceController;
-
-        protected override void Awake()
+        
+        protected void Awake()
         {
-            base.Awake();
             _pieceController = GetComponent<PieceController>();
         }
 
@@ -40,19 +39,20 @@ namespace B3.PortSystem
                     var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopRight);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
+                    
+                    transform.localRotation = Quaternion.Euler(0, 0, 0);
+
                     return true;
-                    break;
                 }
                 case (1, 2):
                 {
                     var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopLeft);
                     var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Bottom, HexVertexDir.TopRight);
-                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
-                    settlement3.ConnectedPortController = this;
+                    var dir = HexEdgeDir.Bottom;
+                    
                     return true;
-                    break;
                 }
                 case (3, 0):
                 {
@@ -60,30 +60,32 @@ namespace B3.PortSystem
                     var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.TopRight);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
+                    
+                    transform.localRotation = Quaternion.Euler(0, 60, 0);
+                    
                     return true;
-                    break;
                 }
                 case (3, -2):
                 {
                     var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.Right);
                     var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.BottomRight);
-                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomLeft, HexVertexDir.Right);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
-                    settlement3.ConnectedPortController = this;
+                    
+                    transform.localRotation = Quaternion.Euler(0, 120, 0);
+                    
                     return true;
-                    break;
                 }
                 case (2, -3):
                 {
                     var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.Right);
                     var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopLeft, HexVertexDir.BottomRight);
-                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomLeft);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
-                    settlement3.ConnectedPortController = this;
+                    
+                    transform.localRotation = Quaternion.Euler(0, 120, 0);
+                    
                     return true;
-                    break;
                 }
                 case (0, -3):
                 {
@@ -91,30 +93,32 @@ namespace B3.PortSystem
                     var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomRight);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
+                    
+                    transform.localRotation = Quaternion.Euler(0, 180, 0);
+                    
                     return true;
-                    break;
                 }
                 case (-2, -1):
                 {
                     var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.Left);
                     var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.BottomLeft);
-                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.Top, HexVertexDir.BottomRight);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
-                    settlement3.ConnectedPortController = this;
+
+                    transform.localRotation = Quaternion.Euler(0, 240, 0);
+                    
                     return true;
-                    break;
                 }
                 case (-3, 1):
                 {
                     var settlement1 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.Left);
                     var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.TopRight, HexVertexDir.BottomLeft);
-                    var settlement3 = boardController.BoardGrid.GetVertex(hexPosition.BottomRight, HexVertexDir.BottomRight);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
-                    settlement3.ConnectedPortController = this;
+
+                    transform.localRotation = Quaternion.Euler(0, 240, 0);
+                    
                     return true;
-                    break;
                 }
                 case (-3, 3):
                 {
@@ -122,8 +126,10 @@ namespace B3.PortSystem
                     var settlement2 = boardController.BoardGrid.GetVertex(hexPosition.BottomRight, HexVertexDir.TopLeft);
                     settlement1.ConnectedPortController = this;
                     settlement2.ConnectedPortController = this;
+                    
+                    transform.localRotation = Quaternion.Euler(0, 300, 0);
+                    
                     return true;
-                    break;
                 }
                 default:
                     return false;

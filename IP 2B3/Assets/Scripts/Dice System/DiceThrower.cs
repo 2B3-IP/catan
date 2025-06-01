@@ -5,23 +5,20 @@ namespace B3.DiceSystem
 {
     public sealed class DiceThrower : MonoBehaviour
     {
-        private DiceController[] _diceControllers;
+        [SerializeField] private DiceController[] _diceControllers;
         
         public int DiceRolls { get; private set; }
 
-        private void Awake() =>
-            _diceControllers = GetComponentsInChildren<DiceController>();
-
-        [ContextMenu("a")]
-        public void a()
+        public IEnumerator ThrowCoroutine()
         {
-            StartCoroutine(ThrowCoroutine(transform.position, 5f));
-        }
-        
-        public IEnumerator ThrowCoroutine(Vector3 startPosition, float throwForce)
-        {
+            var startPosition = transform.position;
+            float throwForce = Random.Range(1f, 10f);
+            
             var firstDice = _diceControllers[0];
             var secondDice = _diceControllers[1];
+            
+            firstDice.gameObject.SetActive(true);
+            secondDice.gameObject.SetActive(true);
             
             var firstThrow = StartCoroutine(firstDice.ThrowCoroutine(startPosition, throwForce));
             var secondThrow = StartCoroutine(secondDice.ThrowCoroutine(startPosition, throwForce));
@@ -30,7 +27,8 @@ namespace B3.DiceSystem
             yield return secondThrow;
             
             DiceRolls = firstDice.DiceRoll + secondDice.DiceRoll;
-            AI.SendDice(DiceRolls);
+            
+             AI.SendDice(DiceRolls);
         }
     }
 }

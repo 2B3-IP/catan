@@ -2,12 +2,16 @@
 using System.Collections;
 using UnityEngine;
 using B3.DiceSystem;
+using B3.PlayerSystem;
+using B3.UI;
 
 namespace B3.GameStateSystem
 {
     [System.Serializable]
     internal sealed class PlayerDiceGameState : GameStateBase
     {
+        [SerializeField] private CanvasGroup diceButton;
+        
         public static event Action OnDiceGameState;
         private const int THIEF_ROLL = 7;
         
@@ -17,6 +21,11 @@ namespace B3.GameStateSystem
 
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
+            var currentPlayer = stateMachine.CurrentPlayer;
+            
+            if(currentPlayer is HumanPlayer)
+                diceButton.interactable = true;
+            
             OnDiceGameState?.Invoke();
             _cameraTransform ??= Camera.main.transform;
             
@@ -24,7 +33,6 @@ namespace B3.GameStateSystem
             // + trb sa astepti ca playerul ca tina apasat pe un buton iar apoi sa i pasezi forta la coroutina
             // adica, cu cat mai mult tine apasat pe buton cu atat mai tare arunca zaru
 
-            var currentPlayer = stateMachine.CurrentPlayer;
             
             yield return currentPlayer.ThrowDiceCoroutine();
             
@@ -38,6 +46,11 @@ namespace B3.GameStateSystem
             
             int diceRolls = currentPlayer.DiceSum;
             Debug.Log("dice: " + diceRolls + " " + (diceRolls == THIEF_ROLL));
+            NotificationManager.Instance.AddNotification($"Dice rolled {diceRolls}");
+            // AI.SendDice(diceRolls);
+
+            if(currentPlayer is HumanPlayer)
+                diceButton.interactable = false;
 
             if (diceRolls == THIEF_ROLL) stateMachine.ChangeState<DiscardGameState>();
             else stateMachine.ChangeState<ResourceGameState>();

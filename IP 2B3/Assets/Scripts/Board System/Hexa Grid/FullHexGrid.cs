@@ -111,7 +111,7 @@ namespace B3.BoardSystem
         // returns null if the cell has not been init
         [CanBeNull]
         public Vertex GetVertex(HexPosition position, HexVertexDir dir) 
-            => InnerGrid[position]?.Vertices[(int)dir];
+            => InnerGrid[position].Vertices[(int)dir];
         
         // returns 6 vertices (if the cell has been init)
         public IEnumerable<(Vertex, HexVertexDir)> GetHexVertices(HexPosition position)

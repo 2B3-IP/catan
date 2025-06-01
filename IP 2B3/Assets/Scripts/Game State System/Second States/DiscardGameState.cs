@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using B3.DiceSystem;
 using B3.ResourcesSystem;
 using UnityEngine;
@@ -8,12 +9,16 @@ using System.Linq;
 using B3.BankSystem;
 using B3.BoardSystem;
 using B3.PlayerSystem;
+using Random = UnityEngine.Random;
 
 namespace B3.GameStateSystem
 {
     [System.Serializable]
     internal sealed class DiscardGameState : GameStateBase
     {
+        public static event Action OnDiscardStateEnd;
+        [SerializeField] private float timeout;
+
         [SerializeField] private BankController bankController;
          public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
@@ -22,20 +27,19 @@ namespace B3.GameStateSystem
             var allPlayers = stateMachine.PlayersManager.players;
             List<Coroutine> coroutines = new List<Coroutine>();
             int discardPlayers = 0;
-            /*
+            
             foreach (var player in allPlayers)
             {
                 int total = player.TotalResources();
                 if (player is not AIPlayer && total > 7) //temp
                 {
-                    Coroutine coroutine = stateMachine.StartCoroutine(player.DiscardResourcesCoroutine(10f));
+                    Coroutine coroutine = stateMachine.StartCoroutine(player.DiscardResourcesCoroutine(timeout));
                     coroutines.Add(coroutine);
                     discardPlayers++;
                 }
             }
 
             float elapsed = 0f;
-            float timeout = 10f;
          
 
             while (elapsed < timeout )
@@ -57,13 +61,16 @@ namespace B3.GameStateSystem
 
                 yield return null;
             }
+
             
             foreach (var coroutine in coroutines)
             {
-                if(coroutine != null)
+                if (coroutine != null)
                     stateMachine.StopCoroutine(coroutine);
-            }*/
+            }
 
+            OnDiscardStateEnd?.Invoke();
+            
             foreach (var player in allPlayers)
             {
                 if(player.DiscardResources == null)
@@ -100,6 +107,7 @@ namespace B3.GameStateSystem
             
                     bankController.GiveResources((ResourceType)index, 1);
                     player.RemoveResource((ResourceType)index, 1);
+                
                 }
             }
         }

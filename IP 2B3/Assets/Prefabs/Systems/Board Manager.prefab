@@ -73,3 +73,8 @@ MonoBehaviour:
   settlementPrefab: {fileID: 5200040358732198354, guid: 6cd7e780901bac74a8182dd61c3a8ff8, type: 3}
   pathPrefab: {fileID: 6626397863268277113, guid: 08dd3561ebdb1414d82cd699175b1013, type: 3}
   pieceTextPrefab: {fileID: 6137507380118235479, guid: 1273f5402440e294db9751d9882d25ec, type: 3}
+  spawnDebugText: 0
+  animDuration: 4
+  delay: 0
+  delayIncPerTile: 0.25
+  easing: 9

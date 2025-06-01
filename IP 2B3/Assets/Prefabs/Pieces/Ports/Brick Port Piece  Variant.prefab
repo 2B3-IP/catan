@@ -12,6 +12,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brick Port Piece  Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 2096841371580836605, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2588189511161185985, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
+      propertyPath: m_text
+      value: '<color=#8F1313>2:1
+
+        Brick</color>'
+      objectReference: {fileID: 0}
     - target: {fileID: 6986705220417915101, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
       propertyPath: <ResourceType>k__BackingField
       value: 1
@@ -20,6 +30,10 @@ PrefabInstance:
       propertyPath: resourceType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8064758766151814628, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ac3969f891824264887af6dce4828eda, type: 2}
     - target: {fileID: 9037801374104359369, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.472094

@@ -39,7 +39,7 @@ public class TurnDisplay : MonoBehaviour
         {
             var minutes = (int)timeRemaining / 60;
             var seconds = (int)(timeRemaining % 60);
-        turnText.text += $"<size={timeRemainingTextSize}>{minutes}:{seconds, 2}</size>";
+        turnText.text += $"<size={timeRemainingTextSize}>{minutes}:{seconds, 0:00}</size>";
         }
     }
 }

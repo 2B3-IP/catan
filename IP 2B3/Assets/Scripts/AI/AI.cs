@@ -243,7 +243,7 @@ public static class AI
     public static void SendMove(string message)
     {
         Debug.Log("Sending move: " + message);
-         return;
+
         try
         {
             TcpListener server = new TcpListener(IPAddress.Any, 6868);

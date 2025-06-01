@@ -154,6 +154,7 @@ namespace B3.BuildingSystem
             }
 
 
+
             var message = $"BUILD road {selectedPath.HexPosition.X} {selectedPath.HexPosition.Y} {(int)selectedPath.EdgeDir} by {player.name}";
             Debug.Log(message);
 
@@ -161,6 +162,7 @@ namespace B3.BuildingSystem
                 AI.SendMove(message);
     
             Audio.Play(placeBuildingAudio, selectedPath.transform.position, 0.5f);
+
             HasBuilt = true;
             selectedPath.Owner = player;
             selectedPath.BuildRoad();

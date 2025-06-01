@@ -136,6 +136,7 @@ public static class AI
 
     public static void SendBoard(ResourceType?[] resources, int[] numbers, ResourceType?[] ports)
     {
+        return;
         int[] indexSwap = { 6, 5, 4, 3, 2, 1, 0, 8, 7 };
         // swap the port with the new index
         var swappedPorts = ports.ToArray();
@@ -241,7 +242,7 @@ public static class AI
     public static void SendMove(string message)
     {
         Debug.Log("Sending move: " + message);
-        // return;
+         return;
         try
         {
             TcpListener server = new TcpListener(IPAddress.Any, 6868);
@@ -272,6 +273,7 @@ public static class AI
     
     public static void SendDice(int dice)
     {
+        return;
         try
         {
             TcpListener server = new TcpListener(IPAddress.Any, 6969);

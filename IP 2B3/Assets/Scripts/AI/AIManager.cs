@@ -4,11 +4,13 @@ public class AIManager : MonoBehaviour
 {
     void Start()
     {
+        return;
         AI.StartMoveListener();
     }
 
     void Update()
     {
+        return;
         string move = AI.PollMove();
         if (move != "NONE")
         {
@@ -20,6 +22,7 @@ public class AIManager : MonoBehaviour
 
     void OnApplicationQuit()
     {
+        return;
         AI.StopMoveListener();
     }
 

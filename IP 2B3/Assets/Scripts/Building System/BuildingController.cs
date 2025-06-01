@@ -109,8 +109,7 @@ namespace B3.BuildingSystem
             
             AddPortBuffForSettlement(selectedHouse, player);
             
-            var message = $"House built at {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y}, {selectedHouse.VertexDir} by {player.name}";
-            Debug.Log(message);
+            var message = $"BUILD House {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y} {(int)selectedHouse.VertexDir} by {player.name}";
 
             if(player is HumanPlayer)
                 AI.SendMove(message);
@@ -158,8 +157,14 @@ namespace B3.BuildingSystem
                     Debug.Log("No path selected by player");
                 }
             }
+
             instructionNotif.Destroy();
-            Debug.Log($"Building road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir}");
+
+
+            var message = $"BUILD road {selectedPath.HexPosition.X} {selectedPath.HexPosition.Y} {(int)selectedPath.EdgeDir} by {player.name}";
+
+            if(player is HumanPlayer)
+                AI.SendMove(message);
     
             //Audio.Play();
             HasBuilt = true;

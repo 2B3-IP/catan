@@ -1,4 +1,5 @@
-﻿using B3.PlayerSystem;
+﻿using B3.GameStateSystem;
+using B3.PlayerSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,21 @@ namespace B3.TradeSystem
         [SerializeField] private TMP_Dropdown dropDown;
         [SerializeField] private PlayersManager playersManager;
 
+        private void OnEnable()
+        {
+            PlayerEndGameState.OnPlayerEnd += OnEndState;
+        }
+        
+        private void OnDisable()
+        {
+            PlayerEndGameState.OnPlayerEnd -= OnEndState;
+        }
+
+        private void OnEndState()
+        {
+            gameObject.SetActive(false);
+        }
+        
         public void AcceptTrade()
         {
             var resourcesToGive = new int[5];

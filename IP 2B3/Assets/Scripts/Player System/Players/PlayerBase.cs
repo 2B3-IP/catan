@@ -53,6 +53,8 @@ namespace B3.PlayerSystem
         public PieceController SelectedThiefPiece { get; protected set; }
         public SettlementController SelectedSettlement { get; protected set; }
         
+        public int GetResourceAmount(ResourceType resourceType) { return Resources[(int)resourceType]; }
+        
         protected virtual void Awake() =>
             PlayerBuffs = GetComponent<PlayerBuffs>();
 

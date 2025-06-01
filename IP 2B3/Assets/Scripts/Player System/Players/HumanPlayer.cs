@@ -6,6 +6,7 @@ using B3.BuildingSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.PlayerSystem.UI;
+using B3.PortSystem;
 using B3.SettlementSystem;
 using B3.ThiefSystem;
 using UnityEngine;
@@ -61,8 +62,8 @@ namespace B3.PlayerSystem
             while (!_hasDiceClick)
                 yield return null;
 
-            DiceSum = 7;
-            instructionNotif.Destroy();
+            DiceSum = 6;
+
             _hasDiceClick = false;
         }
 

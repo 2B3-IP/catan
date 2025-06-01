@@ -8,6 +8,7 @@ using B3.GameStateSystem;
 using B3.PieceSystem;
 using UnityEngine.InputSystem;
 using B3.UI;
+using TheBlindEye.Utility;
 
 namespace B3.BuildingSystem
 {
@@ -16,6 +17,7 @@ namespace B3.BuildingSystem
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private SettlementController settlementPrefab;
         [SerializeField] private LongestRoadController longestRoadController;
+        [SerializeField] private AudioClip placeBuildingAudio;
         public CanvasGroup humanPlayerButtonsGroup;
 
         private PathController[] _allPaths;
@@ -68,9 +70,6 @@ namespace B3.BuildingSystem
                 if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
                 yield break;
             }
-
-            if (_isFirstStates)
-                countFirstStates++;
             
             SettlementController selectedHouse = null;
             if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = false;
@@ -96,11 +95,6 @@ namespace B3.BuildingSystem
             
             Debug.Log($"BEFORE: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
 
-            if (_isFirstStates && countFirstStates == 4)//TREBUIE VAZUT CAND ADAUGAM RESURSELE
-            {
-                AddResourcesForSettlement(selectedHouse, player);
-            }
-
             selectedHouse.Owner = player;
             selectedHouse.BuildHouse();
             player.Settlements.Add(selectedHouse);
@@ -112,8 +106,7 @@ namespace B3.BuildingSystem
             
             AddPortBuffForSettlement(selectedHouse, player);
             
-            var message = $"House built at {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y}, {selectedHouse.VertexDir} by {player.name}";
-            Debug.Log(message);
+            var message = $"BUILD House {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y} {(int)selectedHouse.VertexDir} by {player.name}";
 
             if(player is HumanPlayer)
                 AI.SendMove(message);
@@ -159,8 +152,15 @@ namespace B3.BuildingSystem
                     Debug.Log("No path selected by player");
                 }
             }
-            Debug.Log($"Building road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir}");
+
+
+            var message = $"BUILD road {selectedPath.HexPosition.X} {selectedPath.HexPosition.Y} {(int)selectedPath.EdgeDir} by {player.name}";
+            Debug.Log(message);
+
+            if(player is HumanPlayer)
+                AI.SendMove(message);
     
+            //Audio.Play();
             HasBuilt = true;
             selectedPath.Owner = player;
             selectedPath.BuildRoad();
@@ -313,63 +313,6 @@ namespace B3.BuildingSystem
         
         private void OnDiceGameState() =>
             _isFirstStates = false;
-        
-                
-         private void AddResourcesForSettlement(SettlementController selectedHouse, PlayerBase player)
-        {
-            var boardGrid = boardController.BoardGrid;
-            var vertexPosition = selectedHouse.HexPosition;
-            var vertexDirection = selectedHouse.VertexDir;
-            
-            var pieceController = boardGrid[vertexPosition];
-            player.AddResource(pieceController.ResourceType, 1);
-            
-            switch (vertexDirection)
-            {
-                case HexVertexDir.TopRight :
-                {
-                    AddResourcesToPlayer(HexEdgeDir.TopRight, HexEdgeDir.Top, vertexPosition, player, boardGrid);
-                    break;
-                }
-                case HexVertexDir.Right:
-                {
-                    AddResourcesToPlayer(HexEdgeDir.TopRight,HexEdgeDir.BottomRight,vertexPosition,player,boardGrid);
-                    break;
-                }
-                case HexVertexDir.BottomRight:
-                {
-                    AddResourcesToPlayer(HexEdgeDir.BottomRight, HexEdgeDir.Bottom, vertexPosition, player, boardGrid);
-                    break;
-                }
-                case HexVertexDir.BottomLeft:
-                {
-                    AddResourcesToPlayer(HexEdgeDir.BottomLeft, HexEdgeDir.Bottom, vertexPosition, player, boardGrid);
-                    break;
-                }
-                case HexVertexDir.Left:
-                {
-                    AddResourcesToPlayer(HexEdgeDir.BottomLeft, HexEdgeDir.TopLeft, vertexPosition, player, boardGrid);
-                    break;
-                }
-                case HexVertexDir.TopLeft:
-                {
-                    AddResourcesToPlayer(HexEdgeDir.TopLeft, HexEdgeDir.Top, vertexPosition, player, boardGrid);
-                    break;
-                }
-            }
-        }
-
-        private void AddResourcesToPlayer(HexEdgeDir dir1, HexEdgeDir dir2, HexPosition vertexPosition, PlayerBase player, FullHexGrid<PieceController, SettlementController, PathController> boardGrid )
-        {
-            var hex1 = vertexPosition.GetNeighbour(dir1);
-            var hex2 = vertexPosition.GetNeighbour(dir2);
-
-            var pieceController1 = boardGrid[hex1];
-            var pieceController2 = boardGrid[hex2];
-            
-            player.AddResource(pieceController1.ResourceType, 1);
-            player.AddResource(pieceController2.ResourceType, 1);
-        }
     }
     
 }

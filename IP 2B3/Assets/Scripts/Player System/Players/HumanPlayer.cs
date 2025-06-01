@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using B3.BoardSystem;
 using B3.BuildingSystem;
+using B3.DiceSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.PlayerSystem.UI;
@@ -27,6 +28,7 @@ namespace B3.PlayerSystem
         [SerializeField] private LayerMask pieceLayerMask;
         [SerializeField] private LayerMask settlementLayerMask;
         [SerializeField] private int hitDistance = 200;
+        [SerializeField] private DiceThrower diceThrower;
         
         private readonly RaycastHit[] _hits = new RaycastHit[5];
         
@@ -62,7 +64,8 @@ namespace B3.PlayerSystem
             while (!_hasDiceClick)
                 yield return null;
 
-            DiceSum = 6;
+            yield return diceThrower.ThrowCoroutine(); 
+            DiceSum = diceThrower.DiceRolls;
             
             _hasDiceClick = false;
             instructionNotif.Destroy();

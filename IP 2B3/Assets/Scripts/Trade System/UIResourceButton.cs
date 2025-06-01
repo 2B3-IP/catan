@@ -10,31 +10,29 @@ namespace B3.TradeSystem
     {
         [field: SerializeField] public ResourceType ResourceType { get; private set; }
         [SerializeField] private HumanPlayer player;
+        [SerializeField] public TMP_Text countText;
         
-        private TMP_Text _countText;
         public int Count { get; private set; }
 
         private void Awake()
         {
             var button = GetComponent<Button>();
             button.onClick.AddListener(OnButtonClick);
-
-            _countText = GetComponentInChildren<TMP_Text>();
-            Reset();
         }
 
         private void OnButtonClick()
         {
-            if(player.Resources[(int)ResourceType] <= Count)
+            if(player != null && player.Resources[(int)ResourceType] <= Count)
                 return;
             
             Count++;
-            _countText.SetText(Count.ToString());
+            countText.SetText(Count.ToString());
         }
 
         public void Reset()
         {
-            _countText.SetText("0");
+            Count = 0;
+            countText.SetText("0");
         }
     }
 }

@@ -5735,6 +5735,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[6434893590810853523].diceButton
+      value: 
+      objectReference: {fileID: 1329318355}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: managedReferences[6434893590810853523].diceThrower
       value: 
       objectReference: {fileID: 441811876}
@@ -5742,6 +5746,10 @@ PrefabInstance:
       propertyPath: managedReferences[6434893590810853526].diceThrower
       value: 
       objectReference: {fileID: 441811876}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[3160003638182543459].endTurnButton
+      value: 
+      objectReference: {fileID: 993105642}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: managedReferences[1461691153215914052].playersManager
       value: 
@@ -6385,6 +6393,7 @@ GameObject:
   - component: {fileID: 993105639}
   - component: {fileID: 993105638}
   - component: {fileID: 993105641}
+  - component: {fileID: 993105642}
   m_Layer: 5
   m_Name: End turn
   m_TagString: Untagged
@@ -6506,6 +6515,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27fbd77c88a34048bb815fbd3abb1cab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &993105642
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993105636}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1003302890
 GameObject:
   m_ObjectHideFlags: 0
@@ -9758,6 +9779,7 @@ GameObject:
   - component: {fileID: 1329318352}
   - component: {fileID: 1329318351}
   - component: {fileID: 1329318354}
+  - component: {fileID: 1329318355}
   m_Layer: 5
   m_Name: Dice
   m_TagString: Untagged
@@ -9878,6 +9900,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7534d9d73dbd411fb78e110293aa9197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &1329318355
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329318349}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1335413639
 GameObject:
   m_ObjectHideFlags: 0
@@ -16685,7 +16719,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 823386667}
     m_Modifications:
     - target: {fileID: 3744301960497017484, guid: fac57b4a8b7e7f94487639984ab9bdd7, type: 3}
       propertyPath: m_Name

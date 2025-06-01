@@ -27,6 +27,7 @@ namespace B3.PlayerSystem
         /// </summary>
         /// 
         public int[] Resources { get; private set; } = { 99, 99, 99, 99, 99 };//new int[5];
+         public int PlayerIndex { get; set; }
 
         public int VictoryPoints { get; private set; }
         public int DiceSum { get; protected set; }

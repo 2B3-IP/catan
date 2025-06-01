@@ -14,7 +14,7 @@ namespace B3.PlayerSystem
         [SerializeField] private BuyController buyController;
         [SerializeField] private TradeController tradeSystem;
         [SerializeField] private PlayersManager playersManager;
-        
+        public int PlayerIndex { get; set; }
         public override IEnumerator ThrowDiceCoroutine()
         {
             DiceSum = Random.Range(1, 7) + Random.Range(1, 7); //TODO: TEMP
@@ -123,4 +123,5 @@ namespace B3.PlayerSystem
             DiscardResources = AI.GetDiscardedResources();
         }
     }
+
 }

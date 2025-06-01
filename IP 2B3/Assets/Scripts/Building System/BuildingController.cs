@@ -8,6 +8,7 @@ using B3.GameStateSystem;
 using B3.PieceSystem;
 using UnityEngine.InputSystem;
 using B3.UI;
+using TheBlindEye.Utility;
 
 namespace B3.BuildingSystem
 {
@@ -16,6 +17,7 @@ namespace B3.BuildingSystem
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private SettlementController settlementPrefab;
         [SerializeField] private LongestRoadController longestRoadController;
+        [SerializeField] private AudioClip placeBuildingAudio;
         public CanvasGroup humanPlayerButtonsGroup;
 
         private PathController[] _allPaths;
@@ -159,6 +161,7 @@ namespace B3.BuildingSystem
             instructionNotif.Destroy();
             Debug.Log($"Building road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir}");
     
+            //Audio.Play();
             HasBuilt = true;
             selectedPath.Owner = player;
             selectedPath.BuildRoad();

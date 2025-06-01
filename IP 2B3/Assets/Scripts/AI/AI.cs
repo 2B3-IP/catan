@@ -242,6 +242,7 @@ public static class AI
 
     public static void SendMove(string message)
     {
+        return;
         Debug.Log("Sending move: " + message);
 
         try

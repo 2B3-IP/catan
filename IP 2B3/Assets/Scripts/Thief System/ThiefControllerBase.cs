@@ -4,6 +4,7 @@ using B3.PieceSystem;
 using B3.PlayerSystem;
 using B3.ResourcesSystem;
 using UnityEngine;
+using B3.UI;
 
 namespace B3.ThiefSystem
 {
@@ -59,7 +60,8 @@ namespace B3.ThiefSystem
             while (resources[index] == 0);
             
             var resource = (ResourceType)index;
-            
+            var warningNotif = NotificationManager.Instance
+                .AddNotification("Player "+giveTo.playerName+" stole 1 "+resource.ToString()+"from "+stealFrom.ToString(), 5, false);
             stealFrom.RemoveResource(resource, 1);
             giveTo.AddResource(resource, 1);
         }

@@ -26,9 +26,16 @@ namespace B3.BoardSystem
         
         [SerializeField] private bool spawnDebugText;
 
+        public float animDuration = 2f;
+        public float delay = 1f;
+        public float delayIncPerTile = 0.25f;
+        public LeanTweenType easing;
+        public int piecesAnimating { get; private set; }
+
         private ResourceType?[] _piecesResources = new ResourceType?[19];
         private int[] _piecesNumber = new int[19];
         private ResourceType?[] _portsResources = new ResourceType?[9];
+        
 
         private readonly int[] _numberPoll = new int[]
         {
@@ -72,7 +79,6 @@ namespace B3.BoardSystem
             return instance;
         }
         
-        [Button]
         public void Generate()
         {
             ShuffleNumberPoll();
@@ -121,9 +127,17 @@ namespace B3.BoardSystem
 
             var worldPosition = BoardGrid.ToWorldPosition(position);
             var rotation = arePortPieces ? Quaternion.identity : Quaternion.Euler(0, Random.Range(0 , 6) * 60f, 0);
-            var pieceController = boardPiece.Spawn(new Vector3(worldPosition.x, 0, worldPosition.y), rotation,  transform);
-
-            // todo: lean some tweens
+            var pieceController = boardPiece.Spawn(new Vector3(worldPosition.x, -5, worldPosition.y), rotation, transform);
+            
+            var pieceTransform = pieceController.transform;
+            pieceTransform.localScale = Vector3.zero;
+            LeanTween.moveLocalY(pieceController.gameObject, pieceTransform.localPosition.y + 5, animDuration)
+                .setDelay(delay)
+                .setEase(easing)
+                .setOnComplete(_ => piecesAnimating -= 1);
+            LeanTween.scale(pieceController.gameObject, Vector3.one, animDuration * 0.75f).setDelay(delay).setEase(easing);
+            delay += delayIncPerTile;
+            piecesAnimating += 1;
             
             pieceController.HexPosition = position;
             BoardGrid[position] = pieceController;

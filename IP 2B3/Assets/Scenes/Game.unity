@@ -7393,13 +7393,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Thief
       objectReference: {fileID: 0}
+    - target: {fileID: 3372753775170310111, guid: d363e4a1571fe71d6b1e32b97c3f76d3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3910107372920308185, guid: d363e4a1571fe71d6b1e32b97c3f76d3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3910107372920308185, guid: d363e4a1571fe71d6b1e32b97c3f76d3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 3.93
       objectReference: {fileID: 0}
     - target: {fileID: 3910107372920308185, guid: d363e4a1571fe71d6b1e32b97c3f76d3, type: 3}
       propertyPath: m_LocalPosition.z

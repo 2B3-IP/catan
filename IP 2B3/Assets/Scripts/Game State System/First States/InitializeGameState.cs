@@ -37,6 +37,10 @@ namespace B3.GameStateSystem
                 if (!piece.IsDesert)
                     continue;
 
+                Debug.Log("Waiting for hexes to stop animating");
+                while (boardController.piecesAnimating != 0)
+                    yield return null;
+                
                 Debug.Log(piece, piece);
                 yield return thiefController.MoveThief(piece.ThiefPivot.position);
                 break;

@@ -18,9 +18,8 @@ namespace B3.PortSystem
 
         private PieceController _pieceController;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             _pieceController = GetComponent<PieceController>();
         }
 

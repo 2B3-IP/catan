@@ -15,6 +15,17 @@ namespace B3.TradeSystem
         // -value = daca primesti
         public void TradeResources(PlayerBase player, PlayerBase otherPlayer, int[] resourcesToTrade)
         {
+            // if(otherPlayer is AIPlayer)
+            // {
+            // ai.sendTurn
+            // while(false)
+            // yield return null;
+            
+            // if(!ai.accepted)
+            //     return;
+            // }
+            
+            
             for (int i = 0; i < resourcesToTrade.Length; i++)
             {
                 //print(i);

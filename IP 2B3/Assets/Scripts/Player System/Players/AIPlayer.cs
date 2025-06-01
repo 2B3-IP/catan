@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using B3.BoardSystem;
 using B3.BuySystem;
+using B3.DiceSystem;
 using B3.ThiefSystem;
 using B3.TradeSystem;
 using B3.UI;
@@ -14,11 +15,12 @@ namespace B3.PlayerSystem
         [SerializeField] private BuyController buyController;
         [SerializeField] private TradeController tradeSystem;
         [SerializeField] private PlayersManager playersManager;
-        
+        [SerializeField] private DiceThrower diceThrower;
+
         public override IEnumerator ThrowDiceCoroutine()
         {
-            DiceSum = Random.Range(1, 7) + Random.Range(1, 7); //TODO: TEMP
-            yield break;
+            yield return diceThrower.ThrowCoroutine(); 
+            DiceSum = diceThrower.DiceRolls;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
@@ -69,7 +71,7 @@ namespace B3.PlayerSystem
                     var playerTradeInfo = AI.GetPlayerTradeInfo();
                     var player = playersManager.players[playerTradeInfo.Item1]; 
                     
-                    tradeSystem.TradeResources(this, player, playerTradeInfo.Item2);
+                    //tradeSystem.TradeResources(this, player, playerTradeInfo.Item2);
                     break;
 
                 case "end turn":

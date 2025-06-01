@@ -107,6 +107,7 @@ namespace B3.GameStateSystem
             
                     bankController.GiveResources((ResourceType)index, 1);
                     player.RemoveResource((ResourceType)index, 1);
+                
                 }
             }
         }

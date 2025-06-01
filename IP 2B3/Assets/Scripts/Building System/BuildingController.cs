@@ -286,7 +286,6 @@ namespace B3.BuildingSystem
                 if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
                 yield break;
             }
-
             SettlementController closestCorner = null;
             if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = false;
             while (closestCorner == null)
@@ -310,6 +309,7 @@ namespace B3.BuildingSystem
                     HasBuilt = true;
                 }
             }
+            
             if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
         }
         

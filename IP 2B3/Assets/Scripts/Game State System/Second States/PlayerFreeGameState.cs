@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using B3.PlayerSystem;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -9,14 +10,19 @@ namespace B3.GameStateSystem
     internal sealed class PlayerFreeGameState : GameStateBase
     {
         [SerializeField] private float _waitTimeRound = 10f;
+        [SerializeField] private CanvasGroup endTurnButton;
+
         [HideInInspector]
         public UnityEvent<float> timeRemainingEvent = new();
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
+            var currentPlayer = stateMachine.CurrentPlayer;
+            if(currentPlayer is HumanPlayer)
+                endTurnButton.interactable = true;
+            
             // TODO(front/back): trade + build, yield return astepti doar dupa end turn button/trece timpu
             Debug.Log("Free");
-            var currentPlayer = stateMachine.CurrentPlayer;
             var endTurnCoroutine = currentPlayer.StartCoroutine(currentPlayer.EndTurnCoroutine());
             
             float elapsedTime = 0f; 
@@ -34,6 +40,8 @@ namespace B3.GameStateSystem
             if(!currentPlayer.IsTurnEnded)
                 currentPlayer.StopCoroutine(endTurnCoroutine);
             
+            if(currentPlayer is HumanPlayer)
+                endTurnButton.interactable = false;
             stateMachine.ChangeState<PlayerEndGameState>();
         }
     }

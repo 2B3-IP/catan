@@ -3,6 +3,7 @@ using B3.BoardSystem;
 using B3.BuySystem;
 using B3.ThiefSystem;
 using B3.TradeSystem;
+using B3.UI;
 using UnityEngine;
 
 namespace B3.PlayerSystem
@@ -17,13 +18,13 @@ namespace B3.PlayerSystem
 
         public override IEnumerator ThrowDiceCoroutine()
         {
-            //DiceSum = Random.Range(MIN_DICE_THROW_FORCE, MAX_DICE_THROW_FORCE); //TODO: TEMP
+            DiceSum = Random.Range(1, 7) + Random.Range(1, 7); //TODO: TEMP
             yield break;
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
-            var thiefPosition = AI.GetThiefPostion();
+            var thiefPosition = AI.GetThiefPosition();
             var pieceController = boardController.BoardGrid[thiefPosition];
             
             yield return new WaitForSeconds(1f);
@@ -42,18 +43,22 @@ namespace B3.PlayerSystem
             {
                 case "buy house":
                     StartCoroutine(buyController.BuyHouse(this));
+                    NotificationManager.Instance.AddNotification($"{this.colorTag}{this.playerName}</color> built a house.");
                     break;
 
                 case "buy city":
                     StartCoroutine(buyController.BuyCity(this));
+                    NotificationManager.Instance.AddNotification($"{this.colorTag}{this.playerName}</color> built a city.");
                     break;
 
                 case "buy road":
                     StartCoroutine(buyController.BuyRoad(this));
+                    NotificationManager.Instance.AddNotification($"{this.colorTag}{this.playerName}</color> built a road.");
                     break;
 
                 case "buy card":
                     buyController.BuyDevelopmentCard(this);
+                    NotificationManager.Instance.AddNotification($"{this.colorTag}{this.playerName}</color> bought a development card.");
                     break;
                 
                 case "trade bank":
@@ -116,9 +121,7 @@ namespace B3.PlayerSystem
         public override IEnumerator DiscardResourcesCoroutine(float timeout)
         {
             yield return new WaitForSeconds(1f);
-            var discardedResources = AI.GetDiscardedResources();
-            
-            yield break;
+            DiscardResources = AI.GetDiscardedResources();
         }
     }
 }

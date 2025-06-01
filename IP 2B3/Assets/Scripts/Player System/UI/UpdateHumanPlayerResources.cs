@@ -21,11 +21,11 @@ public class UpdateHumanPlayerResources : MonoBehaviour
         humanPlayer.onVPChanged.AddListener(() => victoryPointsText.text = humanPlayer.VictoryPoints.ToString());
         humanPlayer.onUsedKnightsChanged.AddListener(
             () => largestArmyText.text = humanPlayer.UsedKnightCards.ToString());
-        
+        humanPlayer.onLongestRoadChanged.AddListener(() => longestRoadText.text = humanPlayer.LongestRoad.ToString());
         UpdateResources();
         victoryPointsText.text = 0.ToString();
         largestArmyText.text = 0.ToString();
-        // longestRoadText.text = 0.ToString();
+        longestRoadText.text = 0.ToString();
     }
 
     void UpdateResources()

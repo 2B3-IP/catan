@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using B3.BankSystem;
-using B3.GameStateSystem;
 using B3.PlayerSystem;
 using B3.ResourcesSystem;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace B3.TradeSystem
 {
@@ -36,16 +37,54 @@ namespace B3.TradeSystem
         }
 
         // 4 : 1 sau 3 : 1 sau 2 : 1
-        public void TradeResources(PlayerBase player, ResourceType resourceToTrade, ResourceType resourceToGet)
+        public void TradeResources(PlayerBase player, ResourceType[] resourcesGiven, ResourceType[] resourcesWanted)
         {
             var playerBuffs = player.PlayerBuffs;
-            int resourceCount = playerBuffs.GetResourceAmount(resourceToTrade);
-            
-            player.RemoveResource(resourceToTrade, resourceCount);
-            bankController.GiveResources(resourceToTrade, resourceCount);
-            
-            bankController.GetResources(resourceToGet, 1);
-            player.AddResource(resourceToGet, 1);
+            var resourcesGivenDict = new Dictionary<ResourceType, int>();
+            foreach (var res in resourcesGiven)
+            {
+                if (!resourcesGivenDict.ContainsKey(res))
+                    resourcesGivenDict[res] = 0;
+                resourcesGivenDict[res]++;
+            }
+            var batchSizeForResource = new Dictionary<ResourceType, int>();
+            foreach (var res in resourcesGivenDict.Keys)
+            {
+                int batchSize = playerBuffs.GetResourceAmount(res);
+                if (batchSize == 0)
+                    batchSize = 4;
+                batchSizeForResource[res] = batchSize;
+            }
+            int totalBatches = 0;
+            foreach (var pair in resourcesGivenDict)
+            {
+                int batchSize = batchSizeForResource[pair.Key];
+                int batches = pair.Value / batchSize;
+                totalBatches += batches;
+            }
+            if (resourcesWanted.Length > totalBatches)
+            {
+                Debug.Log("Player wants more resources than allowed by the resources traded!");
+                return;
+            }
+            foreach (var pair in resourcesGivenDict)
+            {
+                if (player.GetResourceAmount(pair.Key) < pair.Value)
+                {
+                    Debug.Log("Player does not have enough resources to trade!");
+                    return;
+                }
+            }
+            foreach (var pair in resourcesGivenDict)
+            {
+                player.RemoveResource(pair.Key, pair.Value);
+                bankController.GiveResources(pair.Key, pair.Value);
+            }
+            foreach (var res in resourcesWanted)
+            {
+                bankController.GetResources(res, 1);
+                player.AddResource(res, 1);
+            }
         }
     }
 }

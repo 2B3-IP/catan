@@ -11,6 +11,9 @@ namespace B3.SettlementSystem
         [SerializeField] private GameObject houseObject;
         [SerializeField] private GameObject cityObject;
         [SerializeField] private Material highlightMaterial;
+        
+        [SerializeField] private LeanTweenType easing;
+        [SerializeField] private float animLength = 2f;
 
         public PortController ConnectedPortController { get; set; }
         public HexPosition HexPosition { get; set; }
@@ -59,6 +62,12 @@ namespace B3.SettlementSystem
             if (IsCity)
                 return;
             
+            houseObject.transform.position = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z);
+            houseObject.transform.localScale = Vector3.zero;
+            
+            LeanTween.scale(houseObject, Vector3.one, animLength).setFrom(Vector3.zero);
+            LeanTween.moveLocalY(houseObject, houseObject.transform.position.y - 5f, animLength);
+            
             houseObject.SetActive(true);
             cityObject.SetActive(false);
         }
@@ -83,8 +92,16 @@ namespace B3.SettlementSystem
             
             IsCity = true;
             
-            houseObject.SetActive(false);
-            cityObject.SetActive(true);
+            LeanTween.rotateAroundLocal(houseObject, Vector3.up, 360f, animLength);
+            LeanTween.scale(houseObject, Vector3.zero, animLength).setFrom(Vector3.one).setOnComplete(() =>
+                {
+                    LeanTween.rotateAroundLocal(cityObject, Vector3.up, 360f, animLength * 1.5f);
+                    LeanTween.scale(cityObject, Vector3.one, animLength * 1.5f).setFrom(Vector3.zero);
+                    houseObject.SetActive(false);
+                    cityObject.SetActive(true);
+                } 
+            );
+            
         }
     }
 }

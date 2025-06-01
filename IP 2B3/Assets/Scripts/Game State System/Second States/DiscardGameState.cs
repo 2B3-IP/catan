@@ -22,6 +22,7 @@ namespace B3.GameStateSystem
             var allPlayers = stateMachine.PlayersManager.players;
             List<Coroutine> coroutines = new List<Coroutine>();
             int discardPlayers = 0;
+            /*
             foreach (var player in allPlayers)
             {
                 int total = player.TotalResources();
@@ -59,9 +60,9 @@ namespace B3.GameStateSystem
             
             foreach (var coroutine in coroutines)
             {
-                stateMachine.StopCoroutine(coroutine);
-            }
-
+                if(coroutine != null)
+                    stateMachine.StopCoroutine(coroutine);
+            }*/
 
             foreach (var player in allPlayers)
             {
@@ -98,8 +99,7 @@ namespace B3.GameStateSystem
                     } while (player.Resources[index] <= 0);
             
                     bankController.GiveResources((ResourceType)index, 1);
-                    player.Resources[index]--;
-                
+                    player.RemoveResource((ResourceType)index, 1);
                 }
             }
         }

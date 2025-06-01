@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 5022685486829936994, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: numberText
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5380163187218900059, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -58,6 +62,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6353825636534302838, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7779977402117031791, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8578178960563531983, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -191,9 +191,12 @@ public static class AI
 
 
     // hex ul selectat de ai, coltu hex ului
+    private static int i = 0;
     public static (HexPosition, HexVertexDir) GetHousePosition()
     {
+
         return (housePosition, houseDir);
+
     }
 
     public static (HexPosition, HexVertexDir) GetCityPosition()
@@ -203,10 +206,12 @@ public static class AI
 
     public static (HexPosition, HexEdgeDir) GetRoadPosition()
     {
+
         return (roudPosition, roudDir);
     }
 
     public static HexPosition GetThiefPostion()
+
     {
         return new HexPosition(0, 0);
     }

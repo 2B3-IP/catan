@@ -84,12 +84,19 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildHouseCoroutine()
         {
-            var housePosition = AI.GetHousePosition();
+            HexPosition housePosition = new HexPosition(0,0);
+            HexVertexDir houseDirection = HexVertexDir.Left;
+            yield return AI.GetHousePosition((pos,dir) =>
+            {
+                housePosition = pos;
+                houseDirection = dir;
+            });
             var boardGrid = boardController.BoardGrid;
+            Debug.Log($"AI building house at {housePosition.X} {housePosition.Y}, {houseDirection}");
 
             //yield return new WaitForSeconds(1f);
 
-            var settlementController = boardGrid.GetVertex(housePosition.Item1, housePosition.Item2);
+            var settlementController = boardGrid.GetVertex(housePosition, houseDirection);
             SelectedHouse = settlementController;
             yield break;
         }
@@ -107,13 +114,23 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildRoadCoroutine()
         {
-            var housePosition = AI.GetRoadPosition();
+            // initialize to a safe default
+            HexPosition roadPosition = new HexPosition(0, 0);
+            HexEdgeDir roadDirection = HexEdgeDir.Top;
+        
+            // wait for the AI to supply a road position
+            yield return AI.GetRoadPosition((pos, dir) =>
+            {
+                roadPosition = pos;
+                roadDirection = dir;
+            });
+        
             var boardGrid = boardController.BoardGrid;
-
-            //yield return new WaitForSeconds(1f);
-
-            var pathController = boardGrid.GetEdge(housePosition.Item1, housePosition.Item2);
+            Debug.Log($"AI building road at {roadPosition.X} {roadPosition.Y}, {roadDirection}");
+        
+            var pathController = boardGrid.GetEdge(roadPosition, roadDirection);
             SelectedPath = pathController;
+        
             yield break;
         }
 

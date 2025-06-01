@@ -10,14 +10,15 @@ namespace B3.DevelopmentCardSystem
     public sealed class RoadBuildingDevelopmentCard : DevelopmentCardBase
     {
         [SerializeField] private BuildingControllerBase buildingController;
-        
-        public override IEnumerator UseCard(PlayerBase player, CanvasGroup actions) => 
-            UseCardCoroutine(player);
 
-        private IEnumerator UseCardCoroutine(PlayerBase player)
+        public override IEnumerator UseCard(PlayerBase player, CanvasGroup actions)
         {
+            actions.interactable = false;
+            
             yield return buildingController.BuildRoad(player);
             yield return buildingController.BuildRoad(player);
+            
+            actions.interactable = true;
         }
     }
 }

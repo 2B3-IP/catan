@@ -61,7 +61,7 @@ namespace B3.PlayerSystem
             while (!_hasDiceClick)
                 yield return null;
 
-            DiceSum = 7;
+            DiceSum = 6;
 
             _hasDiceClick = false;
         }

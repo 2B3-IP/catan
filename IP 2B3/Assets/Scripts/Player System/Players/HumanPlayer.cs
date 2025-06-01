@@ -77,7 +77,7 @@ namespace B3.PlayerSystem
                 yield return RayCastCoroutine(pieceLayerMask);
                 SelectedThiefPiece = _closestHit.transform.GetComponentInParent<PieceController>();
 
-                if (SelectedThiefPiece.IsBlocked)
+                if (SelectedThiefPiece.IsBlocked || SelectedThiefPiece.GetComponentInParent<PortController>())
                 {
                     SelectedThiefPiece = null;
                 }

@@ -8,30 +8,20 @@ using UnityEngine;
 namespace B3.DevelopmentCardSystem
 {
     [System.Serializable]
-    public sealed class YearOfPlentyDevelopmentCard : DevelopmentCardBase
+    public sealed class YearOfPlentyDevelopmentCard : DevelopmentCardBase   
     {
         [SerializeField] private BankController bankController;
-        private bool resourceWasSelected = false;
-        private ResourceType selectedResourceType;
         
-        public override IEnumerator UseCard(PlayerBase player)
+        public override IEnumerator UseCard(PlayerBase player, CanvasGroup actions)
         {
-            resourceWasSelected = false;
-            UISelectResource.OnSelectResource += OnChosenResource;
-            while (!resourceWasSelected)
-                yield return null;
+            ResourceType? selectedResourceType = null;
+            actions.interactable = false;
+            yield return UISelectResource.SelectResourceType(resType => selectedResourceType = resType);
+            Debug.Assert(selectedResourceType.HasValue); 
             
-            
-            bankController.GetResources(selectedResourceType, 2);
-            player.AddResource(selectedResourceType, 2);
-            
-            UISelectResource.OnSelectResource -= OnChosenResource;
-        }
-
-        private void OnChosenResource(ResourceType chosenResource)
-        {
-            resourceWasSelected = true;
-            selectedResourceType = chosenResource;
+            bankController.GetResources(selectedResourceType.Value, 2);
+            player.AddResource(selectedResourceType.Value, 2);
+            actions.interactable = true;
         }
     }
 }

@@ -44,26 +44,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ffb051cd16d4c0d887d5fd2cc0ebe4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startStateIndex: 0
+  firstStateIndex: 0
+  secondStateIndex: 3
   gameStates:
   - rid: 1461691153215914052
   - rid: 3160003638182543451
   - rid: 3160003638182543457
   - rid: 6434893590810853523
   - rid: 6434893590810853526
+  - rid: 1461691333602705513
   - rid: 6434893590810853527
   - rid: 3160003638182543459
   - rid: 3160003638182543458
   playersManager: {fileID: 0}
+  onCurrentPlayerChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
   references:
     version: 2
     RefIds:
     - rid: 1461691153215914052
       type: {class: InitializeGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
-        gameSettings: {fileID: 0}
+        waterGridSize: 50
+        waterPrefab: {fileID: 2809170893415596209, guid: f1c152f9cc09eb2449a463edc5723b12, type: 3}
+        gameSettings: {fileID: 11400000, guid: c608fd40c83703448a2aad5847cfea98, type: 2}
         boardController: {fileID: 0}
         playersManager: {fileID: 0}
+        thiefController: {fileID: 0}
+    - rid: 1461691333602705513
+      type: {class: DiscardGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
+      data:
+        bankController: {fileID: 0}
     - rid: 3160003638182543451
       type: {class: AddHouseState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
@@ -72,14 +87,16 @@ MonoBehaviour:
       type: {class: AddRoadState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
         buildingController: {fileID: 0}
-        repeatTimes: 2
     - rid: 3160003638182543458
       type: {class: PlayerEndGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data: 
     - rid: 3160003638182543459
       type: {class: PlayerFreeGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
-        _waitTimeRound: 10
+        _waitTimeRound: 120
+        timeRemainingEvent:
+          m_PersistentCalls:
+            m_Calls: []
     - rid: 6434893590810853523
       type: {class: PlayerDiceGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
@@ -88,8 +105,9 @@ MonoBehaviour:
       type: {class: ResourceGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
         diceThrower: {fileID: 0}
-        allPieces: []
+        bankController: {fileID: 0}
+        boardController: {fileID: 0}
     - rid: 6434893590810853527
       type: {class: ThiefGameState, ns: B3.GameStateSystem, asm: Assembly-CSharp}
       data:
-        thief: {fileID: 0}
+        thiefController: {fileID: 0}

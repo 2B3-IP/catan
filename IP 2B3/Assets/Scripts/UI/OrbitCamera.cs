@@ -16,15 +16,11 @@ public class CameraOrbit : MonoBehaviour
         [MinMaxSlider(0f, 200f)]
         public Vector2 zoomLimits;
 
-        private float x = 0.0f;
-        private float y = 0.0f;
+        private float x = -15f;
+        private float y = 30f;
 
         void Start()
         {
-            Vector3 angles = transform.eulerAngles;
-            x = angles.y;
-            y = angles.x;
-            
             distance = Mathf.Clamp(distance, zoomLimits.x, zoomLimits.y);
             UpdateCameraPosition();
         }

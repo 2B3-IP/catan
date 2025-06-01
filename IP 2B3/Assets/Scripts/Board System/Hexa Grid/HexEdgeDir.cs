@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using UnityEngine;
 
@@ -15,6 +16,57 @@ namespace B3.BoardSystem
     }
     
     public static class HexEdgeDirExt {
+        
+        public static HexVertexDir GetVertexDirBasedOnStartDir(this HexVertexDir startDir, HexPosition startPos, HexPosition endPos)
+        {
+            return startDir switch
+            {
+                HexVertexDir.TopLeft => startPos.X == endPos.X ? HexVertexDir.BottomLeft : HexVertexDir.Right,
+                HexVertexDir.TopRight => startPos.Y == endPos.Y ? HexVertexDir.Left : HexVertexDir.BottomRight,
+                HexVertexDir.Right => startPos.Y == endPos.Y ? HexVertexDir.BottomLeft : HexVertexDir.TopLeft,
+                HexVertexDir.BottomRight => startPos.X == endPos.X ? HexVertexDir.TopRight : HexVertexDir.Left,
+                HexVertexDir.BottomLeft => startPos.X == endPos.X ? HexVertexDir.TopLeft : HexVertexDir.Right,
+                HexVertexDir.Left => startPos.Y == endPos.Y ? HexVertexDir.TopRight : HexVertexDir.BottomRight,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+        
+        public static HexEdgeDir GetHexDir(HexVertexDir vertex1, HexVertexDir vertex2)
+        {
+            return (vertex1, vertex2) switch
+            {
+                (HexVertexDir.TopLeft, HexVertexDir.TopRight) => HexEdgeDir.Top,
+                (HexVertexDir.TopRight, HexVertexDir.Right) => HexEdgeDir.TopRight,
+                (HexVertexDir.Right, HexVertexDir.BottomRight) => HexEdgeDir.BottomRight,
+                (HexVertexDir.BottomRight, HexVertexDir.BottomLeft) => HexEdgeDir.Bottom,
+                (HexVertexDir.BottomLeft, HexVertexDir.Left) => HexEdgeDir.BottomLeft,
+                (HexVertexDir.Left, HexVertexDir.TopLeft) => HexEdgeDir.TopLeft,
+                
+                (HexVertexDir.TopRight, HexVertexDir.TopLeft) => HexEdgeDir.Top,
+                (HexVertexDir.Right, HexVertexDir.TopRight) => HexEdgeDir.TopRight,
+                (HexVertexDir.BottomRight, HexVertexDir.Right) => HexEdgeDir.BottomRight,
+                (HexVertexDir.BottomLeft, HexVertexDir.BottomRight) => HexEdgeDir.Bottom,
+                (HexVertexDir.Left, HexVertexDir.BottomLeft) => HexEdgeDir.BottomLeft,
+                (HexVertexDir.TopLeft, HexVertexDir.Left) => HexEdgeDir.TopLeft,
+                
+                _ => throw new ArgumentException($"Invalid vertex directions: {vertex1}, {vertex2}"), 
+            };
+        }
+        
+        public static (HexVertexDir, HexVertexDir) GetVertexDirs(this HexEdgeDir edgeDir)
+        {
+            return edgeDir switch
+            {
+                HexEdgeDir.Top => (HexVertexDir.TopLeft, HexVertexDir.TopRight),
+                HexEdgeDir.TopRight => (HexVertexDir.TopRight, HexVertexDir.Right),
+                HexEdgeDir.BottomRight => (HexVertexDir.Right, HexVertexDir.BottomRight),
+                HexEdgeDir.Bottom => (HexVertexDir.BottomRight, HexVertexDir.BottomLeft),
+                HexEdgeDir.BottomLeft => (HexVertexDir.BottomLeft, HexVertexDir.Left),
+                HexEdgeDir.TopLeft => (HexVertexDir.Left, HexVertexDir.TopLeft),
+                _ => throw new ArgumentOutOfRangeException(nameof(edgeDir), edgeDir, null)
+            };
+        }
+        
         public static HexEdgeDir Opposite(this HexEdgeDir dir) =>
             dir switch 
             {

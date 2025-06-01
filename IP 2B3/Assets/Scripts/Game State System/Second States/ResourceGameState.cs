@@ -7,11 +7,16 @@ using System.Collections.Generic;
 using System.Linq;
 using B3.BankSystem;
 using B3.BoardSystem;
+using B3.BuildingSystem;
+using B3.PlayerSystem;
+using B3.SettlementSystem;
+using B3.UI;
+using UnityEngine.Rendering;
 
 namespace B3.GameStateSystem
 {
     [System.Serializable]
-    public sealed class ResourceGameState : GameStateBase
+    internal sealed class ResourceGameState : GameStateBase
     {
         [SerializeField] private DiceThrower diceThrower;
         [SerializeField] private BankController bankController;
@@ -29,8 +34,9 @@ namespace B3.GameStateSystem
             Debug.Log(diceRolls);
             var matchedPieces = allPieces.Where(piece => piece.Number == diceRolls && 
                                                          !piece.IsBlocked && !piece.IsDesert);
-
+            
             var boardGrid = boardController.BoardGrid;
+            // todo (front): resource notifications
             foreach (var piece in matchedPieces)
             {
                 foreach (var vertex in boardGrid.GetHexVertices(piece.HexPosition))
@@ -41,10 +47,10 @@ namespace B3.GameStateSystem
                         continue;
                     var resourceType = piece.ResourceType;
                     int amount = settlement.ResourceAmount;
-        
+                  
                     owner.AddResource(resourceType, amount);
-                    Debug.Log($"Resource Added {resourceType} with {amount}");
-                    Debug.Log($"Resource Amount: {owner.name}");
+                    Debug.Log($"Resource {resourceType} Added to {owner.name}  with amount :{amount}");
+                    NotificationManager.Instance.AddNotification($"{owner.colorTag}{owner.playerName}</color> got {amount} {resourceType}.");
                     bankController.GetResources(resourceType, amount);
                 }
             }

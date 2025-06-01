@@ -10,7 +10,9 @@
         "Unity.RenderPipelines.Universal.2D.Runtime",
         "Unity.RenderPipelines.Universal.Shaders",
         "Unity.RenderPipeline.Universal.ShaderLibrary",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "TheBlindEye.ObjectPoolSystem",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

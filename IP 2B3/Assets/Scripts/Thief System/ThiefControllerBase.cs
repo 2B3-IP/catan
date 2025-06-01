@@ -4,6 +4,7 @@ using B3.PieceSystem;
 using B3.PlayerSystem;
 using B3.ResourcesSystem;
 using UnityEngine;
+using B3.UI;
 
 namespace B3.ThiefSystem
 {
@@ -38,8 +39,19 @@ namespace B3.ThiefSystem
         {
             var resources = stealFrom.Resources;
             int index;
+            bool hasAnyResource = false;
             
-            // TODO: trb sa verifici daca stealFrom are macar o resursa > 0
+            foreach (var r in resources)
+            {
+                if (r > 0)
+                {
+                    hasAnyResource = true;
+                    break;
+                }
+            }
+
+            if (!hasAnyResource)
+                return;
             
             do
             {
@@ -48,7 +60,7 @@ namespace B3.ThiefSystem
             while (resources[index] == 0);
             
             var resource = (ResourceType)index;
-            
+            NotificationManager.Instance.AddNotification($"{giveTo.colorTag}{giveTo.playerName}</color> stole 1 {resource} from {stealFrom.colorTag}{stealFrom.playerName}</color>.");
             stealFrom.RemoveResource(resource, 1);
             giveTo.AddResource(resource, 1);
         }

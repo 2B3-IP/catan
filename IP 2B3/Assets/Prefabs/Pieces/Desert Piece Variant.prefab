@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Desert Piece Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4910995570553014652, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 5022685486829936994, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: numberText
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5022685486829936994, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
       propertyPath: <IsDesert>k__BackingField
       value: 1
@@ -20,6 +28,10 @@ PrefabInstance:
       propertyPath: <IsBlocked>k__BackingField
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5022685486829936994, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: <ThiefPivot>k__BackingField
+      value: 
+      objectReference: {fileID: 2555874202336042898}
     - target: {fileID: 5380163187218900059, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -52,8 +64,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6736805376224820131, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 575384823701800123, guid: 1c14368f4e5067248900aafc1d097ca0, type: 3}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6725650610803093364, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+--- !u!4 &2555874202336042898 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4080819969799974711, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+  m_PrefabInstance: {fileID: 2006835424448508069}
+  m_PrefabAsset: {fileID: 0}

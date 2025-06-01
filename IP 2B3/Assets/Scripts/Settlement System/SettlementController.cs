@@ -1,6 +1,8 @@
 ﻿using B3.BoardSystem;
 using B3.GameStateSystem;
 using B3.PlayerSystem;
+using B3.PortSystem;
+using TheBlindEye.Utility;
 using UnityEngine;
 
 namespace B3.SettlementSystem
@@ -11,6 +13,10 @@ namespace B3.SettlementSystem
         [SerializeField] private GameObject cityObject;
         [SerializeField] private Material highlightMaterial;
         
+        [SerializeField] private LeanTweenType easing;
+        [SerializeField] private float animLength = 2f;
+
+        public PortController ConnectedPortController { get; set; }
         public HexPosition HexPosition { get; set; }
         public HexVertexDir VertexDir { get; set; }
         
@@ -52,19 +58,21 @@ namespace B3.SettlementSystem
             _selectable = value;
         }
         
-        public void BuildHouse()
+        public void BuildHouse(AudioClip clip)
         {
             if (IsCity)
                 return;
             
+            houseObject.transform.position = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z);
+            houseObject.transform.localScale = Vector3.zero;
+            houseObject.transform.localRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+            
+            LeanTween.scale(houseObject, Vector3.one, animLength).setFrom(Vector3.zero).setEase(easing);
+            LeanTween.moveLocalY(houseObject, houseObject.transform.position.y - 5f, animLength).setEase(easing)
+                .setOnComplete(() => Audio.Play(clip, transform.position));
+            
             houseObject.SetActive(true);
             cityObject.SetActive(false);
-            IsCity = true;
-        }
-        
-        public void SetOwner(PlayerBase player)
-        {
-            Owner = player;
         }
         
         public void Highlight(bool value)
@@ -80,15 +88,24 @@ namespace B3.SettlementSystem
             _selectable = value;
         }
 
-        public void UpgradeToCity()
+        public void UpgradeToCity(AudioClip clip)
         {
             if (IsCity) 
                 return;
             
             IsCity = true;
             
-            houseObject.SetActive(false);
-            cityObject.SetActive(true);
+            LeanTween.rotateAroundLocal(houseObject, Vector3.up, 360f, animLength).setEase(easing);
+            LeanTween.scale(houseObject, Vector3.zero, animLength).setFrom(Vector3.one).setEase(easing).setOnComplete(() =>
+                {
+                    LeanTween.rotateAroundLocal(cityObject, Vector3.up, 360f, animLength * 1.5f).setEase(easing);
+                    LeanTween.scale(cityObject, Vector3.one, animLength * 1.5f).setFrom(Vector3.zero).setEase(easing);
+                    houseObject.SetActive(false);
+                    cityObject.SetActive(true);
+                    Audio.Play(clip, transform.position);
+                } 
+            );
+            
         }
     }
 }

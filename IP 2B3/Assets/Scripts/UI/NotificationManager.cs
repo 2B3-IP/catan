@@ -3,7 +3,9 @@ using System.Collections;
 using JetBrains.Annotations;
 using NaughtyAttributes;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
@@ -36,9 +38,32 @@ namespace B3.UI
      
         [SerializeField] private GameObject notificationPrefab;
         [SerializeField] private float animDuration;
+
+        public class NotificationHandle
+        {
+            private NotificationInstance _instance;
+
+            internal NotificationHandle(NotificationInstance instance)
+            {
+                _instance = instance;
+            }
+
+            public void SetText(string text)
+            {
+                _instance.text.text = text;
+            }
+
+            public void AddOnClickListener(UnityAction listener) => _instance.button.onClick.AddListener(listener);
+            
+            public void Destroy()
+            {
+                _instance?.DestroyNotification();
+                _instance = null;
+            }
+        }
         
         // btw: https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/RichText.html
-        public void AddNotification(string message, float durationSeconds)
+        public NotificationHandle AddNotification(string message, float durationSeconds = 4, bool destroyOnClick = true)
         {
             if (durationSeconds < 2f)
                 Debug.LogWarning("Notification duration should be at least 2 seconds so the animation displays properly");
@@ -47,6 +72,8 @@ namespace B3.UI
             var notificationInstance = notification.GetComponent<NotificationInstance>();
             
             notificationInstance.text.text = message;
+            if (destroyOnClick)
+                notificationInstance.button.onClick.AddListener(() => notificationInstance.DestroyNotification());
             
             LeanTween.scale(notification, Vector3.one, animDuration).setFrom(Vector3.zero)
                 .setEase(LeanTweenType.easeOutCubic);
@@ -56,7 +83,8 @@ namespace B3.UI
                 .setLoopPingPong(4)
                 .setDelay(durationSeconds - 2f)
                 .setOnComplete(() => notificationInstance.DestroyNotification() );
-            
+
+            return new NotificationHandle(notificationInstance);
         }
         
         [Button]

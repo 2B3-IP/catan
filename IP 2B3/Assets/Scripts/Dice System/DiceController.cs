@@ -19,10 +19,7 @@ namespace B3.DiceSystem
 
         public int DiceRoll { get; private set; }
 
-        public bool IsInMotion()
-        {
-            return _rigidbody.linearVelocity.magnitude > 0.1f || _rigidbody.angularVelocity.magnitude > 0.1f;
-        }
+
         private void Awake()
         {
             _transform = transform;
@@ -31,17 +28,12 @@ namespace B3.DiceSystem
 
         public IEnumerator ThrowCoroutine(Vector3 startPosition, float throwForce)
         {
-            Debug.Log($"Throwing dice from position: {startPosition} with force: {throwForce}");
-
             _transform.SetPositionAndRotation(startPosition, Random.rotation);
-
-            _rigidbody.linearVelocity = Vector3.zero;
-            _rigidbody.angularVelocity = Vector3.zero;
-
+            
             _rigidbody.AddForce(throwDirection * throwForce, ForceMode.Impulse);
 
             yield return WAIT_FIXED;
-
+            
             while (_rigidbody.linearVelocity.magnitude > landThreshold || 
                    _rigidbody.angularVelocity.magnitude > landThreshold)
                 yield return WAIT_FIXED;
@@ -50,7 +42,6 @@ namespace B3.DiceSystem
 
             SetDiceValue();
         }
-
 
         private void SetDiceValue()
         {
@@ -76,7 +67,7 @@ namespace B3.DiceSystem
             }
 
             DiceRoll = faceIndex + 1;
-            Debug.Log(DiceRoll);
+            Debug.Log( "DICEROLL" + DiceRoll);
         }
     }
 }

@@ -12,6 +12,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ore Piece Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4080819969799974711, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.103
+      objectReference: {fileID: 0}
+    - target: {fileID: 4080819969799974711, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.944
+      objectReference: {fileID: 0}
+    - target: {fileID: 4080819969799974711, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.129
+      objectReference: {fileID: 0}
+    - target: {fileID: 4134428543226658201, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.103
+      objectReference: {fileID: 0}
+    - target: {fileID: 4134428543226658201, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.848
+      objectReference: {fileID: 0}
+    - target: {fileID: 4134428543226658201, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.129
+      objectReference: {fileID: 0}
     - target: {fileID: 5022685486829936994, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
       propertyPath: <ResourceType>k__BackingField
       value: 4
@@ -48,6 +72,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6736805376224820131, guid: 9d4dde31fcdd8ee4893f16399a270fe7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -6511577389770483695, guid: 1c14368f4e5067248900aafc1d097ca0, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

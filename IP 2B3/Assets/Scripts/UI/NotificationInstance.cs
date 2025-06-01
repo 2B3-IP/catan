@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace B3.UI
 {
@@ -7,6 +8,7 @@ namespace B3.UI
     {
         public TMP_Text text;
         public CanvasGroup canvasGroup;
+        public Button button;
 
         public float animDuration = 1f;
         

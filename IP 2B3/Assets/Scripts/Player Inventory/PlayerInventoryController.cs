@@ -2,8 +2,9 @@
 using B3.DevelopmentCardSystem;
 using B3.GameStateSystem;
 using B3.PlayerSystem;
+using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.Events;
 
 namespace B3.PlayerInventorySystem
 {
@@ -13,6 +14,8 @@ namespace B3.PlayerInventorySystem
         
         public DevelopmentCardController developmentCardController;
         private PlayerBase _player;
+        
+        public UnityEvent onItemCountChanged;
         
         public int ItemCount => _playerItems.Count;
         
@@ -32,12 +35,19 @@ namespace B3.PlayerInventorySystem
         {
             var playerItem = new PlayerItem(cardType);
             _playerItems.Add(playerItem);
+            onItemCountChanged.Invoke();
         }
 
-        public void UseItem(DevelopmentCardType cardType)
+        public bool UseItem(DevelopmentCardType cardType)
         {
             if (HasCard(cardType))
+            {
                 developmentCardController.UseCard(_player, cardType);
+                onItemCountChanged.Invoke();
+                return true;
+            }
+            
+            return false;
         }
 
         private bool HasCard(DevelopmentCardType cardType)
@@ -58,6 +68,7 @@ namespace B3.PlayerInventorySystem
             return false;
         }
 
+        [Button("Make all items usable")]
         private void OnPlayerEndGameState()
         {
             for (int i = 0; i < _playerItems.Count; i++)

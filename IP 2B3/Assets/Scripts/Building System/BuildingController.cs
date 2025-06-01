@@ -1,13 +1,14 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using B3.SettlementSystem;
 using B3.PlayerSystem;
 using B3.BoardSystem;
+using B3.DevelopmentCardSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
-using B3.PortSystem;
 using UnityEngine.InputSystem;
+using B3.UI;
+using TheBlindEye.Utility;
 
 namespace B3.BuildingSystem
 {
@@ -15,14 +16,45 @@ namespace B3.BuildingSystem
     {
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private SettlementController settlementPrefab;
-        [SerializeField] private BoardController boardController;
+        [SerializeField] private LongestRoadController longestRoadController;
+        [SerializeField] private AudioClip placeBuildingAudio;
+        public CanvasGroup humanPlayerButtonsGroup;
 
         private PathController[] _allPaths;
         private bool _isFirstStates = true;
+        private int countFirstStates = 0;
+        
+        public bool HasBuilt { get; private set; }
 
         private void Awake()
         {
             _allPaths = FindObjectsByType<PathController>(FindObjectsSortMode.None);
+    
+            Debug.Log($"Found {_allPaths.Length} total paths in Awake");
+    
+            // Debug fiecare drum
+            foreach (var path in _allPaths)
+            {
+                Debug.Log($"Path: Owner={path.Owner?.name ?? "NULL"}, IsBuilt={path.IsBuilt}, HexPos=({path.HexPosition.X},{path.HexPosition.Y}), EdgeDir={path.EdgeDir}");
+        
+                if (path.Owner != null)
+                {
+                    path.IsBuilt = true; // Acum merge direct
+                    Debug.Log($"Set IsBuilt=true for path at {path.HexPosition.X},{path.HexPosition.Y} {path.EdgeDir}");
+                }
+            }
+    
+            // Verificăm din nou după fix
+            int totalBuiltRoads = 0;
+            foreach (var path in _allPaths)
+            {
+                if (path.IsBuilt && path.Owner != null)
+                {
+                    totalBuiltRoads++;
+                    Debug.Log($"Built road found: {path.HexPosition.X},{path.HexPosition.Y} {path.EdgeDir} owned by {path.Owner.name}");
+                }
+            }
+            Debug.Log($"Total built roads after fix: {totalBuiltRoads}");
         }
 
         private void OnEnable() =>
@@ -33,265 +65,256 @@ namespace B3.BuildingSystem
 
         public override IEnumerator BuildHouse(PlayerBase player)
         {
-            if (!CanBuildHouse(player))
+            if (!_isFirstStates && !CanBuildHouse(player))
+            {
+                if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
                 yield break;
+            }
             
             SettlementController selectedHouse = null;
-           
+            if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = false;
             while (selectedHouse == null)
             {
                 yield return player.BuildHouseCoroutine();
                 selectedHouse = player.SelectedHouse;
+
+                if (selectedHouse == null) 
+                    continue;
                 
-                //if (!_isFirstStates && !CanBuildHouse(selectedHouse, player))
-                //    selectedHouse = null;
+                bool canBuild = CanBuildHouse(selectedHouse, player);
+                Debug.Log($"Checking if can build house at {selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}: {canBuild}");
+
+                if (canBuild) 
+                    continue;
+                
+                Debug.Log("Cannot build house here - resetting selection");
+                HasBuilt = false;
+                selectedHouse = null;
             }
+            Debug.Log("Building house successfully!");
             
-            selectedHouse.SetOwner(player);
-            selectedHouse.BuildHouse();
+            Debug.Log($"BEFORE: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
+            
+            selectedHouse.Owner = player;
+            selectedHouse.BuildHouse(placeBuildingAudio);
             player.Settlements.Add(selectedHouse);
+            player.AddVictoryPoints(1);
             
-            TryAddPortBuffForSettlement(selectedHouse, player);
+            HasBuilt = true;
             
-            var message = $"House built at {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y}, {selectedHouse.VertexDir} by {player.name}";
-            Debug.Log(message);
+            Debug.Log($"AFTER: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
             
+            AddPortBuffForSettlement(selectedHouse, player);
+            
+            var message = $"BUILD House {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y} {(int)selectedHouse.VertexDir} by {player.name}";
+
             if(player is HumanPlayer)
                 AI.SendMove(message);
+            if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
         }
+
 
         public override IEnumerator BuildRoad(PlayerBase player)
         {
-            if (!CanBuildRoad(player))
+            if (!_isFirstStates && !CanBuildRoad(player))
+            {
+                if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
                 yield break;
-            
+            }
+    
             PathController selectedPath = null;
-            
             while (selectedPath == null)
             {
+                Debug.Log("Waiting for player to select a path...");
+
+                if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = false;
+                
                 yield return player.BuildRoadCoroutine();
                 selectedPath = player.SelectedPath;
-                
-                // pusca daca apesi pe un road care nu e bun ( lipit de o casa)
-                //if (!CanBuildRoad(player, selectedPath))
-                //    selectedPath = null;
-            }
+        
+                if (selectedPath != null)
+                {
+                     bool canBuild = CanBuildRoad(player, selectedPath);
+                    Debug.Log($"CanBuildRoad result: {canBuild}");
             
+                    if (!canBuild)
+                    {
+                        Debug.Log($"Cannot build road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir} - resetting selection");
+                        HasBuilt = false;
+                        selectedPath = null;
+                    }
+                    else {
+                        Debug.Log($"Can build road - proceeding with construction");
+                    }
+                }
+                else
+                {
+                    Debug.Log("No path selected by player");
+                }
+            }
+
+
+
+            var message = $"BUILD road {selectedPath.HexPosition.X} {selectedPath.HexPosition.Y} {(int)selectedPath.EdgeDir} by {player.name}";
+            Debug.Log(message);
+
+            if(player is HumanPlayer)
+                AI.SendMove(message);
+    
+            Audio.Play(placeBuildingAudio, selectedPath.transform.position, 0.5f);
+
+            HasBuilt = true;
             selectedPath.Owner = player;
             selectedPath.BuildRoad();
-            
+    
             player.Paths.Add(selectedPath);
+    
+            Debug.Log($"Road built successfully! Player now has {player.Paths.Count} roads");
+    
+            if (longestRoadController != null)
+                longestRoadController.CheckLongestRoadAfterBuild(player, selectedPath);
+            if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
         }
 
         protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player)
         {
-            // este asezarea ocupata?
-            if (targetSettlement.HasOwner)
-                return false;
+            var housePosition = targetSettlement.HexPosition;
+            var houseDir = targetSettlement.VertexDir;
 
-            // obt poz si dir vertexului pentru asezarea tintă
-            HexPosition hexPosition = targetSettlement.HexPosition;
-            HexVertexDir vertexDir = targetSettlement.VertexDir;
+            var boardGrid = boardController.BoardGrid;
+            var neighbouringVertices = boardGrid.GetNeighbouringVertices(housePosition, houseDir);
+            
+            int index = 0;
 
-            // vf nodurile vecine
-            bool isConnectedToPlayerRoad = false;
-
-            //vecinii vertexului curent
-            var neighbouringVertices = boardController.BoardGrid
-                .GetNeighbouringVertices(hexPosition, vertexDir);
-
-            // vf dacă exista un drum construit de player care este conectat la aceasta asezare
-            foreach (var (neighbourVertex, neighbourPos, neighbourDir) in neighbouringVertices)
+            bool canBePlaced = _isFirstStates;
+            foreach (var (settlement, pos, dir) in neighbouringVertices)
             {
-                foreach (var path in _allPaths)
-                {
-                    if (path.IsBuilt && path.Owner == player)
-                    {
-                        if ((path.HexPosition.X == hexPosition.X && path.HexPosition.Y == hexPosition.Y) ||
-                            (path.HexPosition.X == neighbourPos.X && path.HexPosition.Y == neighbourPos.Y))
-                        {
-                            isConnectedToPlayerRoad = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (isConnectedToPlayerRoad)
-                    break;
-            }
-
-            if (!isConnectedToPlayerRoad)
-                return false;
-
-            // vf regula distantei de 2 folosind DFS cu lungime maxima 2
-            HashSet<SettlementController> visited = new HashSet<SettlementController>();
-            Queue<(SettlementController settlement, int distance)> queue = new Queue<(SettlementController, int)>();
-
-            queue.Enqueue((targetSettlement, 0));
-            visited.Add(targetSettlement);
-
-            while (queue.Count > 0)
-            {
-                var (currentSettlement, distance) = queue.Dequeue();
-                if (distance > 0 && distance < 2 && currentSettlement.HasOwner)
+                // am o casa vecina deja construita
+                if (settlement.HasOwner)
                     return false;
 
-                if (distance >= 2)
+                if (_isFirstStates)
                     continue;
-                HexPosition currentPos = currentSettlement.HexPosition;
-                HexVertexDir currentDir = currentSettlement.VertexDir;
-
-                var currentNeighbours = boardController.BoardGrid
-                    .GetNeighbouringVertices(currentPos, currentDir);
-
-                foreach (var (neighbourVertex, neighbourPos, neighbourDir) in currentNeighbours)
+                
+                var edgeDir = index switch
                 {
-                    if (neighbourVertex is SettlementController neighbourSettlement &&
-                        !visited.Contains(neighbourSettlement))
-                    {
-                        visited.Add(neighbourSettlement);
-                        queue.Enqueue((neighbourSettlement, distance + 1));
-                    }
-                }
+                    0 => HexEdgeDirExt.GetHexDir(houseDir, dir),
+                    1 => HexEdgeDirExt.GetHexDir(dir, houseDir),
+                    _ => HexEdgeDirExt.GetHexDir(dir, houseDir.GetVertexDirBasedOnStartDir(housePosition, pos))
+                };
+
+                index++;
+                
+                var path = boardGrid.GetEdge(pos, edgeDir);
+                if (path == null)
+                    continue;
+
+                if (path.IsBuilt && path.Owner == player)
+                    canBePlaced = true;
             }
 
-            return true;
+            return canBePlaced;
         }
         
         protected override bool CanBuildRoad(PlayerBase player, PathController targetPath)
         {
-            // mai are playerul roaduri disponibile?
-            if (!base.CanBuildRoad(player))
+            if (targetPath.IsBuilt)
                 return false;
+            
+            var roadPosition = targetPath.HexPosition;
+            var roadDir = targetPath.EdgeDir;
 
-            // este deja construit?
-            if (targetPath.IsBuilt || targetPath.Owner != null)
-                return false;
-
-            HexPosition hexPosition = targetPath.HexPosition;
-            HexEdgeDir edgeDir = targetPath.EdgeDir;
-
-            var neighbouringEdges =
-                boardController.BoardGrid.GetNeighbouringEdges(hexPosition, edgeDir);
-
-            bool hasOwnedSettlement = false;
-
-            foreach (var (vertex, vertexPos, vertexDir) in neighbouringEdges)
-            {
-                if (vertex is SettlementController settlement && settlement.HasOwner && settlement.Owner == player)
-                {
-                    hasOwnedSettlement = true;
-                    break;
-                }
-            }
-
-            bool isConnectedToOwnedRoad = false;
-            foreach (var (vertex, vertexPos, vertexDir) in neighbouringEdges)
-            {
-                if (vertex is SettlementController settlement)
-                {
-                    var connectedEdges = boardController.BoardGrid
-                        .GetNeighbouringEdges(vertexPos, VertexDirToEdgeDir(vertexDir));
-
-                    foreach (var (otherVertex, otherPos, otherDir) in connectedEdges)
-                    {
-                        foreach (var path in _allPaths)
-                        {
-                            if (path != targetPath && path.IsBuilt && path.Owner == player)
-                            {
-                                if ((path.HexPosition.X == vertexPos.X && path.HexPosition.Y == vertexPos.Y) ||
-                                    (path.HexPosition.X == otherPos.X && path.HexPosition.Y == otherPos.Y))
-                                {
-                                    isConnectedToOwnedRoad = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (isConnectedToOwnedRoad)
-                            break;
-                    }
-                }
-
-                if (isConnectedToOwnedRoad)
-                    break;
-            }
-
-            return hasOwnedSettlement || isConnectedToOwnedRoad;
-        }
-
-        private HexEdgeDir VertexDirToEdgeDir(HexVertexDir vertexDir)
-        {
-            switch (vertexDir)
-            {
-                case HexVertexDir.TopRight: return HexEdgeDir.TopRight;
-                case HexVertexDir.Right: return HexEdgeDir.BottomRight;
-                case HexVertexDir.BottomRight: return HexEdgeDir.Bottom;
-                case HexVertexDir.BottomLeft: return HexEdgeDir.BottomLeft;
-                case HexVertexDir.Left: return HexEdgeDir.TopLeft;
-                case HexVertexDir.TopLeft: return HexEdgeDir.Top;
-                default: return HexEdgeDir.Top;
-            }
-        }
-
-        private void TryAddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
-        {
             var boardGrid = boardController.BoardGrid;
             
-            //verific daca settlementul este pe o piesa valida
-            var piece = boardGrid[settlement.HexPosition];
-            if (piece == null) return;
+            var (roadVertex1, roadVertex2) = roadDir.GetVertexDirs();
+            
+            var vertex1 = boardGrid.GetVertex(roadPosition, roadVertex1);
+            var vertex2 = boardGrid.GetVertex(roadPosition, roadVertex2);
+            
+            // este langa o casa a playerului
+            if (vertex1.Owner == player || vertex2.Owner == player)
+                return true;
 
-            //iau vecinii hexului pe care se afla settlementul
-            var neighbors = piece.HexPosition.GetNeighbours();
+            bool canBePlaced = false;
+            
+            CheckNeighbourVertexes(roadVertex1);
+            CheckNeighbourVertexes(roadVertex2);
+            
+            return canBePlaced;
 
-            //iteram prin vecini (HexPosition)
-            foreach (var neighborPos in neighbors)
+            void CheckNeighbourVertexes(HexVertexDir vertex)
             {
-                var hexPiece = boardGrid[neighborPos];
-                if(hexPiece == null)
-                    continue;
-                
-                //verificam daca exista un vecin al hexului cu settlmentul care este port
-                if (!hexPiece.TryGetComponent<PortController>(out var portPiece)) 
-                    continue;
+                var neighbouringVertices = boardGrid.GetNeighbouringVertices(roadPosition, vertex);
 
-                //daca avem vecin port o sa luam vertexul hexului pe care a fost asezat settlementul
-                // transmitem intr o functie de la PortController pozitia opusa
-                // (pe idee ca dreapta jos de la tile e stanga sus de la port)
-                // VertexDir al settlementului
-                if (!portPiece.IsSettlementPosition(settlement)) 
-                    continue;
-                
-                portPiece.AddPlayerBuff(player);
-                return;
+                int index = 0;
+                foreach (var (settlement, pos, dir) in neighbouringVertices)
+                {
+                    // path ul pe care l ai construit chiar acum, deci skip
+                    if (settlement == vertex2 || settlement == vertex1)
+                        continue;
+
+                    var edgeDir = index switch
+                    {
+                        1 => HexEdgeDirExt.GetHexDir(vertex.GetVertexDirBasedOnStartDir(roadPosition, pos), dir),
+                        _ => HexEdgeDirExt.GetHexDir(dir, vertex)
+                    };
+
+                    index++;
+                    
+                    var path = boardGrid.GetEdge(pos, edgeDir);
+                    if (path == null)
+                        continue;
+
+                    if (path.Owner == player)
+                        canBePlaced = true;
+                }
             }
         }
+        
+        
 
-        /*private bool IsConnectedToOwnedRoad(Path path, PlayerBase player)
+        private PieceController[] allPieces;
+        private void AddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
         {
-            return _allPaths.Any(p => p.Owner == player &&
-                                      (p.ConnectsTo(path.SettlementA) || p.ConnectsTo(path.SettlementB)));
-        }*/
-
+            if (settlement.ConnectedPortController != null) settlement.ConnectedPortController.AddPlayerBuff(player);
+        }
+        
         public override IEnumerator BuildCity(PlayerBase player)
         {
             if (!CanBuildCity(player))
-                yield break;
-
-            yield return player.UpgradeToCityCoroutine();
-
-            var closestCorner = player.SelectedHouse;
-
-            if (!closestCorner.HasOwner || closestCorner.Owner != player)
-                Debug.Log("Not your settlement");
-            else
             {
-                closestCorner.UpgradeToCity();
+                if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
+                yield break;
             }
+            SettlementController closestCorner = null;
+            if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = false;
+            while (closestCorner == null)
+            {
+                Debug.Log("Building city for:" + player.name);
+                yield return player.UpgradeToCityCoroutine();
+
+                closestCorner = player.SelectedHouse;
+                
+                Debug.Log(closestCorner.Owner.name + " vs " + player.name);
+                if (!closestCorner.HasOwner || closestCorner.Owner != player)
+                {
+                    closestCorner = null;
+                    Debug.Log("Not your settlement");
+                    //if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
+                }
+                else
+                {
+                    closestCorner.UpgradeToCity(placeBuildingAudio);
+                    player.AddVictoryPoints(1);
+                    HasBuilt = true;
+                }
+            }
+            
+            if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
         }
         
         private void OnDiceGameState() =>
             _isFirstStates = false;
     }
+    
 }

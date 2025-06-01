@@ -17,12 +17,12 @@ namespace B3.BoardSystem
         public static HexVertexDir Opposite(this HexVertexDir dir) =>
             dir switch
             {
-                HexVertexDir.TopLeft => HexVertexDir.BottomRight,
-                HexVertexDir.TopRight => HexVertexDir.BottomLeft,
-                HexVertexDir.Right => HexVertexDir.Left,
+                HexVertexDir.TopLeft => HexVertexDir.BottomLeft,
+                HexVertexDir.TopRight => HexVertexDir.BottomRight,
+                HexVertexDir.Right => HexVertexDir.BottomLeft,
                 HexVertexDir.BottomRight => HexVertexDir.TopRight,
-                HexVertexDir.BottomLeft => HexVertexDir.TopRight,
-                HexVertexDir.Left => HexVertexDir.Right,
+                HexVertexDir.BottomLeft => HexVertexDir.TopLeft,
+                HexVertexDir.Left => HexVertexDir.BottomRight,
                 _ => throw new InvalidEnumArgumentException()
             };
         

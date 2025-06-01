@@ -2,8 +2,6 @@
 using B3.BankSystem;
 using B3.PlayerSystem;
 using B3.ResourcesSystem;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace B3.TradeSystem
 {
@@ -63,8 +61,15 @@ namespace B3.TradeSystem
                     int batchSize = playerBuffs.GetResourceAmount(resourceType);
                     if (batchSize == 0)
                         batchSize = 4;
+                    
                     int batches = given / batchSize;
                     totalBatches += batches;
+
+                    if (given % batchSize != 0)
+                    {
+                        int returnAmount = given % batchSize;
+                        resourcesGiven[i] -= returnAmount;
+                    }
                 }
             }
 

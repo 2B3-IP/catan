@@ -39,8 +39,11 @@ namespace B3.GameStateSystem
             var vertexDirection = selectedHouse.VertexDir;
             
             var pieceController = boardGrid[vertexPosition];
-            player.AddResource(pieceController.ResourceType, 1);
-            bankController.GetResources(pieceController.ResourceType, 1);
+            if (pieceController != null)
+            {
+                player.AddResource(pieceController.ResourceType, 1);
+                bankController.GetResources(pieceController.ResourceType, 1);
+            }
             
             switch (vertexDirection)
             {
@@ -92,12 +95,18 @@ namespace B3.GameStateSystem
 
             var pieceController1 = boardGrid[hex1];
             var pieceController2 = boardGrid[hex2];
-            
-            player.AddResource(pieceController1.ResourceType, 1);
-            bankController.GetResources(pieceController1.ResourceType, 1);
 
-            player.AddResource(pieceController2.ResourceType, 1);
-            bankController.GetResources(pieceController2.ResourceType, 1);
+            if (pieceController1 != null)
+            {
+                player.AddResource(pieceController1.ResourceType, 1);
+                bankController.GetResources(pieceController1.ResourceType, 1);
+            }
+
+            if (pieceController2 != null)
+            {
+                player.AddResource(pieceController2.ResourceType, 1);
+                bankController.GetResources(pieceController2.ResourceType, 1);
+            }
         }
     }
 }

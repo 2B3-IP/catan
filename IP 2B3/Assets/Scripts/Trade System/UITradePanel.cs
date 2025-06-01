@@ -33,6 +33,8 @@ namespace B3.TradeSystem
 
             var otherPlayer = playersManager.players[dropDown.value  + 1];
             tradeController.TradeResources(player, otherPlayer, resourcesToGive, resourcesToGet);
+            
+            gameObject.SetActive(false);
         }
 
         public void Reset()
@@ -40,7 +42,7 @@ namespace B3.TradeSystem
             foreach (var button in topPlayerButtons)
                 button.Reset();
             
-            foreach (var button in topPlayerButtons)
+            foreach (var button in bottomPlayerButtons)
                 button.Reset();
         }
     }

@@ -347,3 +347,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ResourceType>k__BackingField: 0
+  player: {fileID: 0}
+  countText: {fileID: 4557161857111112213}

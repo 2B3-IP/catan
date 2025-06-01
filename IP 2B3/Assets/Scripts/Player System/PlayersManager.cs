@@ -28,6 +28,11 @@ namespace B3.PlayerSystem
                 players.RemoveAt(i);
             }
             OnPlayersInitialized?.Invoke(numberOfPlayers);
+            for (int i = 0; i < players.Count; i++)
+{
+    players[i].PlayerIndex = i;
+}
+
         }
     }
 }

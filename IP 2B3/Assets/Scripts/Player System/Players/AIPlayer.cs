@@ -16,7 +16,7 @@ namespace B3.PlayerSystem
         [SerializeField] private TradeController tradeSystem;
         [SerializeField] private PlayersManager playersManager;
         [SerializeField] private DiceThrower diceThrower;
-
+        public int PlayerIndex { get; set; }
         public override IEnumerator ThrowDiceCoroutine()
         {
             yield return diceThrower.ThrowCoroutine(); 
@@ -155,4 +155,5 @@ namespace B3.PlayerSystem
             DiscardResources = AI.GetDiscardedResources();
         }
     }
+
 }

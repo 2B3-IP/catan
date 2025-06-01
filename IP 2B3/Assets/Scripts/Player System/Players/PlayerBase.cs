@@ -35,6 +35,7 @@ namespace B3.PlayerSystem
                 onResourcesChanged?.Invoke();
             }
         }
+         public int PlayerIndex { get; set; }
 
         public int VictoryPoints { get; private set; }
         public int DiceSum { get; protected set; }

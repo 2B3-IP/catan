@@ -1,0 +1,16 @@
+{
+    "name": "TheBlindEye.ObjectPoolSystem",
+    "rootNamespace": "",
+    "references": [
+        "GUID:61f9cddb5f22e51468e18982cdb3462e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

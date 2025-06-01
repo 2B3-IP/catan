@@ -13,7 +13,7 @@ namespace B3.DevelopmentCardSystem
         private int _maxCardsUsed = 2;
         private PlayerBase _currentPlayerHolder;
         
-        public override IEnumerator UseCard(PlayerBase player)
+        public override IEnumerator UseCard(PlayerBase player, CanvasGroup actions)
         {
             // Debug.Log("IN KNIGTH");
             player.AddUsedKnight();
@@ -28,11 +28,12 @@ namespace B3.DevelopmentCardSystem
 
                 _maxCardsUsed++;
             }
-            
+            actions.interactable = false;
             yield return player.MoveThiefCoroutine(thiefController);
             
             var thiefPivot = player.SelectedThiefPiece.transform;
             yield return thiefController.MoveThief(thiefPivot.position);
+            actions.interactable = true;
         }
     }
 }

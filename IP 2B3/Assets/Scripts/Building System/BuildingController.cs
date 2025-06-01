@@ -5,7 +5,10 @@ using B3.PlayerSystem;
 using B3.BoardSystem;
 using B3.DevelopmentCardSystem;
 using B3.GameStateSystem;
+using B3.PieceSystem;
 using UnityEngine.InputSystem;
+using B3.UI;
+using TheBlindEye.Utility;
 
 namespace B3.BuildingSystem
 {
@@ -14,9 +17,12 @@ namespace B3.BuildingSystem
         [SerializeField] private InputActionReference clickButton;
         [SerializeField] private SettlementController settlementPrefab;
         [SerializeField] private LongestRoadController longestRoadController;
+        [SerializeField] private AudioClip placeBuildingAudio;
+        public CanvasGroup humanPlayerButtonsGroup;
 
         private PathController[] _allPaths;
         private bool _isFirstStates = true;
+        private int countFirstStates = 0;
         
         public bool HasBuilt { get; private set; }
 
@@ -60,10 +66,13 @@ namespace B3.BuildingSystem
         public override IEnumerator BuildHouse(PlayerBase player)
         {
             if (!_isFirstStates && !CanBuildHouse(player))
+            {
+                if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
                 yield break;
-
+            }
+            
             SettlementController selectedHouse = null;
-
+            if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = false;
             while (selectedHouse == null)
             {
                 yield return player.BuildHouseCoroutine();
@@ -82,13 +91,12 @@ namespace B3.BuildingSystem
                 HasBuilt = false;
                 selectedHouse = null;
             }
-
             Debug.Log("Building house successfully!");
             
             Debug.Log($"BEFORE: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
-    
+            
             selectedHouse.Owner = player;
-            selectedHouse.BuildHouse();
+            selectedHouse.BuildHouse(placeBuildingAudio);
             player.Settlements.Add(selectedHouse);
             player.AddVictoryPoints(1);
             
@@ -98,11 +106,11 @@ namespace B3.BuildingSystem
             
             AddPortBuffForSettlement(selectedHouse, player);
             
-            var message = $"House built at {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y}, {selectedHouse.VertexDir} by {player.name}";
-            Debug.Log(message);
+            var message = $"BUILD House {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y} {(int)selectedHouse.VertexDir} by {player.name}";
 
             if(player is HumanPlayer)
                 AI.SendMove(message);
+            if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
         }
 
 
@@ -110,15 +118,17 @@ namespace B3.BuildingSystem
         {
             if (!_isFirstStates && !CanBuildRoad(player))
             {
-                Debug.Log("CanBuildRoad(player) returned false - exiting");
+                if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
                 yield break;
             }
     
             PathController selectedPath = null;
-    
             while (selectedPath == null)
             {
                 Debug.Log("Waiting for player to select a path...");
+
+                if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = false;
+                
                 yield return player.BuildRoadCoroutine();
                 selectedPath = player.SelectedPath;
         
@@ -142,9 +152,17 @@ namespace B3.BuildingSystem
                     Debug.Log("No path selected by player");
                 }
             }
+
+
+
+            var message = $"BUILD road {selectedPath.HexPosition.X} {selectedPath.HexPosition.Y} {(int)selectedPath.EdgeDir} by {player.name}";
+            Debug.Log(message);
+
+            if(player is HumanPlayer)
+                AI.SendMove(message);
     
-            Debug.Log($"Building road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir}");
-    
+            Audio.Play(placeBuildingAudio, selectedPath.transform.position, 0.5f);
+
             HasBuilt = true;
             selectedPath.Owner = player;
             selectedPath.BuildRoad();
@@ -154,7 +172,8 @@ namespace B3.BuildingSystem
             Debug.Log($"Road built successfully! Player now has {player.Paths.Count} roads");
     
             if (longestRoadController != null)
-                longestRoadController.CheckLongestRoadAfterBuild(player, selectedPath);;
+                longestRoadController.CheckLongestRoadAfterBuild(player, selectedPath);
+            if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
         }
 
         protected override bool CanBuildHouse(SettlementController targetSettlement, PlayerBase player)
@@ -252,6 +271,9 @@ namespace B3.BuildingSystem
             }
         }
         
+        
+
+        private PieceController[] allPieces;
         private void AddPortBuffForSettlement(SettlementController settlement, PlayerBase player)
         {
             if (settlement.ConnectedPortController != null) settlement.ConnectedPortController.AddPlayerBuff(player);
@@ -260,25 +282,39 @@ namespace B3.BuildingSystem
         public override IEnumerator BuildCity(PlayerBase player)
         {
             if (!CanBuildCity(player))
-                yield break;
-
-            Debug.Log("Building city for:" + player.name);
-            yield return player.UpgradeToCityCoroutine();
-
-            var closestCorner = player.SelectedHouse;
-
-            Debug.Log(closestCorner.Owner.name + " vs " + player.name);
-            if (!closestCorner.HasOwner || closestCorner.Owner != player)
-                Debug.Log("Not your settlement");
-            else
             {
-                closestCorner.UpgradeToCity();
-                player.AddVictoryPoints(1);
-                HasBuilt = true;
+                if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
+                yield break;
             }
+            SettlementController closestCorner = null;
+            if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = false;
+            while (closestCorner == null)
+            {
+                Debug.Log("Building city for:" + player.name);
+                yield return player.UpgradeToCityCoroutine();
+
+                closestCorner = player.SelectedHouse;
+                
+                Debug.Log(closestCorner.Owner.name + " vs " + player.name);
+                if (!closestCorner.HasOwner || closestCorner.Owner != player)
+                {
+                    closestCorner = null;
+                    Debug.Log("Not your settlement");
+                    //if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
+                }
+                else
+                {
+                    closestCorner.UpgradeToCity(placeBuildingAudio);
+                    player.AddVictoryPoints(1);
+                    HasBuilt = true;
+                }
+            }
+            
+            if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
         }
         
         private void OnDiceGameState() =>
             _isFirstStates = false;
     }
+    
 }

@@ -13,9 +13,9 @@ namespace B3.BoardSystem
         private int _currentSpawnCount;
         public bool CanSpawn => _currentSpawnCount < maxSpawnCount;
         
-        public PieceController Spawn(Vector3 position, Transform parent = null)
+        public PieceController Spawn(Vector3 position, Quaternion rotation, Transform parent = null)
         {
-            var piece = Object.Instantiate(piecePrefab, position, Quaternion.identity, parent);
+            var piece = Object.Instantiate(piecePrefab, position, rotation, parent);
             _currentSpawnCount++;
             
             return piece;

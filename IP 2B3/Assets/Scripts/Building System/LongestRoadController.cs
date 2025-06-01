@@ -29,8 +29,8 @@ namespace B3.DevelopmentCardSystem
             {
                 TransferLongestRoadCard(player, playerLongestRoad);
             }
-
-            player.LongestRoad = playerLongestRoad;
+            
+            player.SetLongestRoad(playerLongestRoad);
         }
         
         private void TransferLongestRoadCard(PlayerBase newOwner, int newLength)
@@ -71,8 +71,14 @@ namespace B3.DevelopmentCardSystem
             var vertex2 = boardGrid.GetVertex(roadPosition, roadVertex2);
             
             visited = new HashSet<SettlementController>{vertex1,vertex2};
-            int length1 = TraverseVertex(player, vertex1, vertex1, vertex2);
-            int length2 = TraverseVertex(player, vertex2, vertex1, vertex2);
+
+            int length1 = 0;
+            int length2 = 0;
+            
+            if (vertex1.Owner == player || vertex1.Owner ==null)
+                length1 = TraverseVertex(player, vertex1, vertex1, vertex2);
+            if (vertex2.Owner == player || vertex2.Owner ==null)
+                length2 = TraverseVertex(player, vertex2, vertex1, vertex2);
            
             return length1 + length2 + 1;
         }
@@ -95,10 +101,8 @@ namespace B3.DevelopmentCardSystem
             foreach (var (settlement, pos, dir) in neighbouringVertices)
             {
                 index++;
-                if (visited.Contains(settlement))
-                {
-                    continue;
-                }
+                
+                if (visited.Contains(settlement)) continue;
                 
                 var edgeDir = index switch
                 {
@@ -108,11 +112,20 @@ namespace B3.DevelopmentCardSystem
                 };
                 
                 var path = boardGrid.GetEdge(pos, edgeDir);
+                
                 if (path == null || path.Owner != player)
                     continue;
-                
                 visited.Add(settlement);
-                int length = 1 + TraverseVertex(player, settlement, v1, v2);
+
+                int length;
+                if (settlement.Owner != player && settlement.Owner != null)
+                {
+                    length = 1;
+                    if (maxLength < length)
+                        maxLength = length;
+                    break; 
+                }
+                length = 1 + TraverseVertex(player, settlement, v1, v2);
 
                 if (maxLength < length)
                     maxLength = length;

@@ -23,10 +23,19 @@ namespace B3.BoardSystem
         [SerializeField] private PathController pathPrefab;
 
         [SerializeField] private GameObject pieceTextPrefab;
+        
+        [SerializeField] private bool spawnDebugText;
+
+        public float animDuration = 2f;
+        public float delay = 1f;
+        public float delayIncPerTile = 0.25f;
+        public LeanTweenType easing;
+        public int piecesAnimating { get; private set; }
 
         private ResourceType?[] _piecesResources = new ResourceType?[19];
         private int[] _piecesNumber = new int[19];
         private ResourceType?[] _portsResources = new ResourceType?[9];
+        
 
         private readonly int[] _numberPoll = new int[]
         {
@@ -70,7 +79,6 @@ namespace B3.BoardSystem
             return instance;
         }
         
-        [Button]
         public void Generate()
         {
             ShuffleNumberPoll();
@@ -95,7 +103,7 @@ namespace B3.BoardSystem
             SpawnPiece(-3, 1, true);
             SpawnPiece(-2, -1, true);
 
-            //AI.SendBoard(_piecesResources, _piecesNumber, _portsResources);
+            AI.SendBoard(_piecesResources, _piecesNumber, _portsResources);
         }
         
         public PieceController GetPieceAt(HexPosition hex)
@@ -118,8 +126,19 @@ namespace B3.BoardSystem
                 return;
 
             var worldPosition = BoardGrid.ToWorldPosition(position);
-            var pieceController = boardPiece.Spawn(new Vector3(worldPosition.x, 0, worldPosition.y), transform);
-
+            var rotation = arePortPieces ? Quaternion.identity : Quaternion.Euler(0, Random.Range(0 , 6) * 60f, 0);
+            var pieceController = boardPiece.Spawn(new Vector3(worldPosition.x, -5, worldPosition.y), rotation, transform);
+            
+            var pieceTransform = pieceController.transform;
+            pieceTransform.localScale = Vector3.zero;
+            LeanTween.moveLocalY(pieceController.gameObject, pieceTransform.localPosition.y + 5, animDuration)
+                .setDelay(delay)
+                .setEase(easing)
+                .setOnComplete(_ => piecesAnimating -= 1);
+            LeanTween.scale(pieceController.gameObject, Vector3.one, animDuration * 0.75f).setDelay(delay).setEase(easing);
+            delay += delayIncPerTile;
+            piecesAnimating += 1;
+            
             pieceController.HexPosition = position;
             BoardGrid[position] = pieceController;
 
@@ -145,16 +164,19 @@ namespace B3.BoardSystem
                 _portsResources[_currentPortIndex++] = portController.ResourceType;
             }
 
-            var debugText = Instantiate
-            (
-                pieceTextPrefab, 
-                new Vector3(worldPosition.x, 0.2f, worldPosition.y), 
-                Quaternion.identity, 
-                transform
-            );
-                
-            debugText.GetComponentInChildren<TMP_Text>()
-                .SetText(i + " " + j + " number: " + pieceController.Number);
+            if (spawnDebugText)
+            {
+                var debugText = Instantiate
+                (
+                    pieceTextPrefab, 
+                    new Vector3(worldPosition.x, 0.2f, worldPosition.y), 
+                    Quaternion.identity, 
+                    transform
+                );
+                    
+                debugText.GetComponentInChildren<TMP_Text>()
+                    .SetText(i + " " + j + " number: " + pieceController.Number);
+            }
         }
         
         private BoardPiece GetRandomPiece(bool isPortPiece)

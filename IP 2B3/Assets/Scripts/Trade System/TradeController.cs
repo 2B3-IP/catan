@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using B3.BankSystem;
-using B3.GameStateSystem;
 using B3.PlayerSystem;
 using B3.ResourcesSystem;
 
@@ -14,6 +13,17 @@ namespace B3.TradeSystem
         // -value = daca primesti
         public void TradeResources(PlayerBase player, PlayerBase otherPlayer, int[] resourcesToTrade)
         {
+            // if(otherPlayer is AIPlayer)
+            // {
+            // ai.sendTurn
+            // while(false)
+            // yield return null;
+            
+            // if(!ai.accepted)
+            //     return;
+            // }
+            
+            
             for (int i = 0; i < resourcesToTrade.Length; i++)
             {
                 //print(i);
@@ -36,16 +46,78 @@ namespace B3.TradeSystem
         }
 
         // 4 : 1 sau 3 : 1 sau 2 : 1
-        public void TradeResources(PlayerBase player, ResourceType resourceToTrade, ResourceType resourceToGet)
+        public void TradeResources(PlayerBase player, int[] resourcesGiven, int[] resourcesWanted)
         {
             var playerBuffs = player.PlayerBuffs;
-            int resourceCount = playerBuffs.GetResourceAmount(resourceToTrade);
-            
-            player.RemoveResource(resourceToTrade, resourceCount);
-            bankController.GiveResources(resourceToTrade, resourceCount);
-            
-            bankController.GetResources(resourceToGet, 1);
-            player.AddResource(resourceToGet, 1);
+            int resourceTypeCount = resourcesGiven.Length;
+
+            int totalBatches = 0;
+            for (int i = 0; i < resourceTypeCount; i++)
+            {
+                int given = resourcesGiven[i];
+                if (given > 0)
+                {
+                    var resourceType = (ResourceType)i;
+                    int batchSize = playerBuffs.GetResourceAmount(resourceType);
+                    if (batchSize == 0)
+                        batchSize = 4;
+                    
+                    int batches = given / batchSize;
+                    totalBatches += batches;
+
+                    if (given % batchSize != 0)
+                    {
+                        int returnAmount = given % batchSize;
+                        resourcesGiven[i] -= returnAmount;
+                    }
+                }
+            }
+
+            int totalWanted = 0;
+            for (int i = 0; i < resourceTypeCount; i++)
+            {
+                if (resourcesWanted[i] > 0)
+                    totalWanted += resourcesWanted[i];
+            }
+
+            if (totalWanted > totalBatches)
+            {
+                Debug.Log("Player wants more resources than allowed by the resources traded!");
+                return;
+            }
+
+            for (int i = 0; i < resourceTypeCount; i++)
+            {
+                if (resourcesGiven[i] > 0)
+                {
+                    var resourceType = (ResourceType)i;
+                    if (player.GetResourceAmount(resourceType) < resourcesGiven[i])
+                    {
+                        Debug.Log($"Player does not have enough {resourceType} to trade!");
+                        return;
+                    }
+                }
+            }
+
+            for (int i = 0; i < resourceTypeCount; i++)
+            {
+                if (resourcesGiven[i] > 0)
+                {
+                    var resourceType = (ResourceType)i;
+                    player.RemoveResource(resourceType, resourcesGiven[i]);
+                    bankController.GiveResources(resourceType, resourcesGiven[i]);
+                }
+            }
+
+            for (int i = 0; i < resourceTypeCount; i++)
+            {
+                if (resourcesWanted[i] > 0)
+                {
+                    var resourceType = (ResourceType)i;
+                    bankController.GetResources(resourceType, resourcesWanted[i]);
+                    player.AddResource(resourceType, resourcesWanted[i]);
+                }
+            }
         }
     }
 }

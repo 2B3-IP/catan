@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using B3.BankSystem;
 using B3.BoardSystem;
+using B3.BuildingSystem;
+using B3.PlayerSystem;
+using B3.SettlementSystem;
+using B3.UI;
 using UnityEngine.Rendering;
 
 namespace B3.GameStateSystem
@@ -46,6 +50,7 @@ namespace B3.GameStateSystem
                   
                     owner.AddResource(resourceType, amount);
                     Debug.Log($"Resource {resourceType} Added to {owner.name}  with amount :{amount}");
+                    NotificationManager.Instance.AddNotification($"{owner.colorTag}{owner.playerName}</color> got {amount} {resourceType}.");
                     bankController.GetResources(resourceType, amount);
                 }
             }

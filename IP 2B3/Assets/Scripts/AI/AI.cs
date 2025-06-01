@@ -196,24 +196,25 @@ public static class AI
     public static (HexPosition, HexVertexDir) GetHousePosition()
     {
 
-        return (housePosition, houseDir);
+        return (new HexPosition(ii, ii), houseDir);
 
     }
 
+    private static int ii = 0;
     public static (HexPosition, HexVertexDir) GetCityPosition()
     {
-        return (new HexPosition(0, 0), HexVertexDir.Left);
+        return (new HexPosition(ii, ii), HexVertexDir.Left);
     }
 
     public static (HexPosition, HexEdgeDir) GetRoadPosition()
     {
 
-        return (roudPosition, roudDir);
+        return (new HexPosition(ii, ii++), HexEdgeDir.TopLeft);
     }
 
     public static HexPosition GetThiefPosition()
     {
-        return new HexPosition(0, 0);
+        return new HexPosition(0,0);
     }
 
     public static int[] GetDiscardedResources()

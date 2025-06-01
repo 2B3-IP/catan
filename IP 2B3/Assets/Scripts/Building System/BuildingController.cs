@@ -108,7 +108,7 @@ namespace B3.BuildingSystem
             
             var message = $"BUILD House {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y} {(int)selectedHouse.VertexDir} by {player.name}";
 
-            if(player is HumanPlayer)
+            if(player is HumanPlayer && _isFirstStates)
                 AI.SendMove(message);
             if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = true;
         }
@@ -154,13 +154,15 @@ namespace B3.BuildingSystem
             }
 
 
+
             var message = $"BUILD road {selectedPath.HexPosition.X} {selectedPath.HexPosition.Y} {(int)selectedPath.EdgeDir} by {player.name}";
             Debug.Log(message);
 
-            if(player is HumanPlayer)
+            if(player is HumanPlayer && _isFirstStates)
                 AI.SendMove(message);
     
             Audio.Play(placeBuildingAudio, selectedPath.transform.position, 0.5f);
+
             HasBuilt = true;
             selectedPath.Owner = player;
             selectedPath.BuildRoad();

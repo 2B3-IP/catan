@@ -12,10 +12,10 @@ public class AIManager : MonoBehaviour
         string move = AI.PollMove();
         if (move != "NONE")
         {
-            // Debug.Log("Received move in Update: " + move);
-        
-            // Do something with the move
+            Debug.Log("Received move in Update: " + move);
+            AI.ProcessMove(move); // This is safe
         }
+        // print ai.getHoues position with a text
     }
 
     void OnApplicationQuit()

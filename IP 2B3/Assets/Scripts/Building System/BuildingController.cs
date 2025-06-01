@@ -72,8 +72,6 @@ namespace B3.BuildingSystem
             }
             
             SettlementController selectedHouse = null;
-            var instructionNotif = NotificationManager.Instance
-                .AddNotification("Select a vertex to build a house", float.PositiveInfinity, false);
             if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = false;
             while (selectedHouse == null)
             {
@@ -93,7 +91,6 @@ namespace B3.BuildingSystem
                 HasBuilt = false;
                 selectedHouse = null;
             }
-            instructionNotif.Destroy();
             Debug.Log("Building house successfully!");
             
             Debug.Log($"BEFORE: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
@@ -109,8 +106,7 @@ namespace B3.BuildingSystem
             
             AddPortBuffForSettlement(selectedHouse, player);
             
-            var message = $"House built at {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y}, {selectedHouse.VertexDir} by {player.name}";
-            Debug.Log(message);
+            var message = $"BUILD House {selectedHouse.HexPosition.X} {selectedHouse.HexPosition.Y} {(int)selectedHouse.VertexDir} by {player.name}";
 
             if(player is HumanPlayer)
                 AI.SendMove(message);
@@ -127,8 +123,6 @@ namespace B3.BuildingSystem
             }
     
             PathController selectedPath = null;
-            var instructionNotif = NotificationManager.Instance
-                .AddNotification("Select an edge to build a road", float.PositiveInfinity, false);
             while (selectedPath == null)
             {
                 Debug.Log("Waiting for player to select a path...");
@@ -158,8 +152,13 @@ namespace B3.BuildingSystem
                     Debug.Log("No path selected by player");
                 }
             }
-            instructionNotif.Destroy();
-            Debug.Log($"Building road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir}");
+
+
+            var message = $"BUILD road {selectedPath.HexPosition.X} {selectedPath.HexPosition.Y} {(int)selectedPath.EdgeDir} by {player.name}";
+            Debug.Log(message);
+
+            if(player is HumanPlayer)
+                AI.SendMove(message);
     
             Audio.Play(placeBuildingAudio, selectedPath.transform.position, 0.5f);
             HasBuilt = true;

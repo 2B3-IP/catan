@@ -11,7 +11,7 @@ using B3.SettlementSystem;
 using B3.ThiefSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using B3.UI;
 namespace B3.PlayerSystem
 {
     public sealed class HumanPlayer : PlayerBase
@@ -57,11 +57,12 @@ namespace B3.PlayerSystem
         public override IEnumerator ThrowDiceCoroutine()
         {
             _hasDiceClick = false;
-
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Touch the dice button to throw the dices", float.PositiveInfinity, false);
             while (!_hasDiceClick)
                 yield return null;
 
-            DiceSum = 7;
+            DiceSum = 6;
 
             _hasDiceClick = false;
         }
@@ -69,15 +70,19 @@ namespace B3.PlayerSystem
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
             SelectedThiefPiece = null;
-            
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select a tile to move the thief to", float.PositiveInfinity, false);
             while (SelectedThiefPiece == null)
             {
                 yield return RayCastCoroutine(pieceLayerMask);
                 SelectedThiefPiece = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 if (SelectedThiefPiece.IsBlocked)
+                {
                     SelectedThiefPiece = null;
+                }
             }
+            instructionNotif.Destroy();
         }
 
         public override void OnTradeAndBuildUpdate()
@@ -93,7 +98,8 @@ namespace B3.PlayerSystem
         public override IEnumerator BuildHouseCoroutine()
         {
             SelectedHouse = null;
-            
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select a vertex to build a house", float.PositiveInfinity, false);
             while (SelectedHouse == null)
             {
                 yield return RayCastCoroutine(pieceLayerMask);
@@ -102,17 +108,29 @@ namespace B3.PlayerSystem
                 var hexPosition = pieceController.HexPosition;
                 SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
 
-                if(SelectedHouse == null) Debug.Log("null house");
+                if (SelectedHouse == null)
+                {
+                    Debug.Log("null house");
+                    NotificationManager.Instance
+                        .AddNotification("Invalid position for a house", 5, true);
+                }
                 else Debug.Log("selected " + SelectedHouse.Owner?.name + " " + SelectedHouse?.name);
+
                 if (SelectedHouse != null && SelectedHouse.Owner != null)
+                {
+                    NotificationManager.Instance
+                        .AddNotification("There is already a house in that vertex", 5, true);
                     SelectedHouse = null;
+                }
             }
+            instructionNotif.Destroy();
         }
         
         public override IEnumerator BuildRoadCoroutine()
         {
             SelectedPath = null;
-
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select an edge to build a road to", float.PositiveInfinity, false);
             while (SelectedPath == null)
             {
                 yield return RayCastCoroutine(pieceLayerMask);
@@ -120,25 +138,42 @@ namespace B3.PlayerSystem
 
                 var hexPosition = pieceController.HexPosition;
                 SelectedPath = GetClosestEdge(hexPosition, _closestHit.point);
-
+                if (SelectedPath == null)
+                {
+                    NotificationManager.Instance
+                        .AddNotification("Invalid position for a road", 5, true);
+                }
                 if (SelectedPath != null && SelectedPath.IsBuilt)
+                {
+                     NotificationManager.Instance
+                        .AddNotification("There is a road already there", 5, true);
                     SelectedPath = null;
+                    
+                }
             }
+            instructionNotif.Destroy();
         }
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
             SelectedHouse = null;
-            
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select a house to upgrade to city", float.PositiveInfinity, false);
             while (SelectedHouse == null)
             {
                 yield return RayCastCoroutine(settlementLayerMask);
                 SelectedHouse = _closestHit.transform.GetComponentInParent<SettlementController>();
                 Debug.Log(SelectedHouse, SelectedHouse);
                 Debug.Log(SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this));
-                if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this)) 
+                if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this))
+                {
+                     NotificationManager.Instance
+                        .AddNotification("Can't build a city there", 5, true);
                     SelectedHouse = null;
+                }
+                    
             }
+            instructionNotif.Destroy();
         }
         
         public override IEnumerator DiscardResourcesCoroutine(float timeout)

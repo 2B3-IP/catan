@@ -2,6 +2,7 @@
 using B3.GameStateSystem;
 using B3.PlayerSystem;
 using B3.PortSystem;
+using TheBlindEye.Utility;
 using UnityEngine;
 
 namespace B3.SettlementSystem
@@ -57,7 +58,7 @@ namespace B3.SettlementSystem
             _selectable = value;
         }
         
-        public void BuildHouse()
+        public void BuildHouse(AudioClip clip)
         {
             if (IsCity)
                 return;
@@ -66,7 +67,8 @@ namespace B3.SettlementSystem
             houseObject.transform.localScale = Vector3.zero;
             
             LeanTween.scale(houseObject, Vector3.one, animLength).setFrom(Vector3.zero);
-            LeanTween.moveLocalY(houseObject, houseObject.transform.position.y - 5f, animLength);
+            LeanTween.moveLocalY(houseObject, houseObject.transform.position.y - 5f, animLength)
+                .setOnComplete(() => Audio.Play(clip, transform.position));
             
             houseObject.SetActive(true);
             cityObject.SetActive(false);
@@ -85,7 +87,7 @@ namespace B3.SettlementSystem
             _selectable = value;
         }
 
-        public void UpgradeToCity()
+        public void UpgradeToCity(AudioClip clip)
         {
             if (IsCity) 
                 return;
@@ -99,6 +101,7 @@ namespace B3.SettlementSystem
                     LeanTween.scale(cityObject, Vector3.one, animLength * 1.5f).setFrom(Vector3.zero);
                     houseObject.SetActive(false);
                     cityObject.SetActive(true);
+                    Audio.Play(clip, transform.position);
                 } 
             );
             

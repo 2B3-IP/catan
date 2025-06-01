@@ -97,9 +97,9 @@ namespace B3.BuildingSystem
             Debug.Log("Building house successfully!");
             
             Debug.Log($"BEFORE: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
-
+            
             selectedHouse.Owner = player;
-            selectedHouse.BuildHouse();
+            selectedHouse.BuildHouse(placeBuildingAudio);
             player.Settlements.Add(selectedHouse);
             player.AddVictoryPoints(1);
             
@@ -161,7 +161,7 @@ namespace B3.BuildingSystem
             instructionNotif.Destroy();
             Debug.Log($"Building road at {selectedPath.HexPosition.X},{selectedPath.HexPosition.Y} {selectedPath.EdgeDir}");
     
-            //Audio.Play();
+            Audio.Play(placeBuildingAudio, selectedPath.transform.position, 0.5f);
             HasBuilt = true;
             selectedPath.Owner = player;
             selectedPath.BuildRoad();
@@ -304,7 +304,7 @@ namespace B3.BuildingSystem
                 }
                 else
                 {
-                    closestCorner.UpgradeToCity();
+                    closestCorner.UpgradeToCity(placeBuildingAudio);
                     player.AddVictoryPoints(1);
                     HasBuilt = true;
                 }

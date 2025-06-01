@@ -2,7 +2,7 @@
 using B3.BankSystem;
 using B3.PlayerSystem;
 using B3.ResourcesSystem;
-
+using B3.UI;
 namespace B3.TradeSystem
 {
     public class TradeController : MonoBehaviour
@@ -77,6 +77,7 @@ namespace B3.TradeSystem
 
             if (totalWanted > totalBatches)
             {
+                NotificationManager.Instance.AddNotification($"You selected more resources than allowed by the resources traded!",5,true);
                 Debug.Log("Player wants more resources than allowed by the resources traded!");
                 return;
             }
@@ -88,6 +89,7 @@ namespace B3.TradeSystem
                     var resourceType = (ResourceType)i;
                     if (player.GetResourceAmount(resourceType) < resourcesGiven[i])
                     {
+                        NotificationManager.Instance.AddNotification($"You do not have enough {resourceType} to trade!",5,true);
                         Debug.Log($"Player does not have enough {resourceType} to trade!");
                         return;
                     }

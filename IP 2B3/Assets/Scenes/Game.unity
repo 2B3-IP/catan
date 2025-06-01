@@ -14109,6 +14109,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1858971809}
     - target: {fileID: 6741960756638947176, guid: 9a8d284f99f8f6e40ab7c4d3710d8259, type: 3}
+      propertyPath: canvasGroup
+      value: 
+      objectReference: {fileID: 811097988}
+    - target: {fileID: 6741960756638947176, guid: 9a8d284f99f8f6e40ab7c4d3710d8259, type: 3}
       propertyPath: managedReferences[7897842835340919043].playerManager
       value: 
       objectReference: {fileID: 1012282399}

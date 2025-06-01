@@ -65,9 +65,10 @@ namespace B3.SettlementSystem
             
             houseObject.transform.position = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z);
             houseObject.transform.localScale = Vector3.zero;
+            houseObject.transform.localRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
             
-            LeanTween.scale(houseObject, Vector3.one, animLength).setFrom(Vector3.zero);
-            LeanTween.moveLocalY(houseObject, houseObject.transform.position.y - 5f, animLength)
+            LeanTween.scale(houseObject, Vector3.one, animLength).setFrom(Vector3.zero).setEase(easing);
+            LeanTween.moveLocalY(houseObject, houseObject.transform.position.y - 5f, animLength).setEase(easing)
                 .setOnComplete(() => Audio.Play(clip, transform.position));
             
             houseObject.SetActive(true);
@@ -94,11 +95,11 @@ namespace B3.SettlementSystem
             
             IsCity = true;
             
-            LeanTween.rotateAroundLocal(houseObject, Vector3.up, 360f, animLength);
-            LeanTween.scale(houseObject, Vector3.zero, animLength).setFrom(Vector3.one).setOnComplete(() =>
+            LeanTween.rotateAroundLocal(houseObject, Vector3.up, 360f, animLength).setEase(easing);
+            LeanTween.scale(houseObject, Vector3.zero, animLength).setFrom(Vector3.one).setEase(easing).setOnComplete(() =>
                 {
-                    LeanTween.rotateAroundLocal(cityObject, Vector3.up, 360f, animLength * 1.5f);
-                    LeanTween.scale(cityObject, Vector3.one, animLength * 1.5f).setFrom(Vector3.zero);
+                    LeanTween.rotateAroundLocal(cityObject, Vector3.up, 360f, animLength * 1.5f).setEase(easing);
+                    LeanTween.scale(cityObject, Vector3.one, animLength * 1.5f).setFrom(Vector3.zero).setEase(easing);
                     houseObject.SetActive(false);
                     cityObject.SetActive(true);
                     Audio.Play(clip, transform.position);

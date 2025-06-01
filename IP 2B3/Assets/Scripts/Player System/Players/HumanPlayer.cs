@@ -58,13 +58,14 @@ namespace B3.PlayerSystem
         {
             _hasDiceClick = false;
             var instructionNotif = NotificationManager.Instance
-                .AddNotification("Touch the dice button to throw the dices", float.PositiveInfinity, false);
+                .AddNotification("Click on the dice button", float.PositiveInfinity, false);
             while (!_hasDiceClick)
                 yield return null;
 
             DiceSum = 6;
-
+            
             _hasDiceClick = false;
+            instructionNotif.Destroy();
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)

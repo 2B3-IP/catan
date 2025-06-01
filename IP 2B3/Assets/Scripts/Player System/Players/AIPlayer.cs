@@ -36,7 +36,12 @@ namespace B3.PlayerSystem
 
         public override void OnTradeAndBuildUpdate()
         {
-            var command = AI.GetFreeStateCommand();
+            string command="";
+       
+            if(AI.freeStateReady){
+                command = AI.GetFreeStateCommand();
+                AI.freeStateReady = false;
+            }
 
             switch (command.ToLower())
             {
@@ -103,13 +108,21 @@ namespace B3.PlayerSystem
 
         public override IEnumerator UpgradeToCityCoroutine()
         {
-            var housePosition = AI.GetCityPosition();
+            HexPosition housePosition = new HexPosition(0,0);
+            HexVertexDir houseDirection = HexVertexDir.Left;
+            yield return AI.GetCityPosition((pos,dir) =>
+            {
+                housePosition = pos;
+                houseDirection = dir;
+            });
             var boardGrid = boardController.BoardGrid;
+            Debug.Log($"AI building city at {housePosition.X} {housePosition.Y}, {houseDirection}");
 
-            yield return new WaitForSeconds(1f);
+            //yield return new WaitForSeconds(1f);
 
-            var settlementController = boardGrid.GetVertex(housePosition.Item1, housePosition.Item2);
+            var settlementController = boardGrid.GetVertex(housePosition, houseDirection);
             SelectedHouse = settlementController;
+            yield break;
         }
 
         public override IEnumerator BuildRoadCoroutine()

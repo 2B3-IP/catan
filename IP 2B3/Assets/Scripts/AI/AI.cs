@@ -72,13 +72,13 @@ public static class AI
         }
     }
 
-public static string PollMove()
-{
-    // non‐blocking
-    if (moveQueue.TryDequeue(out string move))
-        return move;
-    return "NONE";
-}
+    public static string PollMove()
+    {
+        // non‐blocking
+        if (moveQueue.TryDequeue(out string move))
+            return move;
+        return "NONE";
+    }
 
     public static void ProcessMove(string msg)
     {
@@ -91,6 +91,11 @@ public static string PollMove()
             case "BUILD":
                 Debug.Log("[Unity] Building: " + msg);
                 BuildFunction(parts);
+                // Handle building logic here
+                break;
+            case "BUY":
+                Debug.Log("[Unity] Buying: " + msg);
+                BuyFunction(parts);
                 // Handle building logic here
                 break;
             case "MOVE":
@@ -136,13 +141,49 @@ public static string PollMove()
                 houseReady = true; // Set the flag to true to indicate that the house position is ready
                 break;
             case "CITY":
-                // Logic to build a city
+                cityPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                cityDir = ParseHexVertexDir(int.Parse(parts[4]));
+                Debug.Log("[Unity] Building a city at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                cityReady = true; // Set the flag to true to indicate that the city position is ready
                 break;
             case "ROAD":
                 roadPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
                 roadDir = (HexEdgeDir)Enum.Parse(typeof(HexEdgeDir), parts[4]);
                 Debug.Log("[Unity] Building a road at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
                 roadReady = true; // Set the flag to true to indicate that the road position is ready
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static void BuyFunction(string [] parts)
+    {
+       switch (parts[1].ToUpper())
+        {
+            case "SETTLEMENT":
+                freeState = "buy house";
+                housePosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                houseDir = ParseHexVertexDir(int.Parse(parts[4]));
+                Debug.Log("[Unity] Building a settlement at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                houseReady = true; // Set the flag to true to indicate that the house position is ready
+                freeStateReady = true; // Set the flag to true to indicate that the free state command is ready
+                break;
+            case "CITY":
+                freeState = "buy city";
+                cityPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                cityDir = ParseHexVertexDir(int.Parse(parts[4]));
+                Debug.Log("[Unity] Building a city at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                cityReady = true; // Set the flag to true to indicate that the city position is ready
+                freeStateReady = true; // Set the flag to true to indicate that the free state command is ready
+                break;
+            case "ROAD":
+                freeState = "buy road";
+                roadPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                roadDir = (HexEdgeDir)Enum.Parse(typeof(HexEdgeDir), parts[4]);
+                Debug.Log("[Unity] Building a road at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                roadReady = true; // Set the flag to true to indicate that the road position is ready
+                freeStateReady = true; // Set the flag to true to indicate that the free state command is ready
                 break;
             default:
                 break;
@@ -207,6 +248,19 @@ public static string PollMove()
     public static HexPosition roadPosition = new HexPosition(0, 0);
     public static HexEdgeDir roadDir = HexEdgeDir.Top;
 
+    public static HexPosition cityPosition = new HexPosition(0, 0);
+    public static HexVertexDir cityDir = HexVertexDir.Left;
+
+    private static string freeState = "";
+
+    //check OnTradeAndBuildUpdate() din AIPlayer pentru toate comenzile
+    public static bool freeStateReady = false;
+
+    public static string GetFreeStateCommand()
+    {
+      return freeState;
+    }
+
     public static bool houseReady = false;
     public static IEnumerator GetHousePosition(Action<HexPosition, HexVertexDir> callback)
     {
@@ -214,30 +268,35 @@ public static string PollMove()
         yield return new WaitUntil(() => houseReady);
 
 
-      
         callback?.Invoke(housePosition, houseDir);
         houseReady = false; 
     }
 
     public static bool roadReady = false;
 
-     public static IEnumerator GetRoadPosition(Action<HexPosition, HexEdgeDir> callback)
-        {
-            // Wait until the flag is set by the ProcessMove
-             yield return new WaitUntil(() => roadReady);
+    public static IEnumerator GetRoadPosition(Action<HexPosition, HexEdgeDir> callback)
+    {
+        // Wait until the flag is set by the ProcessMove
+        yield return new WaitUntil(() => roadReady);
 
 
-            callback?.Invoke(roadPosition, roadDir);
-            roadReady = false; 
-        }
+        callback?.Invoke(roadPosition, roadDir);
+        roadReady = false; 
+    }
 
     
 
-    private static int ii = 0;
-    public static (HexPosition, HexVertexDir) GetCityPosition()
+    private static bool cityReady = false;
+
+    public static IEnumerator GetCityPosition(Action<HexPosition, HexVertexDir> callback)
     {
-        return (new HexPosition(ii, ii), HexVertexDir.Left);
+        // Wait until the flag is set by the ProcessMove
+        yield return new WaitUntil(() => cityReady);
+
+        callback?.Invoke(cityPosition, cityDir);
+        cityReady = false; 
     }
+
 
 
 
@@ -263,11 +322,7 @@ public static string PollMove()
         return (null, null);
     }
 
-    //check OnTradeAndBuildUpdate() din AIPlayer pentru toate comenzile
-    public static String GetFreeStateCommand()
-    {
-        return "end turn";//string freestate
-    }
+
 
     public static void SendMove(string message)
     {

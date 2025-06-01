@@ -23,6 +23,8 @@ namespace B3.BoardSystem
         [SerializeField] private PathController pathPrefab;
 
         [SerializeField] private GameObject pieceTextPrefab;
+        
+        [SerializeField] private bool spawnDebugText;
 
         private ResourceType?[] _piecesResources = new ResourceType?[19];
         private int[] _piecesNumber = new int[19];
@@ -118,8 +120,11 @@ namespace B3.BoardSystem
                 return;
 
             var worldPosition = BoardGrid.ToWorldPosition(position);
-            var pieceController = boardPiece.Spawn(new Vector3(worldPosition.x, 0, worldPosition.y), transform);
+            var rotation = arePortPieces ? Quaternion.identity : Quaternion.Euler(0, Random.Range(0 , 6) * 60f, 0);
+            var pieceController = boardPiece.Spawn(new Vector3(worldPosition.x, 0, worldPosition.y), rotation,  transform);
 
+            // todo: lean some tweens
+            
             pieceController.HexPosition = position;
             BoardGrid[position] = pieceController;
 
@@ -145,16 +150,19 @@ namespace B3.BoardSystem
                 _portsResources[_currentPortIndex++] = portController.ResourceType;
             }
 
-            var debugText = Instantiate
-            (
-                pieceTextPrefab, 
-                new Vector3(worldPosition.x, 0.2f, worldPosition.y), 
-                Quaternion.identity, 
-                transform
-            );
-                
-            debugText.GetComponentInChildren<TMP_Text>()
-                .SetText(i + " " + j + " number: " + pieceController.Number);
+            if (spawnDebugText)
+            {
+                var debugText = Instantiate
+                (
+                    pieceTextPrefab, 
+                    new Vector3(worldPosition.x, 0.2f, worldPosition.y), 
+                    Quaternion.identity, 
+                    transform
+                );
+                    
+                debugText.GetComponentInChildren<TMP_Text>()
+                    .SetText(i + " " + j + " number: " + pieceController.Number);
+            }
         }
         
         private BoardPiece GetRandomPiece(bool isPortPiece)

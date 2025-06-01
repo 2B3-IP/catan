@@ -71,7 +71,7 @@ namespace B3.PlayerSystem
                     var playerTradeInfo = AI.GetPlayerTradeInfo();
                     var player = playersManager.players[playerTradeInfo.Item1]; 
                     
-                    tradeSystem.TradeResources(this, player, playerTradeInfo.Item2);
+                    //tradeSystem.TradeResources(this, player, playerTradeInfo.Item2);
                     break;
 
                 case "end turn":

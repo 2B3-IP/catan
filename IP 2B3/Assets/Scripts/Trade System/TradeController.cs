@@ -11,7 +11,7 @@ namespace B3.TradeSystem
         
         // +value = daca oferi
         // -value = daca primesti
-        public void TradeResources(PlayerBase player, PlayerBase otherPlayer, int[] resourcesToTrade)
+        public void TradeResources(PlayerBase player, PlayerBase otherPlayer, int[] resourcesToGive, int[] resourcesToGet)
         {
             // if(otherPlayer is AIPlayer)
             // {
@@ -23,25 +23,20 @@ namespace B3.TradeSystem
             //     return;
             // }
             
-            
-            for (int i = 0; i < resourcesToTrade.Length; i++)
+            for (int i = 0; i < resourcesToGive.Length; i++)
             {
-                //print(i);
-                int value = resourcesToTrade[i];
                 var resource = (ResourceType)i;
 
-                if (value > 0)
-                {
-                    player.RemoveResource(resource, resourcesToTrade[i]);
-                    otherPlayer.AddResource(resource, resourcesToTrade[i]);
-                    //print(i);
-                }
-                else
-                {
-                    player.AddResource(resource, -resourcesToTrade[i]);
-                    otherPlayer.RemoveResource(resource, -resourcesToTrade[i]);
-                }
-                
+                player.RemoveResource(resource, resourcesToGive[i]);
+                otherPlayer.AddResource(resource, resourcesToGive[i]);
+            }
+            
+            for (int i = 0; i < resourcesToGive.Length; i++)
+            {
+                var resource = (ResourceType)i;
+
+                player.AddResource(resource, resourcesToGet[i]);
+                otherPlayer.RemoveResource(resource, resourcesToGet[i]);
             }
         }
 

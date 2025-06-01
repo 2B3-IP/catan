@@ -10,7 +10,7 @@ using B3.SettlementSystem;
 using B3.ThiefSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using B3.UI;
 namespace B3.PlayerSystem
 {
     public sealed class HumanPlayer : PlayerBase
@@ -68,15 +68,19 @@ namespace B3.PlayerSystem
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
             SelectedThiefPiece = null;
-            
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select a tile to move the thief to", float.PositiveInfinity, false);
             while (SelectedThiefPiece == null)
             {
                 yield return RayCastCoroutine(pieceLayerMask);
                 SelectedThiefPiece = _closestHit.transform.GetComponentInParent<PieceController>();
 
                 if (SelectedThiefPiece.IsBlocked)
+                {
                     SelectedThiefPiece = null;
+                }
             }
+            instructionNotif.Destroy();
         }
 
         public override void OnTradeAndBuildUpdate()
@@ -92,7 +96,8 @@ namespace B3.PlayerSystem
         public override IEnumerator BuildHouseCoroutine()
         {
             SelectedHouse = null;
-            
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select a vertex to build a house", float.PositiveInfinity, false);
             while (SelectedHouse == null)
             {
                 yield return RayCastCoroutine(pieceLayerMask);
@@ -101,17 +106,29 @@ namespace B3.PlayerSystem
                 var hexPosition = pieceController.HexPosition;
                 SelectedHouse = GetClosestCorner(hexPosition, _closestHit.point);
 
-                if(SelectedHouse == null) Debug.Log("null house");
+                if (SelectedHouse == null)
+                {
+                    Debug.Log("null house");
+                    var warningNotif = NotificationManager.Instance
+                        .AddNotification("Invalid position for a house", 5, false);
+                }
                 else Debug.Log("selected " + SelectedHouse.Owner?.name + " " + SelectedHouse?.name);
+
                 if (SelectedHouse != null && SelectedHouse.Owner != null)
+                {
+                    var warningNotif = NotificationManager.Instance
+                        .AddNotification("There is already a house in that vertex", 5, false);
                     SelectedHouse = null;
+                }
             }
+            instructionNotif.Destroy();
         }
         
         public override IEnumerator BuildRoadCoroutine()
         {
             SelectedPath = null;
-
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select an edge to build a road to", float.PositiveInfinity, false);
             while (SelectedPath == null)
             {
                 yield return RayCastCoroutine(pieceLayerMask);
@@ -121,14 +138,21 @@ namespace B3.PlayerSystem
                 SelectedPath = GetClosestEdge(hexPosition, _closestHit.point);
 
                 if (SelectedPath != null && SelectedPath.IsBuilt)
+                {
+                    var warningNotif = NotificationManager.Instance
+                        .AddNotification("There is a road already there", 5, false);
                     SelectedPath = null;
+                    
+                }
             }
+            instructionNotif.Destroy();
         }
         
         public override IEnumerator UpgradeToCityCoroutine()
         { 
             SelectedHouse = null;
-            
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Select a house to upgrade to city", float.PositiveInfinity, false);
             while (SelectedHouse == null)
             {
                 yield return RayCastCoroutine(settlementLayerMask);
@@ -138,6 +162,7 @@ namespace B3.PlayerSystem
                 if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this)) 
                     SelectedHouse = null;
             }
+            instructionNotif.Destroy();
         }
         
         public override IEnumerator DiscardResourcesCoroutine(float timeout)

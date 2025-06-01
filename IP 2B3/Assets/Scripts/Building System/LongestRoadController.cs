@@ -30,7 +30,11 @@ namespace B3.DevelopmentCardSystem
                 TransferLongestRoadCard(player, playerLongestRoad);
             }
             
+            if (_currentLongestRoadLength==4)
             player.SetLongestRoad(playerLongestRoad);
+            else player.SetLongestRoad(_currentLongestRoadLength);
+            
+            Debug.Log($"[LONGEST ROAD] {_currentLongestRoadLength}");
         }
         
         private void TransferLongestRoadCard(PlayerBase newOwner, int newLength)

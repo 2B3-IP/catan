@@ -62,7 +62,7 @@ namespace B3.PlayerSystem
             while (!_hasDiceClick)
                 yield return null;
 
-            DiceSum = 6;
+            DiceSum = 7;
             
             _hasDiceClick = false;
             instructionNotif.Destroy();
@@ -179,8 +179,20 @@ namespace B3.PlayerSystem
         
         public override IEnumerator DiscardResourcesCoroutine(float timeout)
         {
-            //TODO: FRONT
-            yield break;
+            int resourcesToDiscard = TotalResources() / 2;
+            DiscardMenu discardMenu = FindObjectOfType<DiscardMenu>(true);
+            bool isComplete = false;
+
+            DiscardResources = null;
+            
+            discardMenu.Initialize(resourcesToDiscard, (selectedResources) => 
+            {
+                DiscardResources = selectedResources; 
+                isComplete = true;
+                discardMenu.gameObject.SetActive(false); 
+            });
+    
+            yield return new WaitUntil(() => isComplete);         
         }
         
         private IEnumerator RayCastCoroutine(LayerMask layerMask)

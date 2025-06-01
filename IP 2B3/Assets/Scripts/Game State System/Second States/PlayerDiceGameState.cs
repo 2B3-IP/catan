@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using B3.DiceSystem;
 using B3.PlayerSystem;
+using B3.UI;
 
 namespace B3.GameStateSystem
 {
@@ -45,6 +46,7 @@ namespace B3.GameStateSystem
             
             int diceRolls = currentPlayer.DiceSum;
             Debug.Log("dice: " + diceRolls + " " + (diceRolls == THIEF_ROLL));
+            NotificationManager.Instance.AddNotification($"Dice rolled {diceRolls}");
             // AI.SendDice(diceRolls);
 
             if(currentPlayer is HumanPlayer)

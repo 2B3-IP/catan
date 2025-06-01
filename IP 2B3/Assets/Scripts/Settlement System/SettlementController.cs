@@ -112,6 +112,7 @@ namespace B3.SettlementSystem
             LeanTween.rotateAroundLocal(houseObject, Vector3.up, 360f, animLength).setEase(easing);
             LeanTween.scale(houseObject, Vector3.zero, animLength).setFrom(Vector3.one).setEase(easing).setOnComplete(() =>
                 {
+                    cityObject.transform.localScale = Vector3.zero;
                     LeanTween.rotateAroundLocal(cityObject, Vector3.up, 360f, animLength * 1.5f).setEase(easing);
                     LeanTween.scale(cityObject, Vector3.one, animLength * 1.5f).setFrom(Vector3.zero).setEase(easing);
                     houseObject.SetActive(false);

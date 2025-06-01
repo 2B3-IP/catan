@@ -12,10 +12,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wood Port Piece Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 2588189511161185985, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
+      propertyPath: m_text
+      value: '<color=#632506>2:1
+
+        Wood</color>'
+      objectReference: {fileID: 0}
     - target: {fileID: 8064758766151814628, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: d2ca0147d39c83646bf25bb710d2e12f, type: 2}
+      objectReference: {fileID: 2100000, guid: df09738332ea699488cad9c154bfdb99, type: 2}
     - target: {fileID: 9037801374104359369, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.468107

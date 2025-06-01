@@ -40,6 +40,8 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats: []
-    m_Colors: []
+    m_Colors:
+    - _BaseColor: {r: 1, g: 0.98466945, b: 0.30196083, a: 1}
+    - _Color: {r: 1, g: 0.9846694, b: 0.3019608, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

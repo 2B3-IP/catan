@@ -50,53 +50,69 @@ namespace B3.TradeSystem
         // 4 : 1 sau 3 : 1 sau 2 : 1
         public void TradeResources(PlayerBase player, int[] resourcesGiven, int[] resourcesWanted)
         {
-            /*
             var playerBuffs = player.PlayerBuffs;
-            var resourcesGivenDict = new Dictionary<ResourceType, int>();
-            foreach (var res in resourcesGiven)
-            {
-                if (!resourcesGivenDict.ContainsKey(res))
-                    resourcesGivenDict[res] = 0;
-                resourcesGivenDict[res]++;
-            }
-            var batchSizeForResource = new Dictionary<ResourceType, int>();
-            foreach (var res in resourcesGivenDict.Keys)
-            {
-                int batchSize = playerBuffs.GetResourceAmount(res);
-                if (batchSize == 0)
-                    batchSize = 4;
-                batchSizeForResource[res] = batchSize;
-            }
+            int resourceTypeCount = resourcesGiven.Length;
+
             int totalBatches = 0;
-            foreach (var pair in resourcesGivenDict)
+            for (int i = 0; i < resourceTypeCount; i++)
             {
-                int batchSize = batchSizeForResource[pair.Key];
-                int batches = pair.Value / batchSize;
-                totalBatches += batches;
+                int given = resourcesGiven[i];
+                if (given > 0)
+                {
+                    var resourceType = (ResourceType)i;
+                    int batchSize = playerBuffs.GetResourceAmount(resourceType);
+                    if (batchSize == 0)
+                        batchSize = 4;
+                    int batches = given / batchSize;
+                    totalBatches += batches;
+                }
             }
-            if (resourcesWanted.Length > totalBatches)
+
+            int totalWanted = 0;
+            for (int i = 0; i < resourceTypeCount; i++)
+            {
+                if (resourcesWanted[i] > 0)
+                    totalWanted += resourcesWanted[i];
+            }
+
+            if (totalWanted > totalBatches)
             {
                 Debug.Log("Player wants more resources than allowed by the resources traded!");
                 return;
             }
-            foreach (var pair in resourcesGivenDict)
+
+            for (int i = 0; i < resourceTypeCount; i++)
             {
-                if (player.GetResourceAmount(pair.Key) < pair.Value)
+                if (resourcesGiven[i] > 0)
                 {
-                    Debug.Log("Player does not have enough resources to trade!");
-                    return;
+                    var resourceType = (ResourceType)i;
+                    if (player.GetResourceAmount(resourceType) < resourcesGiven[i])
+                    {
+                        Debug.Log($"Player does not have enough {resourceType} to trade!");
+                        return;
+                    }
                 }
             }
-            foreach (var pair in resourcesGivenDict)
+
+            for (int i = 0; i < resourceTypeCount; i++)
             {
-                player.RemoveResource(pair.Key, pair.Value);
-                bankController.GiveResources(pair.Key, pair.Value);
+                if (resourcesGiven[i] > 0)
+                {
+                    var resourceType = (ResourceType)i;
+                    player.RemoveResource(resourceType, resourcesGiven[i]);
+                    bankController.GiveResources(resourceType, resourcesGiven[i]);
+                }
             }
-            foreach (var res in resourcesWanted)
+
+            for (int i = 0; i < resourceTypeCount; i++)
             {
-                bankController.GetResources(res, 1);
-                player.AddResource(res, 1);
-            }*/
+                if (resourcesWanted[i] > 0)
+                {
+                    var resourceType = (ResourceType)i;
+                    bankController.GetResources(resourceType, resourcesWanted[i]);
+                    player.AddResource(resourceType, resourcesWanted[i]);
+                }
+            }
         }
     }
 }

@@ -56,12 +56,13 @@ namespace B3.PlayerSystem
         public override IEnumerator ThrowDiceCoroutine()
         {
             _hasDiceClick = false;
-
+            var instructionNotif = NotificationManager.Instance
+                .AddNotification("Touch the dice button to throw the dices", float.PositiveInfinity, false);
             while (!_hasDiceClick)
                 yield return null;
 
             DiceSum = 7;
-
+            instructionNotif.Destroy();
             _hasDiceClick = false;
         }
 
@@ -109,15 +110,15 @@ namespace B3.PlayerSystem
                 if (SelectedHouse == null)
                 {
                     Debug.Log("null house");
-                    var warningNotif = NotificationManager.Instance
-                        .AddNotification("Invalid position for a house", 5, false);
+                    NotificationManager.Instance
+                        .AddNotification("Invalid position for a house", 5, true);
                 }
                 else Debug.Log("selected " + SelectedHouse.Owner?.name + " " + SelectedHouse?.name);
 
                 if (SelectedHouse != null && SelectedHouse.Owner != null)
                 {
-                    var warningNotif = NotificationManager.Instance
-                        .AddNotification("There is already a house in that vertex", 5, false);
+                    NotificationManager.Instance
+                        .AddNotification("There is already a house in that vertex", 5, true);
                     SelectedHouse = null;
                 }
             }
@@ -136,11 +137,15 @@ namespace B3.PlayerSystem
 
                 var hexPosition = pieceController.HexPosition;
                 SelectedPath = GetClosestEdge(hexPosition, _closestHit.point);
-
+                if (SelectedPath == null)
+                {
+                    NotificationManager.Instance
+                        .AddNotification("Invalid position for a road", 5, true);
+                }
                 if (SelectedPath != null && SelectedPath.IsBuilt)
                 {
-                    var warningNotif = NotificationManager.Instance
-                        .AddNotification("There is a road already there", 5, false);
+                     NotificationManager.Instance
+                        .AddNotification("There is a road already there", 5, true);
                     SelectedPath = null;
                     
                 }
@@ -161,10 +166,11 @@ namespace B3.PlayerSystem
                 Debug.Log(SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this));
                 if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this))
                 {
-                    var warningNotif = NotificationManager.Instance
-                        .AddNotification("Can't build a city there", 5, false);
-                }
+                     NotificationManager.Instance
+                        .AddNotification("Can't build a city there", 5, true);
                     SelectedHouse = null;
+                }
+                    
             }
             instructionNotif.Destroy();
         }

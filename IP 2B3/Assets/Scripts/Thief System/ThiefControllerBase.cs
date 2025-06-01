@@ -60,8 +60,7 @@ namespace B3.ThiefSystem
             while (resources[index] == 0);
             
             var resource = (ResourceType)index;
-            var warningNotif = NotificationManager.Instance
-                .AddNotification("Player "+giveTo.playerName+" stole 1 "+resource.ToString()+"from "+stealFrom.ToString(), 5, false);
+            NotificationManager.Instance.AddNotification($"{giveTo.colorTag}{giveTo.playerName}</color> stole 1 {resource} from {stealFrom.colorTag}{stealFrom.playerName}</color>.");
             stealFrom.RemoveResource(resource, 1);
             giveTo.AddResource(resource, 1);
         }

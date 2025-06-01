@@ -6,9 +6,133 @@ using B3.ResourcesSystem;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Collections.Concurrent;
+using System.Threading;
 
 public static class AI
 {
+
+    private static Thread listenerThread;
+    private static volatile bool isListening = false;
+    private static readonly ConcurrentQueue<string> moveQueue = new ConcurrentQueue<string>();
+    private static int GET_MOVES_PORT = 7070; 
+
+    public static void StartMoveListener()
+    {
+        if (isListening)
+            return;
+
+        isListening = true;
+        listenerThread = new Thread(ListenForMoves);
+        listenerThread.IsBackground = true;
+        listenerThread.Start();
+        Debug.Log("[Unity] Move listener thread started.");
+    }
+
+    public static void StopMoveListener()
+    {
+        isListening = false;
+        listenerThread?.Join();
+        Debug.Log("[Unity] Move listener thread stopped.");
+    }
+
+    private static void ListenForMoves()
+    {
+        try
+        {
+            TcpListener server = new TcpListener(IPAddress.Any, GET_MOVES_PORT);
+            server.Start();
+
+            while (isListening)
+            {
+                if (server.Pending())
+                {
+                    using (TcpClient client = server.AcceptTcpClient())
+                    using (StreamReader reader = new StreamReader(client.GetStream()))
+                    {
+                        string move = reader.ReadLine();
+                        if (!string.IsNullOrEmpty(move))
+                        {
+                            moveQueue.Enqueue(move);
+                        }
+                    }
+                }
+                else
+                {
+                    Thread.Sleep(10); // Avoid tight loop
+                }
+            }
+
+            server.Stop();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("[Unity] Listener error: " + ex.Message);
+        }
+    }
+
+    public static string PollMove()
+    {
+        if (moveQueue.TryDequeue(out string move))
+        {
+            ProcessMove(move);
+            return move;
+        }
+        return "NONE";
+    }
+
+    private static void ProcessMove(string msg)
+    {
+        string[] parts = msg.Split(' ');
+        if (parts.Length == 0)
+            return;
+
+        switch (parts[0].ToUpper())
+        {
+            case "BUILD":
+                Debug.Log("[Unity] Building: " + msg);
+                // Handle building logic here
+                break;
+            case "MOVE":
+                Debug.Log("[Unity] Moving: " + msg);
+                // Handle moving logic here
+                break;
+            case "TRADE":
+                Debug.Log("[Unity] Trading: " + msg);
+                // Handle trading logic here
+                break;
+            case "END":
+                Debug.Log("[Unity] Ending turn: " + msg);
+                // Handle end turn logic here
+                break;
+            default:
+                Debug.LogWarning("[Unity] Unknown command: " + msg);
+                break;
+        }
+    }
+    private static void BuildFunction(string [] parts)
+    {
+       switch (parts[1].ToUpper())
+        {
+            case "SETTLEMENT":
+                housePosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                houseDir = (HexVertexDir)Enum.Parse(typeof(HexVertexDir), parts[4]);
+                Debug.Log("[Unity] Building a settlement at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                break;
+            case "CITY":
+                // Logic to build a city
+                break;
+            case "ROAD":
+                roudPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                roudDir = (HexEdgeDir)Enum.Parse(typeof(HexEdgeDir), parts[4]);
+                Debug.Log("[Unity] Building a road at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                break;
+            default:
+                break;
+        }
+    }
+
+    
 
     public static void SendBoard(ResourceType?[] resources, int[] numbers, ResourceType?[] ports)
     {
@@ -59,10 +183,17 @@ public static class AI
         }
     }
 
+    private static HexPosition housePosition = new HexPosition(0, 0);
+    private static HexVertexDir houseDir = HexVertexDir.Left;
+
+    private static HexPosition roudPosition = new HexPosition(0, 0);
+    private static HexEdgeDir roudDir = HexEdgeDir.Top;
+
+
     // hex ul selectat de ai, coltu hex ului
     public static (HexPosition, HexVertexDir) GetHousePosition()
     {
-        return (new HexPosition(0, 0), HexVertexDir.Left);
+        return (housePosition, houseDir);
     }
 
     public static (HexPosition, HexVertexDir) GetCityPosition()
@@ -72,7 +203,7 @@ public static class AI
 
     public static (HexPosition, HexEdgeDir) GetRoadPosition()
     {
-        return (new HexPosition(0, 0), HexEdgeDir.TopLeft);
+        return (roudPosition, roudDir);
     }
 
     public static HexPosition GetThiefPostion()
@@ -129,58 +260,12 @@ public static class AI
         }
         catch (Exception ex)
         {
-            Debug.Log(ex.ToString());
-        }
-    }
-    public static string GetMove()
-    {
-        try
-        {
-            using (TcpClient client = new TcpClient())
-            {
-                client.ReceiveTimeout = 50; // Optional: short timeout to avoid hangs
-                client.Connect("127.0.0.1", 6969);
-
-                NetworkStream stream = client.GetStream();
-                if (stream.DataAvailable)
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        string move = reader.ReadLine();
-                        Debug.Log("[Unity] Received move from Java: " + move);
-                        return move ?? "NONE";
-                    }
-                }
-                else
-                {
-                    return "NONE"; // No data available
-                }
-            }
-        }
-        catch (SocketException e)
-        {
-            Debug.LogWarning("[Unity] Socket error: " + e.Message);
-            return "NONE";
-        }
-        catch (IOException e)
-        {
-            Debug.LogWarning("[Unity] IO error: " + e.Message);
-            return "NONE";
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("[Unity] Unexpected error: " + ex.Message);
-            return "NONE";
+            // Debug.Log(ex.ToString());
         }
     }
 
 
-    private static void ProcessMove(string msg)
-    {
-        // Exemplu de parsare: "SETTLEMET -1 1 2"
-        Debug.Log("Processing move: " + msg);
-        // Poți adăuga aici cod pentru a desena piese etc.
-    }
+    
     public static void SendDice(int dice)
     {
         try

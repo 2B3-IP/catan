@@ -14,6 +14,7 @@ namespace B3.PlayerSystem
         [SerializeField] private TradeController tradeSystem;
         [SerializeField] private PlayersManager playersManager;
         
+
         public override IEnumerator ThrowDiceCoroutine()
         {
             //DiceSum = Random.Range(MIN_DICE_THROW_FORCE, MAX_DICE_THROW_FORCE); //TODO: TEMP
@@ -79,13 +80,13 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildHouseCoroutine()
         {
-            /*var housePosition = AI.GetHousePosition();
+            var housePosition = AI.GetHousePosition();
             var boardGrid = boardController.BoardGrid;
 
             //yield return new WaitForSeconds(1f);
 
             var settlementController = boardGrid.GetVertex(housePosition.Item1, housePosition.Item2);
-            SelectedHouse = settlementController;*/
+            SelectedHouse = settlementController;
             yield break;
         }
 
@@ -102,13 +103,13 @@ namespace B3.PlayerSystem
 
         public override IEnumerator BuildRoadCoroutine()
         {
-            /*var housePosition = AI.GetRoadPosition();
+            var housePosition = AI.GetRoadPosition();
             var boardGrid = boardController.BoardGrid;
 
             //yield return new WaitForSeconds(1f);
 
             var pathController = boardGrid.GetEdge(housePosition.Item1, housePosition.Item2);
-            SelectedPath = pathController;*/
+            SelectedPath = pathController;
             yield break;
         }
 

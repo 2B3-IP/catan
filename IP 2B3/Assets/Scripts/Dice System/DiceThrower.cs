@@ -30,7 +30,9 @@ namespace B3.DiceSystem
             yield return secondThrow;
             
             DiceRolls = firstDice.DiceRoll + secondDice.DiceRoll;
-            // AI.SendDice(DiceRolls);
+
+            //AI.SendDice(DiceRolls);
+
         }
     }
 }

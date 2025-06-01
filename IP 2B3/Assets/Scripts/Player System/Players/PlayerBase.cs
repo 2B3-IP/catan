@@ -37,6 +37,8 @@ namespace B3.PlayerSystem
         [Foldout("Events")] public UnityEvent onVPChanged = new();
         [Foldout("Events")] public UnityEvent onUsedKnightsChanged = new();
         [Foldout("Events")] public UnityEvent onLongestRoadChanged = new();
+
+        public Material pieceMaterial;
         
         public SettlementController SelectedHouse { get; protected set; }
         

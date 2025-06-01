@@ -37,7 +37,7 @@ namespace B3.BoardSystem
         private ResourceType?[] _portsResources = new ResourceType?[9];
         
 
-        private readonly int[] _numberPoll = new int[]
+        private readonly int[] _numberPoll =
         {
             2, 3, 3, 4, 4, 5, 5, 6, 6,
             8, 8, 9, 9, 10, 10, 11, 11, 12

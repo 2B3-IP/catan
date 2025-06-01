@@ -8,11 +8,22 @@ namespace B3.BuildingSystem
     public class PathController : MonoBehaviour 
     {
         [SerializeField] private Transform roadPrefab;
+        [SerializeField] private MeshRenderer roadRenderer;
         
         [SerializeField] private LeanTweenType easing;
         [SerializeField] private float animLength = 2f;
         
-        public PlayerBase Owner { get; set; }
+        private PlayerBase _owner;
+        public PlayerBase Owner
+        {
+            get => _owner;
+            set
+            {
+                _owner = value;
+                roadRenderer.material = value.pieceMaterial;
+            }
+        }
+        
         public bool IsBuilt { get; set; } = false; // Schimbă din private set în set
         
         public HexPosition HexPosition { get; set; }

@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 3106306096651586263}
   - component: {fileID: 8794237943946722797}
   - component: {fileID: 1899837674747576098}
+  - component: {fileID: 7302910330711131162}
   m_Layer: 7
   m_Name: Model uwu
   m_TagString: Untagged
@@ -60,7 +61,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.25, z: 0}
-  m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
+  m_LocalScale: {x: 0.10000001, y: 0.10000001, z: 0.10000001}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8806117663903703594}
@@ -96,7 +97,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ac3969f891824264887af6dce4828eda, type: 2}
+  - {fileID: 2100000, guid: e2f4cc39db8d5c1e1a0f85c0b5926ed2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -118,6 +119,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7302910330711131162
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149960299762814988}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 26.232342, y: 11.899975, z: 21.755203}
+  m_Center: {x: 0.05602312, y: 5.9288225, z: 0.54397774}
 --- !u!1 &4673519708717857628
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +187,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   houseObject: {fileID: 516061917905767113}
+  houseRenderer: {fileID: 1899837674747576098}
   cityObject: {fileID: 6803959204898720769}
+  cityRenderer: {fileID: 4044450233563410953}
   highlightMaterial: {fileID: 0}
   easing: 9
   animLength: 2
@@ -197,7 +221,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.25, z: 0}
-  m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
+  m_LocalScale: {x: 0.10000001, y: 0.10000001, z: 0.10000001}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2292769158391839951}
@@ -233,7 +257,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e2f4cc39db8d5c1e1a0f85c0b5926ed2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

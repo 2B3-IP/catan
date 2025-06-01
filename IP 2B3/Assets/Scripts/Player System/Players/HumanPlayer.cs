@@ -159,7 +159,11 @@ namespace B3.PlayerSystem
                 SelectedHouse = _closestHit.transform.GetComponentInParent<SettlementController>();
                 Debug.Log(SelectedHouse, SelectedHouse);
                 Debug.Log(SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this));
-                if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this)) 
+                if (SelectedHouse != null && (SelectedHouse.IsCity || SelectedHouse.Owner != this))
+                {
+                    var warningNotif = NotificationManager.Instance
+                        .AddNotification("Can't build a city there", 5, false);
+                }
                     SelectedHouse = null;
             }
             instructionNotif.Destroy();

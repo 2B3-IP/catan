@@ -48,8 +48,9 @@ namespace B3.TradeSystem
         }
 
         // 4 : 1 sau 3 : 1 sau 2 : 1
-        public void TradeResources(PlayerBase player, ResourceType[] resourcesGiven, ResourceType[] resourcesWanted)
+        public void TradeResources(PlayerBase player, int[] resourcesGiven, int[] resourcesWanted)
         {
+            /*
             var playerBuffs = player.PlayerBuffs;
             var resourcesGivenDict = new Dictionary<ResourceType, int>();
             foreach (var res in resourcesGiven)
@@ -95,7 +96,7 @@ namespace B3.TradeSystem
             {
                 bankController.GetResources(res, 1);
                 player.AddResource(res, 1);
-            }
+            }*/
         }
     }
 }

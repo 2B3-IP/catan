@@ -257,7 +257,7 @@ public class TradeMenuManager : MonoBehaviour
                 if (CardManagerTheirs.CardTypes[0] == TradeType.type.ore) resourceToGet = ResourceType.Ore;
 
 
-                TradeController.TradeResources(CurrentPlayer, resourceToTrade, resourceToGet);
+                //TradeController.TradeResources(CurrentPlayer, resourceToTrade, resourceToGet);
             }
             BankMenu.SetActive(false);
             HarbourMenu.SetActive(false);

@@ -72,8 +72,6 @@ namespace B3.BuildingSystem
             }
             
             SettlementController selectedHouse = null;
-            var instructionNotif = NotificationManager.Instance
-                .AddNotification("Select a vertex to build a house", float.PositiveInfinity, false);
             if (player is HumanPlayer) humanPlayerButtonsGroup.interactable = false;
             while (selectedHouse == null)
             {
@@ -93,13 +91,12 @@ namespace B3.BuildingSystem
                 HasBuilt = false;
                 selectedHouse = null;
             }
-            instructionNotif.Destroy();
             Debug.Log("Building house successfully!");
             
             Debug.Log($"BEFORE: Settlement at ({selectedHouse.HexPosition.X},{selectedHouse.HexPosition.Y} {selectedHouse.VertexDir}) - HasOwner: {selectedHouse.HasOwner}, Owner: {selectedHouse.Owner?.name ?? "NULL"}");
-
+            
             selectedHouse.Owner = player;
-            selectedHouse.BuildHouse();
+            selectedHouse.BuildHouse(placeBuildingAudio);
             player.Settlements.Add(selectedHouse);
             player.AddVictoryPoints(1);
             
@@ -126,8 +123,6 @@ namespace B3.BuildingSystem
             }
     
             PathController selectedPath = null;
-            var instructionNotif = NotificationManager.Instance
-                .AddNotification("Select an edge to build a road", float.PositiveInfinity, false);
             while (selectedPath == null)
             {
                 Debug.Log("Waiting for player to select a path...");
@@ -158,15 +153,14 @@ namespace B3.BuildingSystem
                 }
             }
 
-            instructionNotif.Destroy();
-
 
             var message = $"BUILD road {selectedPath.HexPosition.X} {selectedPath.HexPosition.Y} {(int)selectedPath.EdgeDir} by {player.name}";
+            Debug.Log(message);
 
             if(player is HumanPlayer)
                 AI.SendMove(message);
     
-            //Audio.Play();
+            Audio.Play(placeBuildingAudio, selectedPath.transform.position, 0.5f);
             HasBuilt = true;
             selectedPath.Owner = player;
             selectedPath.BuildRoad();
@@ -309,7 +303,7 @@ namespace B3.BuildingSystem
                 }
                 else
                 {
-                    closestCorner.UpgradeToCity();
+                    closestCorner.UpgradeToCity(placeBuildingAudio);
                     player.AddVictoryPoints(1);
                     HasBuilt = true;
                 }

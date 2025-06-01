@@ -11,7 +11,7 @@ namespace B3.DevelopmentCardSystem
     {
         [SerializeField] private BuildingControllerBase buildingController;
         
-        public override IEnumerator UseCard(PlayerBase player) => 
+        public override IEnumerator UseCard(PlayerBase player, CanvasGroup actions) => 
             UseCardCoroutine(player);
 
         private IEnumerator UseCardCoroutine(PlayerBase player)

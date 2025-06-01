@@ -18,8 +18,8 @@ namespace B3.BuySystem
         {
             if (!HasEnoughResources(player, BuyItemType.House))
             {
-                var warningNotif = NotificationManager.Instance
-                    .AddNotification("Player "+player.playerName+" doesn't have enough resources for a house", 5, false);
+                NotificationManager.Instance
+                    .AddNotification($"{player.colorTag}{player.playerName}</color> doesn't have enough resources for a house", 5, false);
                 yield break;
             }
 
@@ -34,8 +34,8 @@ namespace B3.BuySystem
         {
             if (!HasEnoughResources(player, BuyItemType.Road))
             {
-                var warningNotif = NotificationManager.Instance
-                    .AddNotification("Player "+player.playerName+" doesn't have enough resources for a road", 5, false);
+                 NotificationManager.Instance
+                    .AddNotification($"{player.colorTag}{player.playerName}</color> doesn't have enough resources for a road", 5, true);
                 yield break;
             }
 
@@ -51,8 +51,8 @@ namespace B3.BuySystem
         {
             if (!HasEnoughResources(player, BuyItemType.City))
             {
-                var warningNotif = NotificationManager.Instance
-                    .AddNotification("Player "+player.playerName+" doesn't have enough resources for a city", 5, false);
+                NotificationManager.Instance
+                    .AddNotification($"{player.colorTag}{player.playerName}</color> doesn't have enough resources for a city", 5, true);
                 yield break;
             }
 
@@ -67,16 +67,16 @@ namespace B3.BuySystem
         {
             if (!HasEnoughResources(player, BuyItemType.DevelopmentCard))
             {
-                var warningNotif = NotificationManager.Instance
-                    .AddNotification("Player "+player.playerName+" doesn't have enough resources for a dev card", 5, false);
+                NotificationManager.Instance
+                    .AddNotification($"{player.colorTag}{player.playerName}</color> doesn't have enough resources for a dev card", 5, true);
                 return null;
             }
 
             var cardType = bankController.BuyDevelopmentCard();
             if (cardType is null)
             {
-                var warningNotif = NotificationManager.Instance
-                    .AddNotification("there aren't any dev cards in the bank", 5, false);
+                 NotificationManager.Instance
+                    .AddNotification("there aren't any dev cards in the bank", 5, true);
                 return null;
             }
 

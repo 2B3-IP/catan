@@ -210,8 +210,7 @@ public static class AI
         return (roudPosition, roudDir);
     }
 
-    public static HexPosition GetThiefPostion()
-
+    public static HexPosition GetThiefPosition()
     {
         return new HexPosition(0, 0);
     }
@@ -228,9 +227,9 @@ public static class AI
     }
 
     //resursele pe care le dai, resursa pe care o primesti
-    public static (ResourceType, ResourceType) GetBankTradeInfo()
+    public static (int[], int[]) GetBankTradeInfo()
     {
-        return (ResourceType.Brick, ResourceType.Brick);
+        return (null, null);
     }
 
     //check OnTradeAndBuildUpdate() din AIPlayer pentru toate comenzile

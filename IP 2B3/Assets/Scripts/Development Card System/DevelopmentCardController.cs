@@ -10,11 +10,12 @@ namespace B3.DevelopmentCardSystem
     {
         [SerializeReference] public List<DevelopmentCardBase> cards;
         [SerializeField] private PlayerBase temp;
+        [SerializeField] private CanvasGroup canvasGroup;
         
         public void UseCard(PlayerBase player, DevelopmentCardType cardType)
         {
             var developmentCard = cards[(int)cardType];
-            StartCoroutine(developmentCard.UseCard(player));
+            StartCoroutine(developmentCard.UseCard(player, canvasGroup));
         }
 
         [Button]

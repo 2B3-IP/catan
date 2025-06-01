@@ -134,10 +134,10 @@ namespace B3.BoardSystem
             LeanTween.moveLocalY(pieceController.gameObject, pieceTransform.localPosition.y + 5, animDuration)
                 .setDelay(delay)
                 .setEase(easing)
-                .setOnComplete(_ => piecesAnimating -= 1);
+                .setOnComplete(arePortPieces ? _ => { } : _ => piecesAnimating -= 1);
             LeanTween.scale(pieceController.gameObject, Vector3.one, animDuration * 0.75f).setDelay(delay).setEase(easing);
             delay += delayIncPerTile;
-            piecesAnimating += 1;
+            if (!arePortPieces) piecesAnimating += 1;
             
             pieceController.HexPosition = position;
             BoardGrid[position] = pieceController;
@@ -169,13 +169,13 @@ namespace B3.BoardSystem
                 var debugText = Instantiate
                 (
                     pieceTextPrefab, 
-                    new Vector3(worldPosition.x, 0.2f, worldPosition.y), 
+                    new Vector3(worldPosition.x, 2f, worldPosition.y), 
                     Quaternion.identity, 
                     transform
                 );
                     
                 debugText.GetComponentInChildren<TMP_Text>()
-                    .SetText(i + " " + j + " number: " + pieceController.Number);
+                    .SetText($"{i} {j} ({pieceController.Number})");
             }
         }
         

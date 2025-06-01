@@ -12,6 +12,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ore Port Piece Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 2588189511161185985, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
+      propertyPath: m_text
+      value: '<color=#52B5D7>2:1
+
+        Ore</color>'
+      objectReference: {fileID: 0}
     - target: {fileID: 6986705220417915101, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
       propertyPath: <ResourceType>k__BackingField
       value: 4
@@ -20,6 +26,10 @@ PrefabInstance:
       propertyPath: resourceType
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 8064758766151814628, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 62fc77ad829aaf94999a897be35d720a, type: 2}
     - target: {fileID: 9037801374104359369, guid: a28e3d6e26fc93b40a9523842fc09eae, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.349326

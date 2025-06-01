@@ -20,13 +20,21 @@ namespace B3.PlayerSystem
 
         public string playerName;
         public string colorTag = "<color=red>";
-        
-        
+
+        private int[] _resource = { 99, 99, 99, 99, 99 };
         /// <summary>
         /// Mapat cu ResourceType (Resources[0] = Wood, Resources[1] = Brick, Resources[2] = Wheat, Resources[3] = Sheep, Resources[4] = Ore)
         /// </summary>
         /// 
-        public int[] Resources { get; private set; } = { 99, 99, 99, 99, 99 };//new int[5];
+        public int[] Resources
+        {
+            get => _resource;
+            private set
+            {
+                _resource = value;
+                onResourcesChanged?.Invoke();
+            }
+        }
 
         public int VictoryPoints { get; private set; }
         public int DiceSum { get; protected set; }
@@ -91,7 +99,7 @@ namespace B3.PlayerSystem
         {
             int resourceIndex = (int)resource;
             Resources[resourceIndex] += amount;
-            onResourcesChanged.Invoke();
+            onResourcesChanged?.Invoke();
         }
         
         public void RemoveResource(ResourceType resource, int amount)
@@ -101,7 +109,7 @@ namespace B3.PlayerSystem
                 return;
             
             Resources[resourceIndex] -= amount;
-            onResourcesChanged.Invoke();
+            onResourcesChanged?.Invoke();
         }
 
         public int TotalResources()

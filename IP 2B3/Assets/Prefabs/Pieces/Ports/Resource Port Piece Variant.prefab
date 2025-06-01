@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 400169690359786606, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3074606862541137111, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
       propertyPath: m_LocalPosition.x
@@ -63,6 +63,20 @@ PrefabInstance:
     - target: {fileID: 4957276279471344277, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
       propertyPath: m_Name
       value: Resource Port Piece Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8371226834953483231, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
+      propertyPath: m_text
+      value: ':3
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8371226834953483231, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
+      propertyPath: m_fontSize
+      value: 16.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8371226834953483231, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 16.01
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2630949246756681381, guid: b44d617024fae48419f6cb321fb6bc43, type: 3}

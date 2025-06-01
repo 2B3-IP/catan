@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Collections;
 
 public static class AI
 {
@@ -73,15 +74,13 @@ public static class AI
 
     public static string PollMove()
     {
+        // non‐blocking
         if (moveQueue.TryDequeue(out string move))
-        {
-            ProcessMove(move);
             return move;
-        }
         return "NONE";
     }
 
-    private static void ProcessMove(string msg)
+    public static void ProcessMove(string msg)
     {
         string[] parts = msg.Split(' ');
         if (parts.Length == 0)
@@ -91,6 +90,12 @@ public static class AI
         {
             case "BUILD":
                 Debug.Log("[Unity] Building: " + msg);
+                BuildFunction(parts);
+                // Handle building logic here
+                break;
+            case "BUY":
+                Debug.Log("[Unity] Buying: " + msg);
+                BuyFunction(parts);
                 // Handle building logic here
                 break;
             case "MOVE":
@@ -106,8 +111,23 @@ public static class AI
                 // Handle end turn logic here
                 break;
             default:
+  
                 Debug.LogWarning("[Unity] Unknown command: " + msg);
                 break;
+        }
+    }
+    private static HexVertexDir ParseHexVertexDir(int dir)
+    {
+        // dir = (dir + 1) % 6; // Normalize to 0-5 range
+       switch (dir)
+        {
+            case 0: return HexVertexDir.TopLeft;
+            case 1: return HexVertexDir.TopRight;
+            case 2: return HexVertexDir.Right;
+            case 3: return HexVertexDir.BottomRight;
+            case 4: return HexVertexDir.BottomLeft;
+            case 5: return HexVertexDir.Left;
+            default: throw new ArgumentOutOfRangeException(nameof(dir), "Invalid direction value");
         }
     }
     private static void BuildFunction(string [] parts)
@@ -116,16 +136,54 @@ public static class AI
         {
             case "SETTLEMENT":
                 housePosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
-                houseDir = (HexVertexDir)Enum.Parse(typeof(HexVertexDir), parts[4]);
+                houseDir = ParseHexVertexDir(int.Parse(parts[4]));
                 Debug.Log("[Unity] Building a settlement at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                houseReady = true; // Set the flag to true to indicate that the house position is ready
                 break;
             case "CITY":
-                // Logic to build a city
+                cityPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                cityDir = ParseHexVertexDir(int.Parse(parts[4]));
+                Debug.Log("[Unity] Building a city at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                cityReady = true; // Set the flag to true to indicate that the city position is ready
                 break;
             case "ROAD":
-                roudPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
-                roudDir = (HexEdgeDir)Enum.Parse(typeof(HexEdgeDir), parts[4]);
+                roadPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                roadDir = (HexEdgeDir)Enum.Parse(typeof(HexEdgeDir), parts[4]);
                 Debug.Log("[Unity] Building a road at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                roadReady = true; // Set the flag to true to indicate that the road position is ready
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static void BuyFunction(string [] parts)
+    {
+       switch (parts[1].ToUpper())
+        {
+            case "SETTLEMENT":
+                freeState = "buy house";
+                housePosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                houseDir = ParseHexVertexDir(int.Parse(parts[4]));
+                Debug.Log("[Unity] Building a settlement at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                houseReady = true; // Set the flag to true to indicate that the house position is ready
+                freeStateReady = true; // Set the flag to true to indicate that the free state command is ready
+                break;
+            case "CITY":
+                freeState = "buy city";
+                cityPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                cityDir = ParseHexVertexDir(int.Parse(parts[4]));
+                Debug.Log("[Unity] Building a city at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                cityReady = true; // Set the flag to true to indicate that the city position is ready
+                freeStateReady = true; // Set the flag to true to indicate that the free state command is ready
+                break;
+            case "ROAD":
+                freeState = "buy road";
+                roadPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
+                roadDir = (HexEdgeDir)Enum.Parse(typeof(HexEdgeDir), parts[4]);
+                Debug.Log("[Unity] Building a road at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                roadReady = true; // Set the flag to true to indicate that the road position is ready
+                freeStateReady = true; // Set the flag to true to indicate that the free state command is ready
                 break;
             default:
                 break;
@@ -136,7 +194,7 @@ public static class AI
 
     public static void SendBoard(ResourceType?[] resources, int[] numbers, ResourceType?[] ports)
     {
-        return;
+        // return;
         int[] indexSwap = { 6, 5, 4, 3, 2, 1, 0, 8, 7 };
         // swap the port with the new index
         var swappedPorts = ports.ToArray();
@@ -184,33 +242,63 @@ public static class AI
         }
     }
 
-    private static HexPosition housePosition = new HexPosition(0, 0);
-    private static HexVertexDir houseDir = HexVertexDir.Left;
+    public static HexPosition housePosition = new HexPosition(0, 0);
+    public static HexVertexDir houseDir = HexVertexDir.Left;
 
-    private static HexPosition roudPosition = new HexPosition(0, 0);
-    private static HexEdgeDir roudDir = HexEdgeDir.Top;
+    public static HexPosition roadPosition = new HexPosition(0, 0);
+    public static HexEdgeDir roadDir = HexEdgeDir.Top;
 
+    public static HexPosition cityPosition = new HexPosition(0, 0);
+    public static HexVertexDir cityDir = HexVertexDir.Left;
 
-    // hex ul selectat de ai, coltu hex ului
-    private static int i = 0;
-    public static (HexPosition, HexVertexDir) GetHousePosition()
+    private static string freeState = "";
+
+    //check OnTradeAndBuildUpdate() din AIPlayer pentru toate comenzile
+    public static bool freeStateReady = false;
+
+    public static string GetFreeStateCommand()
     {
-
-        return (new HexPosition(ii, ii), houseDir);
-
+      return freeState;
     }
 
-    private static int ii = 0;
-    public static (HexPosition, HexVertexDir) GetCityPosition()
+    public static bool houseReady = false;
+    public static IEnumerator GetHousePosition(Action<HexPosition, HexVertexDir> callback)
     {
-        return (new HexPosition(ii, ii), HexVertexDir.Left);
+        // Wait until the flag is set by the ProcessMove
+        yield return new WaitUntil(() => houseReady);
+
+
+        callback?.Invoke(housePosition, houseDir);
+        houseReady = false; 
     }
 
-    public static (HexPosition, HexEdgeDir) GetRoadPosition()
-    {
+    public static bool roadReady = false;
 
-        return (new HexPosition(ii, ii++), HexEdgeDir.TopLeft);
+    public static IEnumerator GetRoadPosition(Action<HexPosition, HexEdgeDir> callback)
+    {
+        // Wait until the flag is set by the ProcessMove
+        yield return new WaitUntil(() => roadReady);
+
+
+        callback?.Invoke(roadPosition, roadDir);
+        roadReady = false; 
     }
+
+    
+
+    private static bool cityReady = false;
+
+    public static IEnumerator GetCityPosition(Action<HexPosition, HexVertexDir> callback)
+    {
+        // Wait until the flag is set by the ProcessMove
+        yield return new WaitUntil(() => cityReady);
+
+        callback?.Invoke(cityPosition, cityDir);
+        cityReady = false; 
+    }
+
+
+
 
     public static HexPosition GetThiefPosition()
     {
@@ -234,15 +322,10 @@ public static class AI
         return (null, null);
     }
 
-    //check OnTradeAndBuildUpdate() din AIPlayer pentru toate comenzile
-    public static String GetFreeStateCommand()
-    {
-        return "end turn";//string freestate
-    }
+
 
     public static void SendMove(string message)
     {
-        return;
         Debug.Log("Sending move: " + message);
 
         try
@@ -275,7 +358,6 @@ public static class AI
     
     public static void SendDice(int dice)
     {
-        return;
         try
         {
             TcpListener server = new TcpListener(IPAddress.Any, 6969);

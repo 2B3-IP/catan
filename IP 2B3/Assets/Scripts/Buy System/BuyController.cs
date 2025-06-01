@@ -28,6 +28,12 @@ namespace B3.BuySystem
             
             if(buildingController.HasBuilt)
                 RemoveResources(player, BuyItemType.House);
+
+
+            if (player is HumanPlayer && buildingController.HasBuilt)
+                AI.SendMove("BUY HOUSE" + player.SelectedHouse.HexPosition.X + " "+ player.SelectedHouse.HexPosition.Y + " " + (int)player.SelectedHouse.VertexDir);
+           
+        
         }
 
         public override IEnumerator BuyRoad(PlayerBase player)
@@ -45,6 +51,9 @@ namespace B3.BuySystem
             {
                 RemoveResources(player, BuyItemType.Road);
             }
+
+             if (player is HumanPlayer && buildingController.HasBuilt)
+                AI.SendMove("BUY ROAD" + player.SelectedPath.HexPosition.X + " "+ player.SelectedPath.HexPosition.Y + " " + (int)player.SelectedPath.EdgeDir);
         }
 
         public override IEnumerator BuyCity(PlayerBase player)
@@ -61,6 +70,10 @@ namespace B3.BuySystem
             
             if(buildingController.HasBuilt)
                 RemoveResources(player, BuyItemType.City);
+
+
+                  if (player is HumanPlayer && buildingController.HasBuilt)
+                         AI.SendMove("BUY CITY" + player.SelectedHouse.HexPosition.X + " "+ player.SelectedHouse.HexPosition.Y + " " + (int)player.SelectedHouse.VertexDir);
         }
 
         public override DevelopmentCardType? BuyDevelopmentCard(PlayerBase player)

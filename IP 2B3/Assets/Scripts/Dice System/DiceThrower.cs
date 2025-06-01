@@ -28,7 +28,7 @@ namespace B3.DiceSystem
             
             DiceRolls = firstDice.DiceRoll + secondDice.DiceRoll;
             
-            // AI.SendDice(DiceRolls);
+             AI.SendDice(DiceRolls);
         }
     }
 }

@@ -29,6 +29,7 @@ namespace B3.DiceSystem
         public IEnumerator ThrowCoroutine(Vector3 startPosition, float throwForce)
         {
             _transform.SetPositionAndRotation(startPosition, Random.rotation);
+            
             _rigidbody.AddForce(throwDirection * throwForce, ForceMode.Impulse);
 
             yield return WAIT_FIXED;

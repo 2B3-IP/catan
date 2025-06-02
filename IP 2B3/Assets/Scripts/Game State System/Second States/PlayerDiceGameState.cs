@@ -23,7 +23,7 @@ namespace B3.GameStateSystem
         {
             var currentPlayer = stateMachine.CurrentPlayer;
             
-            if(currentPlayer is HumanPlayer)
+            if(currentPlayer is HumanPlayer && diceButton != null)
                 diceButton.interactable = true;
             
             OnDiceGameState?.Invoke();
@@ -49,7 +49,7 @@ namespace B3.GameStateSystem
             NotificationManager.Instance.AddNotification($"Dice rolled {diceRolls}");
             // AI.SendDice(diceRolls);
 
-            if(currentPlayer is HumanPlayer)
+            if(currentPlayer is HumanPlayer && diceButton != null)
                 diceButton.interactable = false;
 
             if (diceRolls == THIEF_ROLL) stateMachine.ChangeState<DiscardGameState>();

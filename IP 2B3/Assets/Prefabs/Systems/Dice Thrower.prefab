@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 559eefb5b27348249af4c1431961fdb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _diceControllers:
+  - {fileID: 3542328453175578269}
+  - {fileID: 1801261520676488182}
 --- !u!1001 &11919527184707322
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57,6 +60,10 @@ PrefabInstance:
     - target: {fileID: 1754228024497626971, guid: 0e3d5339ea644ed4ca18b3d82a9f8a24, type: 3}
       propertyPath: m_Name
       value: Dice
+      objectReference: {fileID: 0}
+    - target: {fileID: 1789342405816528140, guid: 0e3d5339ea644ed4ca18b3d82a9f8a24, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8371855193839919781, guid: 0e3d5339ea644ed4ca18b3d82a9f8a24, type: 3}
       propertyPath: m_LocalPosition.x
@@ -103,6 +110,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e3d5339ea644ed4ca18b3d82a9f8a24, type: 3}
+--- !u!114 &1801261520676488182 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1789342405816528140, guid: 0e3d5339ea644ed4ca18b3d82a9f8a24, type: 3}
+  m_PrefabInstance: {fileID: 11919527184707322}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2acb6b6673c4dd891f442c65245ad27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8359970972499594335 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8371855193839919781, guid: 0e3d5339ea644ed4ca18b3d82a9f8a24, type: 3}
@@ -165,6 +183,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e3d5339ea644ed4ca18b3d82a9f8a24, type: 3}
+--- !u!114 &3542328453175578269 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1789342405816528140, guid: 0e3d5339ea644ed4ca18b3d82a9f8a24, type: 3}
+  m_PrefabInstance: {fileID: 3025826887704683409}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2acb6b6673c4dd891f442c65245ad27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6760791946486137140 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8371855193839919781, guid: 0e3d5339ea644ed4ca18b3d82a9f8a24, type: 3}

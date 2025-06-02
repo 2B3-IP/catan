@@ -64,8 +64,12 @@ namespace B3.PlayerSystem
             while (!_hasDiceClick)
                 yield return null;
 
+
             yield return diceThrower.ThrowCoroutine(); 
-            DiceSum = diceThrower.DiceRolls;
+            DiceSum = 7;
+            while(DiceSum==7)
+                DiceSum = Random.Range(1, 7) + Random.Range(1,7); // Simulate a dice roll for the sake of example
+            AI.SendDice(DiceSum);
             
             _hasDiceClick = false;
             instructionNotif.Destroy();
@@ -95,6 +99,7 @@ namespace B3.PlayerSystem
             if(!_hasEndClicked)
                 return;
             Debug.Log("buton apasat");
+            AI.SendMove("END_TURN");    
             IsTurnEnded = true;
             _hasEndClicked = false;
         }

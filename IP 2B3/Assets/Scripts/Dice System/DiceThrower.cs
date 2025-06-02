@@ -7,7 +7,19 @@ namespace B3.DiceSystem
     {
         [SerializeField] private DiceController[] _diceControllers;
         
-        public int DiceRolls { get; private set; }
+        public int DiceRolls { get;  set; }
+
+
+       public void Throw()
+        {
+            if (_diceControllers == null || _diceControllers.Length < 2)
+            {
+                Debug.LogError("Dice controllers are not set or insufficient.");
+                return;
+            }
+            
+            StartCoroutine(ThrowCoroutine());
+        }
 
         public IEnumerator ThrowCoroutine()
         {
@@ -26,9 +38,12 @@ namespace B3.DiceSystem
             yield return firstThrow;
             yield return secondThrow;
             
-            DiceRolls = firstDice.DiceRoll + secondDice.DiceRoll;
-            
-             AI.SendDice(DiceRolls);
+            DiceRolls = firstDice.DiceRoll + secondDice.DiceRoll; 
+            if(DiceRolls == 7)
+            {
+                DiceRolls = 8; // Adjusting for the game rule where a roll of 12 is treated as 7
+            }
+            Debug.Log($"Dice rolled: {DiceRolls}");
         }
     }
 }

@@ -12,7 +12,8 @@ using System.Collections;
 
 public static class AI
 {
-
+     public static int robberX = 0;
+    public static int robberY = 0;
     private static Thread listenerThread;
     private static volatile bool isListening = false;
     private static readonly ConcurrentQueue<string> moveQueue = new ConcurrentQueue<string>();
@@ -79,7 +80,7 @@ public static class AI
             return move;
         return "NONE";
     }
-
+    public static bool canmovethief;
     public static void ProcessMove(string msg)
     {
         string[] parts = msg.Split(' ');
@@ -98,6 +99,25 @@ public static class AI
                 BuyFunction(parts);
                 // Handle building logic here
                 break;
+           case "MOVEROBBER":
+                // Așteptăm formatul: "MOVEROBBER <x> <y>"
+                if (parts.Length >= 3
+                    && int.TryParse(parts[1], out int rx)
+                    && int.TryParse(parts[2], out int ry))
+                {
+                    robberX = rx;
+                    robberY = ry;
+                    canmovethief = true;
+  
+                    Debug.Log($"[Unity] Received MOVEROBBER => x={rx}, y={ry}");
+                }
+                else
+                {
+                    Debug.LogWarning("[Unity] Mesaj MOVEROBBER incorect: " + msg);
+                }
+                break;
+
+
             case "MOVE":
                 Debug.Log("[Unity] Moving: " + msg);
                 // Handle moving logic here
@@ -300,9 +320,12 @@ public static class AI
 
 
 
-    public static HexPosition GetThiefPosition()
+    public static IEnumerator GetThiefPosition()
     {
-        return new HexPosition(0,0);
+        Debug.Log("imi intra in get thief");
+        while (canmovethief is false)
+            yield return null;
+                 canmovethief = false;
     }
 
     public static int[] GetDiscardedResources()
@@ -372,7 +395,7 @@ public static class AI
                 writer.WriteLine("DICE_NUMBER " + dice);
                 Debug.Log("Sent single dice number to client: " + dice);
             }
-
+            Debug.Log(" merge aici send dice ");
             client.Close();
             server.Stop();
         }

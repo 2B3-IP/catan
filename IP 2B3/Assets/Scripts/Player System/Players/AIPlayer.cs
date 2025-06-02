@@ -23,8 +23,9 @@ namespace B3.PlayerSystem
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
         {
-            var thiefPosition = AI.GetThiefPosition();
-            var pieceController = boardController.BoardGrid[thiefPosition];
+            yield return AI.GetThiefPosition();
+       
+            var pieceController = boardController.BoardGrid[new HexPosition(AI.robberX,AI.robberY)];
             
             yield return new WaitForSeconds(1f);
 

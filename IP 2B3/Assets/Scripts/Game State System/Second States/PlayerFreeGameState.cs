@@ -14,9 +14,17 @@ namespace B3.GameStateSystem
 
         [HideInInspector]
         public UnityEvent<float> timeRemainingEvent = new();
-        
+        private bool subscribed; 
+        private bool forceEndTurn;
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
+            if(subscribed==false)
+            {
+                PlayerEndGameState.OnPlayerEnd += () => {forceEndTurn = true;};
+                subscribed = true;
+            }
+
+
             var currentPlayer = stateMachine.CurrentPlayer;
             if(currentPlayer is HumanPlayer)
                 endTurnButton.interactable = true;
@@ -30,11 +38,14 @@ namespace B3.GameStateSystem
             {
                 elapsedTime += Time.deltaTime;
                 timeRemainingEvent?.Invoke(_waitTimeRound - elapsedTime);
-                if (currentPlayer.IsTurnEnded)
+                if(currentPlayer is AIPlayer)
+                Debug.Log(currentPlayer.IsTurnEnded);
+                if (currentPlayer.IsTurnEnded || forceEndTurn)
                     break;
                 
                 yield return null;
             }
+            forceEndTurn = false;
             
             Debug.Log("aici");
             if(!currentPlayer.IsTurnEnded)

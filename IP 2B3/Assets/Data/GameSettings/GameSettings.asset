@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 197239f4f0e948c9b8c2c95df03c1b3a, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  numberOfPlayers: 2
+  numberOfPlayers: 4
   autoGenerateBoard: 1

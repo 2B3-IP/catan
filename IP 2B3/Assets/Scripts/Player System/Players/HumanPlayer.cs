@@ -98,8 +98,11 @@ namespace B3.PlayerSystem
            // Debug.Log("waiting to end");
             if(!_hasEndClicked)
                 return;
+
+            AI.freeStateReady = false;
+            AI.freeState = "";
+
             Debug.Log("buton apasat");
-            AI.SendMove("END_TURN");    
             IsTurnEnded = true;
             _hasEndClicked = false;
         }

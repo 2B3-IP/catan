@@ -20,7 +20,11 @@ namespace B3.PlayerSystem
         public override IEnumerator ThrowDiceCoroutine()
         {
             yield return diceThrower.ThrowCoroutine(); 
-            DiceSum = diceThrower.DiceRolls;
+            DiceSum = 7;
+            while(DiceSum==7)
+                DiceSum = Random.Range(1, 7) + Random.Range(1,7); // Simulate a dice roll for the s
+            AI.SendDice(DiceSum);
+
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)

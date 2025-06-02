@@ -106,8 +106,9 @@ public static class AI
                 Debug.Log("[Unity] Trading: " + msg);
                 // Handle trading logic here
                 break;
-            case "END":
+            case "ENDTURN":
                 Debug.Log("[Unity] Ending turn: " + msg);
+                freeState = "end turn";
                 // Handle end turn logic here
                 break;
             default:
@@ -370,7 +371,7 @@ public static class AI
             using (StreamWriter writer = new StreamWriter(client.GetStream()))
             {
                 writer.WriteLine("DICE_NUMBER " + dice);
-                Debug.Log("Sent single dice number to client: " + dice);
+                Debug.Log("Sent: DICE_NUMBER " + dice);
             }
 
             client.Close();

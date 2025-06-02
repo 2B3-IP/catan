@@ -407,6 +407,30 @@ public static void SendDice(int dice)
         Debug.Log("Server error: " + ex.ToString());
     }
 }
+public static bool SendTradeOffer(string message)
+{
+    try
+    {
+        using (TcpClient client = new TcpClient("127.0.0.1", 6969))
+        using (NetworkStream stream = client.GetStream())
+        using (StreamWriter writer = new StreamWriter(stream))
+        using (StreamReader reader = new StreamReader(stream))
+        {
+            writer.WriteLine(message);
+            writer.Flush();
+
+            string response = reader.ReadLine();  // Ex: TRADE_RESULT accepted=true
+            Debug.Log("Received from server: " + response);
+            return response.Contains("accepted=true");
+        }
+    }
+    catch (Exception ex)
+    {
+        Debug.Log("Error sending trade offer: " + ex.ToString());
+        return false;
+    }
+}
+
 
 }
 

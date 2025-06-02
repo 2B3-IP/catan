@@ -3,6 +3,7 @@ using B3.BankSystem;
 using B3.PlayerSystem;
 using B3.ResourcesSystem;
 using B3.UI;
+using System.Linq;
 namespace B3.TradeSystem
 {
     public class TradeController : MonoBehaviour
@@ -116,5 +117,37 @@ namespace B3.TradeSystem
                 }
             }
         }
+    
+public bool TryTradeWithJava(PlayerBase player, PlayerBase otherPlayer, int[] trade)
+{
+    // construim mesajul
+    string[] resourceNames = { "brick", "lumber", "grain", "ore", "wool" };
+    string give = "", get = "";
+    for (int i = 0; i < trade.Length; i++)
+    {
+        int val = trade[i];
+        if (val > 0) give += resourceNames[i] + ":" + val + ",";
+        if (val < 0) get += resourceNames[i] + ":" + (-val) + ",";
+    }
+    give = give.TrimEnd(',');
+    get = get.TrimEnd(',');
+
+    int from = player.PlayerIndex;
+    int to = otherPlayer.PlayerIndex;
+    string toStr = string.Join(",", Enumerable.Range(0, 4).Select(i => i == to ? "true" : "false"));
+
+    string message = $"TRADE_OFFER from={from} to={toStr} give={give} get={get}";
+    bool accepted = AI.SendTradeOffer(message);
+
+    if (accepted)
+    {
+        TradeResources(player, otherPlayer, trade);  // aplicăm trade-ul local
+        Debug.Log("✅ Trade executat (Java a aprobat)");
+        return true;
+    }
+
+    Debug.Log("❌ Trade respins de bot (Java)");
+    return false;
+}
     }
 }

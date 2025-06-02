@@ -14,10 +14,10 @@ namespace B3.GameStateSystem
         
         [SerializeReference] private GameStateBase[] gameStates;
         [SerializeField] private PlayersManager playersManager;
-
+        
         public UnityEvent onCurrentPlayerChanged = new();
         public UnityEvent onStateChanged = new();
-
+        
         private GameStateBase _currentState;
 
         private int _currentPlayerIndex;

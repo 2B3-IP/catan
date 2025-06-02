@@ -3176,7 +3176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7592162570825562992, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_fontSize
-      value: 17.6
+      value: 20.4
       objectReference: {fileID: 0}
     - target: {fileID: 8233346562408614657, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_Type
@@ -5740,6 +5740,10 @@ PrefabInstance:
       value: Game State Machine
       objectReference: {fileID: 0}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: playersManager
       value: 
       objectReference: {fileID: 1012282399}
@@ -5751,6 +5755,14 @@ PrefabInstance:
       propertyPath: managedReferences[6434893590810853523].diceButton
       value: 
       objectReference: {fileID: 1329318355}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[3160003638182543458].audioSource
+      value: 
+      objectReference: {fileID: 19774537}
+    - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
+      propertyPath: managedReferences[3160003638182543458].victoryClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 388b90f19fd655346b4ceb737b6bc35f, type: 3}
     - target: {fileID: 8515613851027529657, guid: 5a9bcdfd260659e49bb3181240a23d8e, type: 3}
       propertyPath: managedReferences[6434893590810853523].diceThrower
       value: 
@@ -7855,7 +7867,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7592162570825562992, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_fontSize
-      value: 17.6
+      value: 20.4
       objectReference: {fileID: 0}
     - target: {fileID: 8233346562408614657, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_Type
@@ -10317,7 +10329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7592162570825562992, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_fontSize
-      value: 17.6
+      value: 20.4
       objectReference: {fileID: 0}
     - target: {fileID: 8233346562408614657, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_Type
@@ -13310,7 +13322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7592162570825562992, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_fontSize
-      value: 17.6
+      value: 20.4
       objectReference: {fileID: 0}
     - target: {fileID: 8233346562408614657, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_Type
@@ -13688,7 +13700,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7592162570825562992, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_fontSize
-      value: 17.6
+      value: 20.4
       objectReference: {fileID: 0}
     - target: {fileID: 8233346562408614657, guid: 3ca5f627fbeace2af963bf8c0470d033, type: 3}
       propertyPath: m_Type

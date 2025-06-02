@@ -9,21 +9,22 @@ namespace B3.TradeSystem
     public class TradeController : MonoBehaviour
     {
         [SerializeField] private BankController bankController;
-        
+
         // +value = daca oferi
         // -value = daca primesti
-        public void TradeResources(PlayerBase player, PlayerBase otherPlayer, int[] resourcesToGive, int[] resourcesToGet)
+        public void TradeResources(PlayerBase player, PlayerBase otherPlayer, int[] resourcesToGive,
+            int[] resourcesToGet)
         {
             // if(otherPlayer is AIPlayer)
             // {
             // ai.sendTurn
             // while(false)
             // yield return null;
-            
+
             // if(!ai.accepted)
             //     return;
             // }
-            
+
             for (int i = 0; i < resourcesToGive.Length; i++)
             {
                 var resource = (ResourceType)i;
@@ -31,7 +32,7 @@ namespace B3.TradeSystem
                 player.RemoveResource(resource, resourcesToGive[i]);
                 otherPlayer.AddResource(resource, resourcesToGive[i]);
             }
-            
+
             for (int i = 0; i < resourcesToGive.Length; i++)
             {
                 var resource = (ResourceType)i;
@@ -57,7 +58,7 @@ namespace B3.TradeSystem
                     int batchSize = playerBuffs.GetResourceAmount(resourceType);
                     if (batchSize == 0)
                         batchSize = 4;
-                    
+
                     int batches = given / batchSize;
                     totalBatches += batches;
 
@@ -78,7 +79,8 @@ namespace B3.TradeSystem
 
             if (totalWanted > totalBatches)
             {
-                NotificationManager.Instance.AddNotification($"You selected more resources than allowed by the resources traded!",5,true);
+                NotificationManager.Instance.AddNotification(
+                    $"You selected more resources than allowed by the resources traded!", 5, true);
                 Debug.Log("Player wants more resources than allowed by the resources traded!");
                 return;
             }
@@ -90,7 +92,8 @@ namespace B3.TradeSystem
                     var resourceType = (ResourceType)i;
                     if (player.GetResourceAmount(resourceType) < resourcesGiven[i])
                     {
-                        NotificationManager.Instance.AddNotification($"You do not have enough {resourceType} to trade!",5,true);
+                        NotificationManager.Instance.AddNotification($"You do not have enough {resourceType} to trade!",
+                            5, true);
                         Debug.Log($"Player does not have enough {resourceType} to trade!");
                         return;
                     }
@@ -117,37 +120,38 @@ namespace B3.TradeSystem
                 }
             }
         }
-    
-public bool TryTradeWithJava(PlayerBase player, PlayerBase otherPlayer, int[] trade)
-{
-    // construim mesajul
-    string[] resourceNames = { "brick", "lumber", "grain", "ore", "wool" };
-    string give = "", get = "";
-    for (int i = 0; i < trade.Length; i++)
+        /*
+    public bool TryTradeWithJava(PlayerBase player, PlayerBase otherPlayer, int[] trade)
     {
-        int val = trade[i];
-        if (val > 0) give += resourceNames[i] + ":" + val + ",";
-        if (val < 0) get += resourceNames[i] + ":" + (-val) + ",";
+        // construim mesajul
+        string[] resourceNames = { "brick", "lumber", "grain", "ore", "wool" };
+        string give = "", get = "";
+        for (int i = 0; i < trade.Length; i++)
+        {
+            int val = trade[i];
+            if (val > 0) give += resourceNames[i] + ":" + val + ",";
+            if (val < 0) get += resourceNames[i] + ":" + (-val) + ",";
+        }
+        give = give.TrimEnd(',');
+        get = get.TrimEnd(',');
+
+        int from = player.PlayerIndex;
+        int to = otherPlayer.PlayerIndex;
+        string toStr = string.Join(",", Enumerable.Range(0, 4).Select(i => i == to ? "true" : "false"));
+
+        string message = $"TRADE_OFFER from={from} to={toStr} give={give} get={get}";
+        bool accepted = AI.SendTradeOffer(message);
+
+        if (accepted)
+        {
+            TradeResources(player, otherPlayer, trade);  // aplicăm trade-ul local
+            Debug.Log("✅ Trade executat (Java a aprobat)");
+            return true;
+        }
+
+        Debug.Log("❌ Trade respins de bot (Java)");
+        return false;
     }
-    give = give.TrimEnd(',');
-    get = get.TrimEnd(',');
-
-    int from = player.PlayerIndex;
-    int to = otherPlayer.PlayerIndex;
-    string toStr = string.Join(",", Enumerable.Range(0, 4).Select(i => i == to ? "true" : "false"));
-
-    string message = $"TRADE_OFFER from={from} to={toStr} give={give} get={get}";
-    bool accepted = AI.SendTradeOffer(message);
-
-    if (accepted)
-    {
-        TradeResources(player, otherPlayer, trade);  // aplicăm trade-ul local
-        Debug.Log("✅ Trade executat (Java a aprobat)");
-        return true;
-    }
-
-    Debug.Log("❌ Trade respins de bot (Java)");
-    return false;
-}
+        }*/
     }
 }

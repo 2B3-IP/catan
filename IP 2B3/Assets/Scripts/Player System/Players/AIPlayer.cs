@@ -38,6 +38,8 @@ namespace B3.PlayerSystem
 
         public override void OnTradeAndBuildUpdate()
         {
+			IsTurnEnded = true;
+return;
             string command="";
        
             if(AI.freeStateReady){
@@ -101,7 +103,7 @@ namespace B3.PlayerSystem
             var boardGrid = boardController.BoardGrid;
             Debug.Log($"AI building house at {housePosition.X} {housePosition.Y}, {houseDirection}");
 
-            //yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f);
 
             var settlementController = boardGrid.GetVertex(housePosition, houseDirection);
             SelectedHouse = settlementController;
@@ -139,6 +141,8 @@ namespace B3.PlayerSystem
                 roadPosition = pos;
                 roadDirection = dir;
             });
+
+yield return new WaitForSeconds(1);
         
             var boardGrid = boardController.BoardGrid;
             Debug.Log($"AI building road at {roadPosition.X} {roadPosition.Y}, {roadDirection}");
@@ -151,6 +155,7 @@ namespace B3.PlayerSystem
 
         public override IEnumerator DiscardResourcesCoroutine(float timeout)
         {
+			yield break;
             yield return new WaitForSeconds(1f);
             DiscardResources = AI.GetDiscardedResources();
         }

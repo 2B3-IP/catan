@@ -21,7 +21,7 @@ namespace B3.PlayerSystem
         public string playerName;
         public string colorTag = "<color=red>";
 
-        private int[] _resource = { 99, 99, 99, 99, 99 };
+        private int[] _resource = { 99,99,99,99,99 };
         /// <summary>
         /// Mapat cu ResourceType (Resources[0] = Wood, Resources[1] = Brick, Resources[2] = Wheat, Resources[3] = Sheep, Resources[4] = Ore)
         /// </summary>

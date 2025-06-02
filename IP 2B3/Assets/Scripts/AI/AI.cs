@@ -20,6 +20,7 @@ public static class AI
 
     public static void StartMoveListener()
     {
+        return;
         if (isListening)
             return;
 
@@ -31,7 +32,8 @@ public static class AI
     }
 
     public static void StopMoveListener()
-    {
+    {        return;
+
         isListening = false;
         listenerThread?.Join();
         Debug.Log("[Unity] Move listener thread stopped.");
@@ -39,6 +41,7 @@ public static class AI
 
     private static void ListenForMoves()
     {
+        return;
         try
         {
             TcpListener server = new TcpListener(IPAddress.Any, GET_MOVES_PORT);
@@ -82,6 +85,7 @@ public static class AI
 
     public static void ProcessMove(string msg)
     {
+        return;
         string[] parts = msg.Split(' ');
         if (parts.Length == 0)
             return;
@@ -132,6 +136,7 @@ public static class AI
     }
     private static void BuildFunction(string [] parts)
     {
+        return;
        switch (parts[1].ToUpper())
         {
             case "SETTLEMENT":
@@ -158,7 +163,8 @@ public static class AI
     }
 
     private static void BuyFunction(string [] parts)
-    {
+    {        return;
+
        switch (parts[1].ToUpper())
         {
             case "SETTLEMENT":
@@ -194,6 +200,7 @@ public static class AI
 
     public static void SendBoard(ResourceType?[] resources, int[] numbers, ResourceType?[] ports)
     {
+        return;
         // return;
         int[] indexSwap = { 6, 5, 4, 3, 2, 1, 0, 8, 7 };
         // swap the port with the new index
@@ -262,26 +269,70 @@ public static class AI
     }
 
     public static bool houseReady = false;
+    private static int i = 0;
     public static IEnumerator GetHousePosition(Action<HexPosition, HexVertexDir> callback)
     {
-        // Wait until the flag is set by the ProcessMove
-        yield return new WaitUntil(() => houseReady);
-
-
-        callback?.Invoke(housePosition, houseDir);
-        houseReady = false; 
+        switch (i)
+        {
+            case 0:
+                callback(new HexPosition(-1, 2), HexVertexDir.TopLeft);
+                break;
+            
+            case 1:
+                callback(new HexPosition(1, 1), HexVertexDir.TopLeft);
+                break;
+            
+            case 2:
+                callback(new HexPosition(-1, 1),HexVertexDir.TopLeft);
+                break;
+            
+            case 3:
+                callback(new HexPosition(1, 0), HexVertexDir.TopLeft);
+                break;
+            
+            case 4:
+                callback(new HexPosition(-1, 0),HexVertexDir.TopLeft);
+                break;
+            
+            case 5:
+                callback(new HexPosition(1, -1), HexVertexDir.TopLeft);
+                break;
+        }
+        yield break;
     }
 
     public static bool roadReady = false;
 
     public static IEnumerator GetRoadPosition(Action<HexPosition, HexEdgeDir> callback)
     {
-        // Wait until the flag is set by the ProcessMove
-        yield return new WaitUntil(() => roadReady);
-
-
-        callback?.Invoke(roadPosition, roadDir);
-        roadReady = false; 
+        switch (i++)
+        {
+            case 0:
+                callback(new HexPosition(-1, 2),HexEdgeDir.Top);
+                break;
+            
+            case 1:
+                callback(new HexPosition(1, 1), HexEdgeDir.Top);
+                break;
+            
+            case 2:
+                callback(new HexPosition(-1, 1), HexEdgeDir.Top);
+                break;
+            
+            case 3:
+                callback(new HexPosition(1, 0), HexEdgeDir.Top);
+                break;
+            
+            case 4:
+                callback(new HexPosition(-1, 0),HexEdgeDir.Top);
+                break;
+            
+            case 5:
+                callback(new HexPosition(1, -1),HexEdgeDir.Top);
+                break;
+        }
+        
+        yield break;
     }
 
     
@@ -298,11 +349,11 @@ public static class AI
     }
 
 
-
-
+    private static bool a = true;
     public static HexPosition GetThiefPosition()
     {
-        return new HexPosition(0,0);
+        a = !a;
+        return a ? new HexPosition(0,0) : new HexPosition(1,0);
     }
 
     public static int[] GetDiscardedResources()
@@ -325,7 +376,8 @@ public static class AI
 
 
     public static void SendMove(string message)
-    {
+    {        return;
+
         Debug.Log("Sending move: " + message);
 
         try
@@ -357,7 +409,8 @@ public static class AI
 
     
     public static void SendDice(int dice)
-    {
+    {        return;
+
         try
         {
             TcpListener server = new TcpListener(IPAddress.Any, 6969);
@@ -381,7 +434,6 @@ public static class AI
             Debug.Log(ex.ToString());
         }
     }
-}
 public static bool SendTradeOffer(string message)
 {
     try
@@ -404,6 +456,7 @@ public static bool SendTradeOffer(string message)
         Debug.Log("Error sending trade offer: " + ex.ToString());
         return false;
     }
-}
+}}
+
 
 

@@ -69,6 +69,14 @@ PrefabInstance:
       propertyPath: playerName
       value: Blue
       objectReference: {fileID: 0}
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: pieceMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: c2cd7a2ca8049c9cf98922a534d0d2b3, type: 2}
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: playersManager
+      value: 
+      objectReference: {fileID: 105831096138984837}
     - target: {fileID: 3173389152480104931, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
       propertyPath: developmentCardController
       value: 
@@ -142,6 +150,14 @@ PrefabInstance:
       propertyPath: playerName
       value: Yellow
       objectReference: {fileID: 0}
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: pieceMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 3eccf20cf25df1b1489ef5900c345adf, type: 2}
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: playersManager
+      value: 
+      objectReference: {fileID: 105831096138984837}
     - target: {fileID: 3173389152480104931, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
       propertyPath: developmentCardController
       value: 
@@ -243,6 +259,10 @@ PrefabInstance:
       propertyPath: pieceLayerMask.m_Bits
       value: 64
       objectReference: {fileID: 0}
+    - target: {fileID: 3757976149989513223, guid: c84c1f686d9ae4841bc48903ed22cc27, type: 3}
+      propertyPath: settlementLayerMask.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 3879276844280853339, guid: c84c1f686d9ae4841bc48903ed22cc27, type: 3}
       propertyPath: m_Name
       value: Red (Human)
@@ -284,6 +304,14 @@ PrefabInstance:
       propertyPath: playerName
       value: Green
       objectReference: {fileID: 0}
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: pieceMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 31ff3abd181a876b1994f13a7310c803, type: 2}
+    - target: {fileID: 2219019072998924029, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
+      propertyPath: playersManager
+      value: 
+      objectReference: {fileID: 105831096138984837}
     - target: {fileID: 3173389152480104931, guid: 28f0ae4ca5ee3804d8ef82f06bf62bed, type: 3}
       propertyPath: developmentCardController
       value: 

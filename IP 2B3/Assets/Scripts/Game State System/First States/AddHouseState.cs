@@ -39,8 +39,11 @@ namespace B3.GameStateSystem
             var vertexDirection = selectedHouse.VertexDir;
             
             var pieceController = boardGrid[vertexPosition];
-            player.AddResource(pieceController.ResourceType, 1);
-            bankController.GetResources(pieceController.ResourceType, 1);
+            if (pieceController != null)
+            {
+                player.AddResource(pieceController.ResourceType, 1);
+                bankController.GetResources(pieceController.ResourceType, 1);
+            }
             
             switch (vertexDirection)
             {

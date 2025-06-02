@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using B3.BoardSystem;
 using B3.BuildingSystem;
+using B3.DiceSystem;
 using B3.GameStateSystem;
 using B3.PieceSystem;
 using B3.PlayerSystem.UI;
@@ -27,6 +28,7 @@ namespace B3.PlayerSystem
         [SerializeField] private LayerMask pieceLayerMask;
         [SerializeField] private LayerMask settlementLayerMask;
         [SerializeField] private int hitDistance = 200;
+        [SerializeField] private DiceThrower diceThrower;
         
         private readonly RaycastHit[] _hits = new RaycastHit[5];
         
@@ -58,13 +60,19 @@ namespace B3.PlayerSystem
         {
             _hasDiceClick = false;
             var instructionNotif = NotificationManager.Instance
-                .AddNotification("Touch the dice button to throw the dices", float.PositiveInfinity, false);
+                .AddNotification("Click on the dice button", float.PositiveInfinity, false);
             while (!_hasDiceClick)
                 yield return null;
 
-            DiceSum = 7;
 
+            yield return diceThrower.ThrowCoroutine(); 
+            DiceSum = 7;
+            while(DiceSum==7)
+                DiceSum = Random.Range(1, 7) + Random.Range(1,7); // Simulate a dice roll for the sake of example
+            AI.SendDice(DiceSum);
+            
             _hasDiceClick = false;
+            instructionNotif.Destroy();
         }
 
         public override IEnumerator MoveThiefCoroutine(ThiefControllerBase thiefController)
@@ -77,7 +85,7 @@ namespace B3.PlayerSystem
                 yield return RayCastCoroutine(pieceLayerMask);
                 SelectedThiefPiece = _closestHit.transform.GetComponentInParent<PieceController>();
 
-                if (SelectedThiefPiece.IsBlocked)
+                if (SelectedThiefPiece.IsBlocked || SelectedThiefPiece.GetComponentInParent<PortController>())
                 {
                     SelectedThiefPiece = null;
                 }
@@ -90,6 +98,10 @@ namespace B3.PlayerSystem
            // Debug.Log("waiting to end");
             if(!_hasEndClicked)
                 return;
+
+            AI.freeStateReady = false;
+            AI.freeState = "";
+
             Debug.Log("buton apasat");
             IsTurnEnded = true;
             _hasEndClicked = false;
@@ -178,8 +190,20 @@ namespace B3.PlayerSystem
         
         public override IEnumerator DiscardResourcesCoroutine(float timeout)
         {
-            //TODO: FRONT
-            yield break;
+            int resourcesToDiscard = TotalResources() / 2;
+            DiscardMenu discardMenu = FindObjectOfType<DiscardMenu>(true);
+            bool isComplete = false;
+
+            DiscardResources = null;
+            
+            discardMenu.Initialize(resourcesToDiscard, (selectedResources) => 
+            {
+                DiscardResources = selectedResources; 
+                isComplete = true;
+                discardMenu.gameObject.SetActive(false); 
+            });
+    
+            yield return new WaitUntil(() => isComplete);         
         }
         
         private IEnumerator RayCastCoroutine(LayerMask layerMask)

@@ -48,6 +48,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerName: Red
   colorTag: <color=red>
+  onResourcesChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onVPChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onUsedKnightsChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onLongestRoadChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  pieceMaterial: {fileID: 2100000, guid: e2f4cc39db8d5c1e1a0f85c0b5926ed2, type: 2}
+  throwForceButton: {fileID: 0}
   boardController: {fileID: 0}
   buildingController: {fileID: 0}
   clickButton: {fileID: 0}
@@ -71,6 +85,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   developmentCardController: {fileID: 0}
+  onItemCountChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3716936130456399448
 MonoBehaviour:
   m_ObjectHideFlags: 0

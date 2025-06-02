@@ -5,23 +5,32 @@ namespace B3.DiceSystem
 {
     public sealed class DiceThrower : MonoBehaviour
     {
-        private DiceController[] _diceControllers;
+        [SerializeField] private DiceController[] _diceControllers;
         
-        public int DiceRolls { get; private set; }
+        public int DiceRolls { get;  set; }
 
-        private void Awake() =>
-            _diceControllers = GetComponentsInChildren<DiceController>();
 
-        [ContextMenu("a")]
-        public void a()
+       public void Throw()
         {
-            StartCoroutine(ThrowCoroutine(transform.position, 5f));
+            if (_diceControllers == null || _diceControllers.Length < 2)
+            {
+                Debug.LogError("Dice controllers are not set or insufficient.");
+                return;
+            }
+            
+            StartCoroutine(ThrowCoroutine());
         }
-        
-        public IEnumerator ThrowCoroutine(Vector3 startPosition, float throwForce)
+
+        public IEnumerator ThrowCoroutine()
         {
+            var startPosition = transform.position;
+            float throwForce = Random.Range(1f, 10f);
+            
             var firstDice = _diceControllers[0];
             var secondDice = _diceControllers[1];
+            
+            firstDice.gameObject.SetActive(true);
+            secondDice.gameObject.SetActive(true);
             
             var firstThrow = StartCoroutine(firstDice.ThrowCoroutine(startPosition, throwForce));
             var secondThrow = StartCoroutine(secondDice.ThrowCoroutine(startPosition, throwForce));
@@ -29,10 +38,12 @@ namespace B3.DiceSystem
             yield return firstThrow;
             yield return secondThrow;
             
-            DiceRolls = firstDice.DiceRoll + secondDice.DiceRoll;
-
-            AI.SendDice(DiceRolls);
-
+            DiceRolls = firstDice.DiceRoll + secondDice.DiceRoll; 
+            if(DiceRolls == 7)
+            {
+                DiceRolls = 8; // Adjusting for the game rule where a roll of 12 is treated as 7
+            }
+            Debug.Log($"Dice rolled: {DiceRolls}");
         }
     }
 }

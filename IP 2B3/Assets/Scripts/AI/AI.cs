@@ -80,7 +80,11 @@ public static class AI
             return move;
         return "NONE";
     }
+
     public static bool canmovethief;
+    private static int endTurnIgnore = 0;
+    private static int lastIndex = 0;
+    public static event Action OnEndTurn;
     public static void ProcessMove(string msg)
     {
         string[] parts = msg.Split(' ');
@@ -126,8 +130,18 @@ public static class AI
                 Debug.Log("[Unity] Trading: " + msg);
                 // Handle trading logic here
                 break;
-            case "END":
+            case "ENDTURN":
                 Debug.Log("[Unity] Ending turn: " + msg);
+                
+                if(lastIndex == int.Parse(parts[1]))
+                    break;
+                lastIndex = int.Parse(parts[1]);
+
+                freeState = "end turn";
+                if(lastIndex!=0)
+                    {freeStateReady = true;
+                    OnEndTurn?.Invoke();
+                    }
                 // Handle end turn logic here
                 break;
             default:
@@ -136,6 +150,8 @@ public static class AI
                 break;
         }
     }
+
+
     private static HexVertexDir ParseHexVertexDir(int dir)
     {
         // dir = (dir + 1) % 6; // Normalize to 0-5 range
@@ -271,14 +287,14 @@ public static class AI
     public static HexPosition cityPosition = new HexPosition(0, 0);
     public static HexVertexDir cityDir = HexVertexDir.Left;
 
-    private static string freeState = "";
+    public static string freeState = "";
 
     //check OnTradeAndBuildUpdate() din AIPlayer pentru toate comenzile
     public static bool freeStateReady = false;
 
     public static string GetFreeStateCommand()
     {
-      return freeState;
+        return freeState;
     }
 
     public static bool houseReady = false;
@@ -379,30 +395,70 @@ public static class AI
 
 
     
-    public static void SendDice(int dice)
+public static void SendDice(int dice)
+{
+    try
     {
-        try
-        {
-            TcpListener server = new TcpListener(IPAddress.Any, 6969);
-            server.Start();
-            Debug.Log("Server is running on port 6969...");
+        // Start the TCP listener
+        TcpListener server = new TcpListener(IPAddress.Any, 6969);
+        server.Start();
+        Debug.Log("Server is running on port 6969...");
 
-            TcpClient client = server.AcceptTcpClient();
+        // Accept one client
+        using (TcpClient client = server.AcceptTcpClient())
+        {
             Debug.Log("Client connected!");
 
             using (StreamWriter writer = new StreamWriter(client.GetStream()))
             {
+                writer.AutoFlush = true;
                 writer.WriteLine("DICE_NUMBER " + dice);
-                Debug.Log("Sent single dice number to client: " + dice);
+                Debug.Log("Sent: DICE_NUMBER " + dice);
+
+                // Optionally wait for the client to close the connection
+                // or flush everything to ensure delivery
+                client.GetStream().Flush();
             }
             Debug.Log(" merge aici send dice ");
             client.Close();
             server.Stop();
+            // Client will be disposed here
+
         }
-        catch (Exception ex)
+
+        // After sending the message and closing the client connection, stop the server
+        server.Stop();
+        Debug.Log("Server stopped.");
+    }
+    catch (Exception ex)
+    {
+        Debug.Log("Server error: " + ex.ToString());
+    }
+}
+public static bool SendTradeOffer(string message)
+{
+    try
+    {
+        using (TcpClient client = new TcpClient("127.0.0.1", 6969))
+        using (NetworkStream stream = client.GetStream())
+        using (StreamWriter writer = new StreamWriter(stream))
+        using (StreamReader reader = new StreamReader(stream))
         {
-            Debug.Log(ex.ToString());
+            writer.WriteLine(message);
+            writer.Flush();
+
+            string response = reader.ReadLine();  // Ex: TRADE_RESULT accepted=true
+            Debug.Log("Received from server: " + response);
+            return response.Contains("accepted=true");
         }
     }
+    catch (Exception ex)
+    {
+        Debug.Log("Error sending trade offer: " + ex.ToString());
+        return false;
+    }
+}
+
+
 }
 

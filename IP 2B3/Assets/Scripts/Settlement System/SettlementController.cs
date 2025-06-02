@@ -10,7 +10,9 @@ namespace B3.SettlementSystem
     public sealed class SettlementController : MonoBehaviour
     {
         [SerializeField] private GameObject houseObject;
+        [SerializeField] private MeshRenderer houseRenderer;
         [SerializeField] private GameObject cityObject;
+        [SerializeField] private MeshRenderer cityRenderer;
         [SerializeField] private Material highlightMaterial;
         
         [SerializeField] private LeanTweenType easing;
@@ -21,11 +23,22 @@ namespace B3.SettlementSystem
         public HexVertexDir VertexDir { get; set; }
         
         public static event System.Action<SettlementController> OnSettlementSelected;
-        
-        public PlayerBase Owner { get; set; }
+
+        private PlayerBase _owner;
+        public PlayerBase Owner
+        {
+            get => _owner;
+            set
+            {
+                _owner = value;
+                houseRenderer.material = value.pieceMaterial;
+                cityRenderer.material = value.pieceMaterial;
+            }
+        }
+
         public bool IsCity { get; private set; }
         
-        public bool HasOwner => Owner != null;
+        public bool HasOwner => _owner != null;
 
         public int ResourceAmount => IsCity ? 2 : 1;
         
@@ -66,8 +79,10 @@ namespace B3.SettlementSystem
             houseObject.transform.position = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z);
             houseObject.transform.localScale = Vector3.zero;
             
-            LeanTween.scale(houseObject, Vector3.one, animLength).setFrom(Vector3.zero);
-            LeanTween.moveLocalY(houseObject, houseObject.transform.position.y - 5f, animLength)
+            cityObject.transform.localRotation = houseObject.transform.localRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+            
+            LeanTween.scale(houseObject, Vector3.one, animLength).setFrom(Vector3.zero).setEase(easing);
+            LeanTween.moveLocalY(houseObject, houseObject.transform.position.y - 5f, animLength).setEase(easing)
                 .setOnComplete(() => Audio.Play(clip, transform.position));
             
             houseObject.SetActive(true);
@@ -94,11 +109,12 @@ namespace B3.SettlementSystem
             
             IsCity = true;
             
-            LeanTween.rotateAroundLocal(houseObject, Vector3.up, 360f, animLength);
-            LeanTween.scale(houseObject, Vector3.zero, animLength).setFrom(Vector3.one).setOnComplete(() =>
+            LeanTween.rotateAroundLocal(houseObject, Vector3.up, 360f, animLength).setEase(easing);
+            LeanTween.scale(houseObject, Vector3.zero, animLength).setFrom(Vector3.one).setEase(easing).setOnComplete(() =>
                 {
-                    LeanTween.rotateAroundLocal(cityObject, Vector3.up, 360f, animLength * 1.5f);
-                    LeanTween.scale(cityObject, Vector3.one, animLength * 1.5f).setFrom(Vector3.zero);
+                    cityObject.transform.localScale = Vector3.zero;
+                    LeanTween.rotateAroundLocal(cityObject, Vector3.up, 360f, animLength * 1.5f).setEase(easing);
+                    LeanTween.scale(cityObject, Vector3.one, animLength * 1.5f).setFrom(Vector3.zero).setEase(easing);
                     houseObject.SetActive(false);
                     cityObject.SetActive(true);
                     Audio.Play(clip, transform.position);

@@ -47,6 +47,7 @@ namespace B3.PlayerSystem
             if(AI.freeStateReady){
                 command = AI.GetFreeStateCommand();
                 AI.freeStateReady = false;
+                AI.freeState = "";
             }
 
             switch (command.ToLower())
@@ -84,11 +85,14 @@ namespace B3.PlayerSystem
                     break;
 
                 case "end turn":
+                Debug.Log("[Unity1] Ending turn: ");
                     IsTurnEnded = true;
+                    
                     break;
 
                 default:
-                    Debug.Log("AI unknown command");
+                if(command != "")
+                    Debug.Log("AI unknown command " + "{"+ command +"}");
                     break;
             }
         }

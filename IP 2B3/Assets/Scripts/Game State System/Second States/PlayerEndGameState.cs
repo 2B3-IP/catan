@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-
+using B3.PlayerSystem;
 namespace B3.GameStateSystem
 {
     [Serializable]
@@ -11,10 +11,11 @@ namespace B3.GameStateSystem
         
         public override IEnumerator OnEnter(GameStateMachine stateMachine)
         {
-            Debug.Log("PlayerEndGameState OnEnter");
+            Debug.Log("PlayerEndGameState OnEnter "+ stateMachine.CurrentPlayer.playerName);
             OnPlayerEnd?.Invoke();
-            
-            AI.SendMove("end round");
+            if(stateMachine.CurrentPlayer is HumanPlayer)
+            AI.SendMove("END_TURN");    
+
             
             stateMachine.StartMachineWithOtherPlayer();
             yield break;

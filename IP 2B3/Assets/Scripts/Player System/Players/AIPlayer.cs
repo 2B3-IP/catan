@@ -19,10 +19,9 @@ namespace B3.PlayerSystem
         public int PlayerIndex { get; set; }
         public override IEnumerator ThrowDiceCoroutine()
         {
-            yield return diceThrower.ThrowCoroutine(); 
-            DiceSum = 7;
-            while(DiceSum==7)
-                DiceSum = Random.Range(1, 7) + Random.Range(1,7); // Simulate a dice roll for the s
+            yield return diceThrower.ThrowCoroutine();
+            // DiceSum = 7;
+            // DiceSum = diceThrower.DiceRolls;
             AI.SendDice(DiceSum);
 
         }

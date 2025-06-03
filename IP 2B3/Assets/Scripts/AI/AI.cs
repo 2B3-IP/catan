@@ -132,10 +132,6 @@ public static class AI
                 break;
             case "ENDTURN":
                 Debug.Log("[Unity] Ending turn: " + msg);
-                
-                if(lastIndex == int.Parse(parts[1]))
-                    break;
-                lastIndex = int.Parse(parts[1]);
 
                 freeState = "end turn";
                 if(lastIndex!=0)
@@ -143,6 +139,7 @@ public static class AI
                     OnEndTurn?.Invoke();
                     }
                 // Handle end turn logic here
+ lastIndex = (lastIndex + 1) % 4;
                 break;
             default:
   

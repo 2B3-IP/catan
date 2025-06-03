@@ -39,10 +39,6 @@ namespace B3.DiceSystem
             yield return secondThrow;
             
             DiceRolls = firstDice.DiceRoll + secondDice.DiceRoll; 
-            if(DiceRolls == 7)
-            {
-                DiceRolls = 8; // Adjusting for the game rule where a roll of 12 is treated as 7
-            }
             Debug.Log($"Dice rolled: {DiceRolls}");
         }
     }

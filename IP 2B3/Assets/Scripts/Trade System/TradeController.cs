@@ -141,9 +141,9 @@ public bool TryTradeWithJava(PlayerBase player, PlayerBase otherPlayer, int[] tr
 
     if (accepted)
     {
-        TradeResources(player, otherPlayer, trade);  // aplicăm trade-ul local
-        Debug.Log("✅ Trade executat (Java a aprobat)");
-        return true;
+        // TradeResources(player, otherPlayer, trade);  // aplicăm trade-ul local
+        // Debug.Log("✅ Trade executat (Java a aprobat)");
+        // return true;
     }
 
     Debug.Log("❌ Trade respins de bot (Java)");

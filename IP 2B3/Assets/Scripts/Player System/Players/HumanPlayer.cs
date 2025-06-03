@@ -66,11 +66,8 @@ namespace B3.PlayerSystem
 
 
             yield return diceThrower.ThrowCoroutine(); 
-            DiceSum = 7;
-            while(DiceSum==7)
-                DiceSum = Random.Range(1, 7) + Random.Range(1,7); // Simulate a dice roll for the sake of example
+            DiceSum = diceThrower.DiceRolls;
             AI.SendDice(DiceSum);
-            
             _hasDiceClick = false;
             instructionNotif.Destroy();
         }
@@ -91,6 +88,7 @@ namespace B3.PlayerSystem
                 }
             }
             instructionNotif.Destroy();
+            AI.SendMove("MOVEROBBER "+SelectedThiefPiece.HexPosition.X + " " + SelectedThiefPiece.HexPosition.Y);
         }
 
         public override void OnTradeAndBuildUpdate()

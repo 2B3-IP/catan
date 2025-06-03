@@ -50,7 +50,7 @@ namespace B3.PlayerSystem
         
         public SettlementController SelectedHouse { get; protected set; }
         
-        public int[] DiscardResources { get; protected set; }
+        public int[] DiscardResources { get; set; }
 
         public PathController SelectedPath { get; protected set; }
         public bool IsTurnEnded { get; set; }

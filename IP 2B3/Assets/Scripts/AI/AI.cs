@@ -9,6 +9,8 @@ using System.Net.Sockets;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Collections;
+using B3.PlayerSystem;
+using B3.UI;
 
 public static class AI
 {
@@ -111,6 +113,11 @@ public static class AI
                 freeState = "end turn";
                 // Handle end turn logic here
                 break;
+            case "DISCARD":
+                Debug.Log("[Unity] Discarding resources: " + msg);
+                HandleDiscard(msg);
+                break;
+
             default:
   
                 Debug.LogWarning("[Unity] Unknown command: " + msg);
@@ -131,6 +138,61 @@ public static class AI
             default: throw new ArgumentOutOfRangeException(nameof(dir), "Invalid direction value");
         }
     }
+    private static void HandleDiscard(string msg)
+    {
+        // Format mesaj: DISCARD <playerId> <r1> <r2> <r3> <r4> <r5>
+        var parts = msg.Split(' ');
+        if (parts.Length != 7)  // trebuie să fie exact 7: comanda + id + 5 resurse
+            return;
+
+        if (!int.TryParse(parts[1], out int playerId))
+            return;
+
+        int[] resources = new int[5];
+        for (int i = 0; i < 5; i++)
+        {
+            if (!int.TryParse(parts[i + 2], out resources[i]))
+                resources[i] = 0;
+        }
+
+        Debug.Log($"[Unity] Player {playerId} discarded: {string.Join(", ", resources)}");
+
+        var playersManager = GameObject.FindObjectOfType<PlayersManager>();
+        if (playersManager == null)
+        {
+            Debug.LogWarning("[Unity] PlayersManager not found!");
+            return;
+        }
+
+        var playerList = playersManager.players;
+        if (playerId < 0 || playerId >= playerList.Count)
+        {
+            Debug.LogWarning($"[Unity] Invalid playerId {playerId} in DISCARD");
+            return;
+        }
+
+        if (playerList[playerId] is not AIPlayer aiPlayer)
+        {
+            Debug.LogWarning($"[Unity] Player {playerId} is not an AIPlayer");
+            return;
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            aiPlayer.RemoveResource((ResourceType)i, resources[i]);
+        }
+        string colorTag = aiPlayer.colorTag ?? "<color=white>";
+        string playerName = aiPlayer.playerName ?? $"AI {playerId}";
+        int totalDiscarded = resources.Sum();
+
+        NotificationManager.Instance.AddNotification(
+            $"{colorTag}{playerName}</color> discarded {totalDiscarded} cards: {string.Join(", ", resources)}"
+        );
+
+        aiPlayer.DiscardResources = resources;
+    }
+
+
     private static void BuildFunction(string [] parts)
     {
        switch (parts[1].ToUpper())

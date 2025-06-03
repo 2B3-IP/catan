@@ -42,14 +42,9 @@ namespace B3.PlayerSystem
 
         public override void OnTradeAndBuildUpdate()
         {
-            string command="";
-       
-            if(AI.freeStateReady){
-                command = AI.GetFreeStateCommand();
-                AI.freeStateReady = false;
-                AI.freeState = "";
+            string command= command = AI.GetFreeStateCommand();
+
                 Debug.Log($"AI free state command: {command}");
-            }
 
             switch (command.ToLower())
             {
@@ -59,8 +54,11 @@ namespace B3.PlayerSystem
                     break;
 
                 case "buy city":
+                Debug.Log("[Unity1] AIPlayer buying city");
                     StartCoroutine(buyController.BuyCity(this));
                     NotificationManager.Instance.AddNotification($"{this.colorTag}{this.playerName}</color> built a city.");
+                 Debug.Log("[Unity1] AIPlayer built city");
+
                     break;
 
                 case "buy road":

@@ -16,6 +16,8 @@ public static class AI
     private static Thread listenerThread;
     private static volatile bool isListening = false;
     private static readonly ConcurrentQueue<string> moveQueue = new ConcurrentQueue<string>();
+    private static readonly ConcurrentQueue<string> freeStateQueue = new ConcurrentQueue<string>();
+
     private static int GET_MOVES_PORT = 7070; 
 
     public static void StartMoveListener()
@@ -114,7 +116,7 @@ public static class AI
                 if(lastIndex == int.Parse(parts[1]))
                     break;
                 lastIndex = int.Parse(parts[1]);
-
+                Debug.Log("[Unity] State change: "+ freeState + " -> end turn");
                 freeState = "end turn";
                 if(lastIndex!=0)
                 {freeStateReady = true;
@@ -176,26 +178,28 @@ public static class AI
        switch (parts[1].ToUpper())
         {
             case "SETTLEMENT":
-                freeState = "buy house";
+                freeStateQueue.Enqueue("buy house");
                 housePosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
                 houseDir = ParseHexVertexDir(int.Parse(parts[4]));
-                Debug.Log("[Unity] Building a settlement at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                Debug.Log("[Unity] Buying a settlement at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
                 houseReady = true; // Set the flag to true to indicate that the house position is ready
                 freeStateReady = true; // Set the flag to true to indicate that the free state command is ready
                 break;
             case "CITY":
-                freeState = "buy city";
+                freeStateQueue.Enqueue("buy city");
+
                 cityPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
                 cityDir = ParseHexVertexDir(int.Parse(parts[4]));
-                Debug.Log("[Unity] Building a city at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                Debug.Log("[Unity] Buying a city at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
                 cityReady = true; // Set the flag to true to indicate that the city position is ready
                 freeStateReady = true; // Set the flag to true to indicate that the free state command is ready
                 break;
             case "ROAD":
-                freeState = "buy road";
+                freeStateQueue.Enqueue("buy road");
+
                 roadPosition = new HexPosition(int.Parse(parts[2]), int.Parse(parts[3]));
                 roadDir = (HexEdgeDir)Enum.Parse(typeof(HexEdgeDir), parts[4]);
-                Debug.Log("[Unity] Building a road at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
+                Debug.Log("[Unity] Buying a road at: " + parts[2] + ", " + parts[3] + " in direction: " + parts[4]);
                 roadReady = true; // Set the flag to true to indicate that the road position is ready
                 freeStateReady = true; // Set the flag to true to indicate that the free state command is ready
                 break;
@@ -272,7 +276,9 @@ public static class AI
 
     public static string GetFreeStateCommand()
     {
-        return freeState;
+        if (freeStateQueue.TryPeek(out var command))
+        return command;
+    return "";
     }
 
     public static bool houseReady = false;

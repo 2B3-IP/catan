@@ -21,7 +21,7 @@ namespace B3.PlayerSystem
         {
             yield return diceThrower.ThrowCoroutine();
             // DiceSum = 7;
-            // DiceSum = diceThrower.DiceRolls;
+             DiceSum = diceThrower.DiceRolls;
             AI.SendDice(DiceSum);
 
         }

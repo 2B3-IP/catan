@@ -47,7 +47,7 @@ namespace B3.GameStateSystem
             int diceRolls = currentPlayer.DiceSum;
             Debug.Log("dice: " + diceRolls + " " + (diceRolls == THIEF_ROLL));
             NotificationManager.Instance.AddNotification($"Dice rolled {diceRolls}");
-            // AI.SendDice(diceRolls);
+            //AI.SendDice(diceRolls);
 
             if(currentPlayer is HumanPlayer && diceButton != null)
                 diceButton.interactable = false;

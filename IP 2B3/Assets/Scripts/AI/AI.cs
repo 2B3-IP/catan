@@ -117,9 +117,9 @@ public static class AI
 
                 freeState = "end turn";
                 if(lastIndex!=0)
-                    {freeStateReady = true;
+                {freeStateReady = true;
                     OnEndTurn?.Invoke();
-                    }
+                }
                 // Handle end turn logic here
                 break;
             default:

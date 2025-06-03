@@ -40,7 +40,7 @@ namespace B3.GameStateSystem
                 timeRemainingEvent?.Invoke(_waitTimeRound - elapsedTime);
                 if(currentPlayer is AIPlayer)
                 Debug.Log(currentPlayer.IsTurnEnded);
-                if (currentPlayer.IsTurnEnded || forceEndTurn)
+                if (currentPlayer.IsTurnEnded ||( forceEndTurn && currentPlayer is AIPlayer))
                     break;
                 
                 yield return null;

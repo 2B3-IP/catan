@@ -48,6 +48,7 @@ namespace B3.PlayerSystem
                 command = AI.GetFreeStateCommand();
                 AI.freeStateReady = false;
                 AI.freeState = "";
+                Debug.Log($"AI free state command: {command}");
             }
 
             switch (command.ToLower())
@@ -63,7 +64,9 @@ namespace B3.PlayerSystem
                     break;
 
                 case "buy road":
+                Debug.Log("[Unity1] AIPlayer buying road");
                     StartCoroutine(buyController.BuyRoad(this));
+                    Debug.Log($"{this.colorTag}{this.playerName}</color> built a road.");
                     NotificationManager.Instance.AddNotification($"{this.colorTag}{this.playerName}</color> built a road.");
                     break;
 

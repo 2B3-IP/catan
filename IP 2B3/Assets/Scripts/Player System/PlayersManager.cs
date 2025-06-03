@@ -35,4 +35,8 @@ namespace B3.PlayerSystem
 
         }
     }
+    public List<PlayerBase> GetPlayers()
+{
+    return players;
+}
 }

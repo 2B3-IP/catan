@@ -9,6 +9,9 @@ using System.Net.Sockets;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Collections;
+using B3.PlayerSystem;
+using B3.TradeSystem;
+using System.Collections.Generic;
 
 public static class AI
 {
@@ -17,7 +20,7 @@ public static class AI
     private static volatile bool isListening = false;
     private static readonly ConcurrentQueue<string> moveQueue = new ConcurrentQueue<string>();
     private static readonly ConcurrentQueue<string> freeStateQueue = new ConcurrentQueue<string>();
-
+    private static Dictionary<string, int> tradeMessageCounts = new Dictionary<string, int>();
     private static int GET_MOVES_PORT = 7070; 
 
     public static void StartMoveListener()
@@ -413,29 +416,100 @@ public static void SendDice(int dice)
         Debug.Log("Server error: " + ex.ToString());
     }
 }
-public static bool SendTradeOffer(string message)
+    public static int[] ParseGivenResources(string tradeMessage)
 {
+    int[] givenResources = new int[5]; // [CLAY, ORE, SHEEP, WHEAT, WOOD]
+    string[] resourceNames = { "CLAY", "ORE", "SHEEP", "WHEAT", "WOOD" };
+
+    // Extrage partea "gave Xx TYPE and Yx TYPE"
+    int gaveIndex = tradeMessage.IndexOf("gave ");
+    int toIndex = tradeMessage.IndexOf(" to ");
+    if (gaveIndex == -1 || toIndex == -1) return givenResources;
+
+    string givenPart = tradeMessage.Substring(gaveIndex + 5, toIndex - gaveIndex - 5);
+    string[] tokens = givenPart.Split(new[] { " and " }, StringSplitOptions.RemoveEmptyEntries);
+
+    foreach (string token in tokens)
+    {
+        string[] parts = token.Trim().Split('x');
+        if (parts.Length != 2) continue;
+
+        if (int.TryParse(parts[0].Trim(), out int count))
+        {
+            string resName = parts[1].Trim().ToUpper();
+            int index = Array.IndexOf(resourceNames, resName);
+            if (index != -1)
+                givenResources[index] += count;
+        }
+    }
+
+    return givenResources;
+}
+public static int[] ParseReceivedResources(string tradeMessage)
+{
+    int[] receivedResources = new int[5]; // [CLAY, ORE, SHEEP, WHEAT, WOOD]
+    string[] resourceNames = { "CLAY", "ORE", "SHEEP", "WHEAT", "WOOD" };
+
+    // Extrage partea "received Xx TYPE and Yx TYPE"
+    int receivedIndex = tradeMessage.IndexOf("received ");
+    if (receivedIndex == -1) return receivedResources;
+
+    string receivedPart = tradeMessage.Substring(receivedIndex + 9);
+    string[] tokens = receivedPart.Split(new[] { " and " }, StringSplitOptions.RemoveEmptyEntries);
+
+    foreach (string token in tokens)
+    {
+        string[] parts = token.Trim().Split('x');
+        if (parts.Length != 2) continue;
+
+        if (int.TryParse(parts[0].Trim(), out int count))
+        {
+            string resName = parts[1].Trim().ToUpper();
+            int index = Array.IndexOf(resourceNames, resName);
+            if (index != -1)
+                receivedResources[index] += count;
+        }
+    }
+
+    return receivedResources;
+}
+public static void HandleTradeMessage(string message)
+{
+     if (!tradeMessageCounts.ContainsKey(message))
+        tradeMessageCounts[message] = 1;
+    else
+        tradeMessageCounts[message]++;
+
+    
+    if (tradeMessageCounts[message] == 5)
     try
     {
-        using (TcpClient client = new TcpClient("127.0.0.1", 6969))
-        using (NetworkStream stream = client.GetStream())
-        using (StreamWriter writer = new StreamWriter(stream))
-        using (StreamReader reader = new StreamReader(stream))
-        {
-            writer.WriteLine(message);
-            writer.Flush();
+        PlayerBase[] players = GameObject.FindObjectOfType<PlayersManager>().GetPlayers().ToArray();
+        int fromStart = message.IndexOf("FirstPlayer: ") + 13;
+        int fromEnd = message.IndexOf(" gave");
+        int playerFrom = int.Parse(message.Substring(fromStart, fromEnd - fromStart).Trim());
 
-            string response = reader.ReadLine();  // Ex: TRADE_RESULT accepted=true
-            Debug.Log("Received from server: " + response);
-            return response.Contains("accepted=true");
-        }
+        int toStart = message.IndexOf("to ") + 3;
+        int toEnd = message.IndexOf(" and received");
+        int playerTo = int.Parse(message.Substring(toStart, toEnd - toStart).Trim());
+
+        int[] resourcesToGive = ParseGivenResources(message);
+        int[] resourcesToGet = ParseReceivedResources(message);
+        // presupunând că ai o instanță în scenă
+        TradeController tradeController = GameObject.FindObjectOfType<TradeController>();
+
+
+        tradeController.TradeResources(players[playerFrom], players[playerTo], resourcesToGive, resourcesToGet);
+
+        Debug.Log($"[Unity] Trade complet între {playerFrom} și {playerTo}");
+
     }
     catch (Exception ex)
     {
-        Debug.Log("Error sending trade offer: " + ex.ToString());
-        return false;
+        Debug.LogError("[Unity] Eroare la parsarea mesajului de trade: " + ex.Message);
     }
 }
+
 
 
 }
